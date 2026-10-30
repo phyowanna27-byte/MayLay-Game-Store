@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>May Lay Game Store</title>
+    <!-- Telegram Web App SDK -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            background-color: #fbcfe8; 
+            font-family: sans-serif; 
+        }
+        @keyframes glow {
+            0% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.03); text-shadow: 0 0 10px rgba(236, 72, 153, 0.6); }
+            100% { opacity: 0.8; transform: scale(1); }
+        }
+        .animate-store-title {
+            animation: glow 2s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="pb-24">
+
+    <!-- HOME VIEW (ပင်မမျက်နှာပြင်) -->
+    <div id="home-view" class="p-4 max-w-md mx-auto">
+        
+        <!-- ၁။ May Lay Game Store Animation Title -->
+        <div class="text-center my-3">
+            <h1 class="text-pink-700 font-extrabold text-2xl tracking-wide animate-store-title">
+                ✨ May Lay Game Store ✨
+            </h1>
+        </div>
+
+        <!-- ၂။ Telegram & Gmail Login & Wallet -->
+        <div class="flex justify-between items-center bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-sm mb-4">
+            <div id="user-profile-section" class="flex items-center space-x-2">
+                <button onclick="openLoginModal()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow flex items-center space-x-1">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>အကောင့်ဝင်ရန်</span>
+                </button>
+            </div>
+
+            <div class="text-right">
+                <div class="flex items-center justify-end space-x-1 text-xs font-bold text-gray-800">
+                    <i class="fa-solid fa-wallet text-pink-600"></i>
+                    <span>Wallet Balance</span>
+                </div>
+                <div class="text-xs font-semibold text-gray-700 mt-0.5">
+                    <span id="thb-balance" class="text-blue-600">฿ 150.00 THB</span> | <span id="mmk-balance" class="text-emerald-600">Ks 15,000 MMK</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ၃။ Updated Banner Slides -->
+        <div class="relative overflow-hidden rounded-2xl shadow-md mb-4 bg-gradient-to-r from-teal-400 via-purple-500 to-pink-500 text-white p-5 min-h-[110px] flex items-center justify-between">
+            <div id="banner-container" class="w-full">
+                <div class="banner-slide flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center space-x-1 font-bold text-sm mb-1">
+                            <span>💎</span>
+                            <span>Top Up ဖြင့်ဝယ်ယူရန်</span>
+                        </div>
+                        <p class="text-[11px] opacity-90">သင့်ပိုက်ဆံအိတ်ထဲက လက်ကျန်ငွေဖြင့်ဝယ်ယူရန် top up ကိုနှိပ်ပါ။</p>
+                    </div>
+                    <span class="text-2xl">👛</span>
+                </div>
+                <div class="banner-slide hidden flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center space-x-1 font-bold text-sm mb-1">
+                            <span>💸</span>
+                            <span>Manual ဖြင့်ဝယ်ယူရန်</span>
+                        </div>
+                        <p class="text-[11px] opacity-90">တိုက်ရိုက် ငွေလွှဲပြီးဝယ်ယူလိုပါက manual ကိုနှိပ်ပါ။</p>
+                    </div>
+                    <span class="text-2xl">🔄</span>
+                </div>
+                <div class="banner-slide hidden flex items-center justify-between">
+                    <div>
+                        <div class="flex items-center space-x-1 font-bold text-sm mb-1">
+                            <span>📦</span>
+                            <span>Order ကြိုတင်ပေးရန်</span>
+                        </div>
+                        <p class="text-[11px] opacity-90">event ရက်မှာ အချိန်မစောင့်ချင်တဲ့ ကာကာတွေအတွက် order ကနေ ကြိုတင်စာရင်းပေးထားကြပါ။</p>
+                    </div>
+                    <span class="text-2xl">⭐</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOPUP | Manual | Order Tabs -->
+        <div class="flex bg-white p-1 rounded-2xl shadow-sm mb-4 justify-between font-bold text-xs">
+            <button onclick="switchMainTab('topup')" id="tab-topup" class="flex-1 py-2 rounded-xl bg-pink-500 text-white text-center transition">TOPUP</button>
+            <button onclick="switchMainTab('manual')" id="tab-manual" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Manual</button>
+            <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
+        </div>
+
+        <!-- ၄။ Game Categories (၅ ခု - MLBB, PUBG, HOK, MCGG, Starlight) -->
+        <div class="grid grid-cols-3 gap-3 mb-4">
+            <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-cyan-400 h-20 flex items-center justify-center text-white font-bold shadow-inner">
+                    <i class="fa-solid fa-gamepad text-3xl"></i>
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">MLBB</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Mobile Legend</p>
+                </div>
+            </div>
+
+            <div onclick="openGamePage('PUBG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-amber-500 h-20 flex items-center justify-center text-white font-bold shadow-inner">
+                    <i class="fa-solid fa-crosshairs text-3xl"></i>
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">PUBG</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Pubg Mobile</p>
+                </div>
+            </div>
+
+            <div onclick="openGamePage('HOK')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-indigo-700 h-20 flex items-center justify-center text-white font-bold shadow-inner">
+                    <i class="fa-solid fa-shield-halved text-3xl"></i>
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">HOK</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">HOK</p>
+                </div>
+            </div>
+
+            <div onclick="openGamePage('MCGG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-purple-700 h-20 flex items-center justify-center text-white font-bold shadow-inner">
+                    <i class="fa-solid fa-chess text-3xl"></i>
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">MCGG</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Magic Chess</p>
+                </div>
+            </div>
+
+            <div onclick="openGamePage('Starlight')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-pink-600 h-20 flex items-center justify-center text-white font-bold shadow-inner">
+                    <i class="fa-solid fa-star text-3xl"></i>
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">STARLIGHT</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Starlight card</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME DETAIL / SHOP PAGE (ဂိမ်း သို့မဟုတ် Gift Card ကိုနှိပ်မှပေါ်လာမည့် ဈေးနှုန်းစာရင်းမျက်နှာပြင်) -->
+    <div id="game-page-view" class="hidden p-4 max-w-md mx-auto">
+        <div class="flex items-center justify-between mb-4 bg-white p-3 rounded-2xl shadow-sm">
+            <button onclick="backToHome()" class="bg-pink-100 text-pink-700 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>နောက်သို့</span>
+            </button>
+            <h2 id="game-page-title" class="font-extrabold text-pink-700 text-sm">Game Store</h2>
+            <div class="w-12"></div>
+        </div>
+
+        <!-- Currency Selector (THB / MMK Toggle) -->
+        <div class="flex bg-white p-1 rounded-2xl shadow-sm mb-4 justify-between font-bold text-xs">
+            <button onclick="switchCurrency('THB')" id="curr-thb" class="flex-1 py-2 rounded-xl bg-blue-600 text-white text-center transition">🇹🇭 ထိုင်းဘတ် (THB)</button>
+            <button onclick="switchCurrency('MMK')" id="curr-mmk" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">🇲🇲 မြန်မာကျပ် (MMK)</button>
+        </div>
+
+        <!-- ဈေးနှုန်းစာရင်းပြကွက် -->
+        <div class="bg-white p-4 rounded-2xl shadow-md mb-4">
+            <h3 class="font-bold text-pink-700 text-xs mb-3">💎 ရွေးချယ်နိုင်သော ပက်ကေ့ဂျ်များ</h3>
+            <div id="game-price-list" class="space-y-2">
+                <p class="text-xs text-gray-500 text-center py-2">ဒေတာဆွဲယူနေပါပြီ...</p>
+            </div>
+        </div>
+
+        <!-- Order Form & Payment Section -->
+        <div id="game-order-section" class="hidden bg-white p-4 rounded-2xl shadow-md space-y-3 text-xs">
+            <h3 id="form-section-title" class="font-bold text-pink-700 text-sm mb-2">🛒 ဝယ်ယူရန် အချက်အလက်ဖြည့်ပါ</h3>
+            
+            <div class="bg-pink-50 p-2.5 rounded-xl border border-pink-100">
+                <p class="text-gray-500">ရွေးချယ်ထားသည် -</p>
+                <p id="form-item-name" class="font-bold text-gray-800 text-sm">-</p>
+                <p id="form-item-price" class="font-bold text-blue-600 mt-1">-</p>
+            </div>
+
+            <div>
+                <label class="font-bold text-gray-700 block mb-1">Game UID / ID</label>
+                <input type="text" id="f-uid" placeholder="ဥပမာ - 12345678" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
+            </div>
+
+            <div>
+                <label class="font-bold text-gray-700 block mb-1">Server / Zone</label>
+                <input type="text" id="f-server" placeholder="ဥပမာ - 1234" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
+            </div>
+
+            <div>
+                <label class="font-bold text-gray-700 block mb-1">In-game Name</label>
+                <div id="f-ingame-name" class="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 font-semibold">
+                    🔍 UID ထည့်ပါ...
+                </div>
+            </div>
+
+            <!-- Manual Mode ဖြစ်မှသာ ငွေလွှဲအကောင့်၊ QR နှင့် Slip တင်ရန် ပေါ်မည် -->
+            <div id="manual-payment-container" class="space-y-3">
+                <div id="payment-account-box" class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2">
+                    <!-- Dynamic Bank/QR Info -->
+                </div>
+
+                <div>
+                    <label class="font-bold text-gray-700 block mb-1">ငွေလွှဲစလစ် (Slip) တင်ရန်</label>
+                    <input type="file" id="f-slip" accept="image/*" class="w-full p-2 border border-gray-200 rounded-xl text-xs bg-gray-50">
+                </div>
+            </div>
+
+            <button onclick="submitGameOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition">
+                🚀 Order တင်မည် / ဝယ်ယူမည်
+            </button>
+        </div>
+    </div>
+
+    <!-- CONTACT US VIEW -->
+    <div id="contact-view" class="hidden p-4 max-w-md mx-auto">
+        <div class="bg-white p-5 rounded-3xl shadow-md text-center space-y-4 my-6">
+            <div class="w-16 h-16 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto text-2xl shadow-inner">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+            <h2 class="font-extrabold text-pink-700 text-lg">ဆက်သွယ်ရန် (Contact Us)</h2>
+            <p class="text-xs text-gray-500">အဆင်မပြေသည်များရှိပါက အောက်ပါ Telegram Channel သို့ ဆက်သွယ်နိုင်ပါသည် -</p>
+            
+            <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100 flex items-center justify-between">
+                <div class="flex items-center space-x-2">
+                    <i class="fa-brands fa-telegram text-sky-500 text-xl"></i>
+                    <span class="font-bold text-gray-800 text-xs">Telegram Channel</span>
+                </div>
+                <a href="https://t.me/MayLayGameStore" target="_blank" class="bg-sky-500 hover:bg-sky-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
+                    @MayLayGameStore
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- RECHARGE VIEW (ပိုက်ဆံဖြည့်ရန်) -->
+    <div id="recharge-view" class="hidden p-4 max-w-md mx-auto space-y-4">
+        <div class="bg-white p-4 rounded-2xl shadow-md space-y-4">
+            <h2 class="font-extrabold text-pink-700 text-sm flex items-center space-x-1">
+                <i class="fa-solid fa-credit-card"></i>
+                <span>ပိုက်ဆံအိတ်သို့ ငွေဖြည့်မည် (Recharge)</span>
+            </h2>
+
+            <!-- Currency Selector for Recharge -->
+            <div class="flex bg-gray-100 p-1 rounded-xl justify-between font-bold text-xs">
+                <button onclick="switchRechargeCurrency('MMK')" id="recharge-curr-mmk" class="flex-1 py-2 rounded-lg bg-emerald-600 text-white text-center transition">🇲🇲 မြန်မာကျပ် (MMK)</button>
+                <button onclick="switchRechargeCurrency('THB')" id="recharge-curr-thb" class="flex-1 py-2 rounded-lg text-gray-600 text-center transition">🇹🇭 ထိုင်းဘတ် (THB)</button>
+            </div>
+
+            <!-- MMK Amounts Grid -->
+            <div id="recharge-amounts-mmk" class="grid grid-cols-2 gap-2">
+                <button onclick="selectRechargeAmount(10000)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">10,000 MMK</button>
+                <button onclick="selectRechargeAmount(20000)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">20,000 MMK</button>
+                <button onclick="selectRechargeAmount(30000)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">30,000 MMK</button>
+                <button onclick="selectRechargeAmount(40000)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">40,000 MMK</button>
+            </div>
+
+            <!-- THB Amounts Grid (Initially Hidden) -->
+            <div id="recharge-amounts-thb" class="grid grid-cols-2 gap-2 hidden">
+                <button onclick="selectRechargeAmount(100)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">100 THB</button>
+                <button onclick="selectRechargeAmount(200)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">200 THB</button>
+                <button onclick="selectRechargeAmount(300)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">300 THB</button>
+                <button onclick="selectRechargeAmount(400)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">400 THB</button>
+            </div>
+
+            <!-- Custom Amount Input -->
+            <div>
+                <label class="font-bold text-gray-700 block mb-1 text-xs">Custom ပမာဏ ထည့်ရန်</label>
+                <input type="number" id="custom-recharge-amount" placeholder="လိုသလောက် ငွေပမာဏ ရိုက်ထည့်ပါ" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500">
+            </div>
+
+            <!-- Bank & QR Account Info Display -->
+            <div id="recharge-bank-box" class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2 text-xs">
+                <!-- Dynamic MMK Accounts & QR -->
+            </div>
+
+            <!-- Slip Upload -->
+            <div class="text-xs space-y-1">
+                <label class="font-bold text-gray-700 block">ငွေလွှဲပြီး စလစ် (Slip) တင်ရန်</label>
+                <input type="file" id="recharge-slip" accept="image/*" class="w-full p-2 border border-gray-200 rounded-xl bg-gray-50">
+            </div>
+
+            <button onclick="submitRecharge()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md text-xs hover:opacity-90 transition">
+                💳 ငွေဖြည့်မည် (Submit)
+            </button>
+        </div>
+    </div>
+
+    <!-- PROFILE VIEW (ကိုယ်ပိုင် အချက်အလက်နှင့် ဝယ်ယူမှုမှတ်တမ်း) -->
+    <div id="profile-view" class="hidden p-4 max-w-md mx-auto space-y-4">
+        <div class="bg-white p-5 rounded-3xl shadow-md text-center space-y-3">
+            <div id="profile-avatar-box" class="w-20 h-20 bg-pink-400 rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold shadow border-4 border-pink-100 overflow-hidden">
+                👤
+            </div>
+            <h2 id="profile-name" class="font-extrabold text-pink-700 text-base">Guest User</h2>
+            <p id="profile-rank-badge" class="inline-block bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold text-[10px] px-3 py-1 rounded-full shadow-sm">
+                ⭐ Regular Customer
+            </p>
+
+            <div class="grid grid-cols-2 gap-2 pt-3 border-t text-left text-xs">
+                <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100">
+                    <p class="text-gray-500 text-[10px]">စုစုပေါင်း ဝယ်ယူပြီးငွေ (THB)</p>
+                    <p id="profile-total-thb" class="font-extrabold text-blue-600 text-sm mt-0.5">฿ 0.00</p>
+                </div>
+                <div class="bg-emerald-50 p-3 rounded-2xl border border-emerald-100">
+                    <p class="text-gray-500 text-[10px]">စုစုပေါင်း ဝယ်ယူပြီးငွေ (MMK)</p>
+                    <p id="profile-total-mmk" class="font-extrabold text-emerald-600 text-sm mt-0.5">Ks 0</p>
+                </div>
+            </div>
+
+            <div class="bg-gray-50 p-3 rounded-2xl text-left text-xs space-y-1.5 border">
+                <p class="font-bold text-gray-700">💼 ပိုက်ဆံအိတ် လက်ကျန်ငွေ:</p>
+                <div class="flex justify-between text-gray-600 font-semibold">
+                    <span>ထိုင်းဘတ်:</span>
+                    <span id="profile-wallet-thb" class="text-blue-600">฿ 150.00 THB</span>
+                </div>
+                <div class="flex justify-between text-gray-600 font-semibold">
+                    <span>မြန်မာကျပ်:</span>
+                    <span id="profile-wallet-mmk" class="text-emerald-600">Ks 15,000 MMK</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGIN MODAL (Telegram သို့မဟုတ် Gmail ဖြင့် ဝင်ရန်) -->
+    <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
+        <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl text-center space-y-4">
+            <h3 class="font-extrabold text-pink-700 text-base">အကောင့်ဝင်ရောက်ရန်</h3>
+            <p class="text-xs text-gray-500">ကြိုက်နှစ်သက်ရာ နည်းလမ်းဖြင့် ဝင်ရောက်နိုင်ပါသည်</p>
+            
+            <div class="space-y-2">
+                <button onclick="loginWithTelegram()" class="w-full bg-sky-500 hover:bg-sky-600 text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow">
+                    <i class="fa-brands fa-telegram text-base"></i>
+                    <span>Telegram ဖြင့် ဝင်မည်</span>
+                </button>
+                <button onclick="loginWithGmail()" class="w-full bg-red-500 hover:bg-red-600 text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow">
+                    <i class="fa-brands fa-google text-base"></i>
+                    <span>Gmail ဖြင့် ဝင်မည်</span>
+                </button>
+            </div>
+
+            <button onclick="closeLoginModal()" class="text-xs text-gray-400 font-bold hover:text-gray-600 mt-2">ပိတ်မည်</button>
+        </div>
+    </div>
+
+    <!-- ၅။ Bottom Navigation (၅ ခု) -->
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-pink-200 flex justify-around py-2.5 shadow-lg z-50">
+        <button onclick="navClick('home')" id="nav-btn-home" class="flex flex-col items-center text-pink-600 transition">
+            <i class="fa-solid fa-house text-base"></i>
+            <span class="text-[9px] font-bold mt-1">HOME</span>
+        </button>
+        <button onclick="navClick('contact')" id="nav-btn-contact" class="flex flex-col items-center text-gray-400 hover:text-pink-600 transition">
+            <i class="fa-solid fa-headset text-base"></i>
+            <span class="text-[9px] font-bold mt-1">CONTACT US</span>
+        </button>
+        <button onclick="navClick('recharge')" id="nav-btn-recharge" class="flex flex-col items-center text-gray-400 hover:text-pink-600 transition">
+            <i class="fa-solid fa-credit-card text-base"></i>
+            <span class="text-[9px] font-bold mt-1">RECHARGE</span>
+        </button>
+        <button onclick="navClick('gift')" id="nav-btn-gift" class="flex flex-col items-center text-gray-400 hover:text-pink-600 transition">
+            <i class="fa-solid fa-gift text-base"></i>
+            <span class="text-[9px] font-bold mt-1">GIFT CARD</span>
+        </button>
+        <button onclick="navClick('profile')" id="nav-btn-profile" class="flex flex-col items-center text-gray-400 hover:text-pink-600 transition">
+            <i class="fa-solid fa-user text-base"></i>
+            <span class="text-[9px] font-bold mt-1">PROFILE</span>
+        </button>
+    </div>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let userWallet = { THB: 150.00, MMK: 15000 };
+        let userSpent = { THB: 350.00, MMK: 35000 };
+        let activeMainTab = 'topup'; // 'topup', 'manual', 'order'
+        let rechargeCurrency = 'MMK';
+        let currentCurrency = 'THB';
+        let selectedRechargeAmt = 0;
+
+        let currentUser = {
+            name: "Guest User",
+            photo: null
+        };
+
+        const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
+        if (user) {
+            currentUser.name = user.first_name;
+            currentUser.photo = user.photo_url;
+            updateUserProfileUI(currentUser.name, currentUser.photo);
+        }
+
+        function updateUserProfileUI(name, photo) {
+            currentUser.name = name;
+            currentUser.photo = photo;
+            document.getElementById('user-profile-section').innerHTML = `
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 rounded-full bg-pink-400 overflow-hidden border border-pink-600 flex items-center justify-center text-white font-bold text-xs">
+                        ${photo ? `<img src="${photo}" class="w-full h-full object-cover">` : name.charAt(0)}
+                    </div>
+                    <div>
+                        <p class="text-xs font-bold text-gray-800">${name}</p>
+                        <p class="text-[9px] text-emerald-600 font-semibold">Online</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function openLoginModal() {
+            tg.HapticFeedback.impactOccurred('medium');
+            document.getElementById('login-modal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('login-modal').classList.add('hidden');
+        }
+
+        function loginWithTelegram() {
+            tg.HapticFeedback.notificationOccurred('success');
+            if (user) {
+                updateUserProfileUI(user.first_name, user.photo_url);
+                alert("Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။");
+            } else {
+                updateUserProfileUI("Telegram User", null);
+                alert("Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။");
+            }
+            closeLoginModal();
+        }
+
+        function loginWithGmail() {
+            tg.HapticFeedback.notificationOccurred('success');
+            let email = prompt("ကျေးဇူးပြု၍ သင့် Gmail ထည့်ပါ -", "user@gmail.com");
+            if (email) {
+                updateUserProfileUI(email.split('@')[0], null);
+                alert("Gmail (" + email + ") ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။");
+            }
+            closeLoginModal();
+        }
+
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.banner-slide');
+        setInterval(() => {
+            slides[currentSlide].classList.add('hidden');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.remove('hidden');
+        }, 4000);
+
+        function switchMainTab(tab) {
+            activeMainTab = tab;
+            document.getElementById('tab-topup').className = "flex-1 py-2 rounded-xl text-gray-600 text-center transition";
+            document.getElementById('tab-manual').className = "flex-1 py-2 rounded-xl text-gray-600 text-center transition";
+            document.getElementById('tab-order').className = "flex-1 py-2 rounded-xl text-gray-600 text-center transition";
+            
+            document.getElementById('tab-' + tab).className = "flex-1 py-2 rounded-xl bg-pink-500 text-white text-center transition font-bold";
+            tg.HapticFeedback.selectionChanged();
+        }
+
+        let currentGame = '';
+        let rawSheetData = [];
+        let selectedPkg = {};
+
+        function openGamePage(gameKey) {
+            tg.HapticFeedback.impactOccurred('medium');
+            currentGame = gameKey;
+            
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('contact-view').classList.add('hidden');
+            document.getElementById('recharge-view').classList.add('hidden');
+            document.getElementById('profile-view').classList.add('hidden');
+            document.getElementById('game-page-view').classList.remove('hidden');
+            
+            document.getElementById('game-page-title').innerText = gameKey + " Store";
+            document.getElementById('game-order-section').classList.add('hidden');
+            
+            fetchSheetData();
+        }
+
+        function backToHome() {
+            tg.HapticFeedback.impactOccurred('light');
+            document.getElementById('game-page-view').classList.add('hidden');
+            document.getElementById('home-view').classList.remove('hidden');
+            setActiveNav('home');
+        }
+
+        function switchCurrency(curr) {
+            tg.HapticFeedback.selectionChanged();
+            currentCurrency = curr;
+            if(curr === 'THB') {
+                document.getElementById('curr-thb').className = "flex-1 py-2 rounded-xl bg-blue-600 text-white text-center transition";
+                document.getElementById('curr-mmk').className = "flex-1 py-2 rounded-xl text-gray-600 text-center transition";
+            } else {
+                document.getElementById('curr-mmk').className = "flex-1 py-2 rounded-xl bg-emerald-600 text-white text-center transition";
+                document.getElementById('curr-thb').className = "flex-1 py-2 rounded-xl text-gray-600 text-center transition";
+            }
+            renderPrices();
+            if(!document.getElementById('game-order-section').classList.contains('hidden') && activeMainTab === 'manual') {
+                updatePaymentBox(curr);
+            }
+        }
+
+        function fetchSheetData() {
+            const container = document.getElementById('game-price-list');
+            if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ စျေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
+            
+            const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
+
+            fetch(apiURL)
+                .then(res => res.json())
+                .then(data => {
+                    rawSheetData = data;
+                    renderPrices();
+                })
+                .catch(err => {
+                    if(container) container.innerHTML = `<p class="text-xs text-red-500 text-center py-2">ဒေတာဆွဲယူရာတွင် အမှားအယွင်းရှိပါသည်။</p>`;
+                });
+        }
+
+        function renderPrices() {
+            const container = document.getElementById('game-price-list');
+            if(!container) return;
+            let html = "";
+
+            rawSheetData.forEach(item => {
+                let cat = item.Category ? item.Category.toUpperCase().trim() : '';
+                let isMatch = false;
+
+                if (currentGame === 'Gift Card') {
+                    if (cat === 'GIFT CARD') {
+                        isMatch = true;
+                    }
+                } else {
+                    if (cat.includes(currentGame.toUpperCase())) {
+                        isMatch = true;
+                    }
+                }
+
+                if (isMatch) {
+                    let pkgName = item.Name || '';
+                    let price = currentCurrency === 'THB' ? parseFloat(item.THB || 0) : parseFloat(item.MMK || 0);
+                    let currSymbol = currentCurrency === 'THB' ? '฿' : 'Ks ';
+                    let badge = item.Badge || '';
+
+                    html += `
+                        <div class="flex justify-between items-center p-2.5 bg-pink-50 rounded-xl border border-pink-100">
+                            <div>
+                                <p class="font-bold text-xs text-gray-800">${pkgName}</p>
+                                <p class="text-[9px] text-gray-500 whitespace-pre-line">${badge}</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="text-right">
+                                    <p class="text-xs font-bold ${currentCurrency === 'THB' ? 'text-blue-600' : 'text-emerald-600'}">${currSymbol}${price.toLocaleString()}</p>
+                                </div>
+                                <button onclick="selectPackage('${pkgName}', ${price}, '${currentCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
+                                    ဝယ်ယူမည်
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+
+            if(html === "") {
+                html = `<p class="text-xs text-gray-500 text-center py-2">ဤကဏ္ဍအတွက် ဈေးနှုန်းစာရင်း မရှိသေးပါ။</p>`;
+            }
+            container.innerHTML = html;
+        }
+
+        function selectPackage(name, price, curr) {
+            tg.HapticFeedback.impactOccurred('medium');
+            selectedPkg = { name, price, curr };
+            document.getElementById('form-item-name').innerText = name;
+            document.getElementById('form-item-price').innerText = `ဈေးနှုန်း: ${curr === 'THB' ? '฿' : 'Ks '}${price.toLocaleString()} (${curr})`;
+            
+            let manualContainer = document.getElementById('manual-payment-container');
+            let titleElement = document.getElementById('form-section-title');
+
+            if (activeMainTab === 'topup') {
+                titleElement.innerText = "🛒 Top Up ဖြင့် ဝယ်ယူရန် (Wallet Balance ဖြင့် ဖြတ်မည်)";
+                manualContainer.classList.add('hidden');
+            } else {
+                titleElement.innerText = "🛒 Manual ဖြင့် ဝယ်ယူရန် (ငွေလွှဲစလစ်တင်ရန်)";
+                manualContainer.classList.remove('hidden');
+                updatePaymentBox(curr);
+            }
+
+            document.getElementById('game-order-section').classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function openQRImage(filename) {
+            tg.HapticFeedback.notificationOccurred('success');
+            if (tg.openLink) {
+                let fullUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1) + filename;
+                tg.openLink(fullUrl);
+            } else {
+                window.open(filename, '_blank');
+            }
+        }
+
+        function updatePaymentBox(curr) {
+            let accountBox = document.getElementById('payment-account-box');
+            if(curr === 'THB') {
+                accountBox.innerHTML = `
+                    <p class="font-bold text-gray-800">🇹🇭 ထိုင်းဘတ်ငွေလွှဲရန် အကောင့်နှင့် QR:</p>
+                    <div class="bg-white p-2.5 rounded-lg border space-y-2 text-center">
+                        <div class="flex justify-between items-center text-left">
+                            <div>
+                                <span class="font-semibold text-blue-600">Bangkok Bank</span>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('0408228211')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">0408228211 📋</p>
+                                <p class="text-[10px] text-gray-500">Mr. Phyo Wanna Linn</p>
+                            </div>
+                            <button onclick="copyText('0408228211')" class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
+                        </div>
+                        <div class="my-2 border-t pt-2 space-y-2">
+                            <img src="7659.jpg" alt="Thai QR" class="w-36 h-36 mx-auto rounded-lg shadow border object-contain">
+                            <button onclick="openQRImage('7659.jpg')" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow hover:bg-blue-700 transition">
+                                <i class="fa-solid fa-download mr-1"></i> 📥 QR ပုံ Save ရန် ဖွင့်မည်
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-red-500 font-semibold text-left">📌 Note / Memo တွင် (Payment) ဟုသာ ရေးပါ။ စိန်ဝယ်ခြင်း၊ ဂိမ်းနာမည်များ လုံးဝမရေးရပါ။</p>
+                    </div>
+                `;
+            } else {
+                accountBox.innerHTML = `
+                    <p class="font-bold text-gray-800">🇲🇲 မြန်မာကျပ်ငွေလွှဲရန် အကောင့်များနှင့် QR:</p>
+                    <div class="bg-white p-2.5 rounded-lg border space-y-2">
+                        <div class="flex justify-between items-center border-b pb-1">
+                            <div>
+                                <span class="font-semibold text-emerald-600">KBZPay / WavePay</span>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('09779091686')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">09779091686 📋</p>
+                                <p class="text-[10px] text-gray-500">Ei Ei Phyu</p>
+                            </div>
+                            <button onclick="copyText('09779091686')" class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 my-2 border-t pt-2 text-center">
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold text-gray-600">KBZPay QR</p>
+                                <img src="7655.jpg" alt="KBZPay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
+                                <button onclick="openQRImage('7655.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
+                                    <i class="fa-solid fa-download"></i> Save KBZ
+                                </button>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold text-gray-600">WavePay QR</p>
+                                <img src="7656.jpg" alt="WavePay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
+                                <button onclick="openQRImage('7656.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
+                                    <i class="fa-solid fa-download"></i> Save Wave
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-red-500 font-semibold">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။ (dia, Skin, Weekly pass လုံးဝမရေးရပါ)</p>
+                    </div>
+                `;
+            }
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                tg.HapticFeedback.notificationOccurred('success');
+                alert("📋 Copied: " + text);
+            }).catch(err => {
+                alert("Copy လုပ်၍ မရပါ။");
+            });
+        }
+
+        document.getElementById('f-uid').addEventListener('input', function() {
+            let uid = this.value;
+            let nameDisp = document.getElementById('f-ingame-name');
+            if (uid.length > 3) {
+                nameDisp.innerHTML = `<span class="text-emerald-600 font-bold">✨ Player_${uid} (Verified)</span>`;
+            } else {
+                nameDisp.innerHTML = `🔍 စစ်ဆေးနေသည်...`;
+            }
+        });
+
+        function logOrderToSheet(targetTab, orderData) {
+            let apiEndpoint = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935"; 
+            let fullUrl = `${apiEndpoint}/tabs/${encodeURIComponent(targetTab)}`;
+
+            fetch(fullUrl, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(orderData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Logged to Sheet (${targetTab}) successfully:`, data);
+            })
+            .catch(error => {
+                console.error(`Error logging to sheet (${targetTab}):`, error);
+            });
+        }
+
+        function submitGameOrder() {
+            tg.HapticFeedback.notificationOccurred('success');
+            let uid = document.getElementById('f-uid').value;
+            let server = document.getElementById('f-server').value;
+
+            if (!uid || !server) {
+                alert("ကျေးဇူးပြု၍ UID နှင့် Server ဖြည့်ပါ။");
+                return;
+            }
+
+            let curr = selectedPkg.curr;
+            let price = selectedPkg.price;
+            let packageName = selectedPkg.name;
+            let customerName = currentUser.name;
+            let gameIdFull = `${uid} (${server})`;
+
+            let now = new Date();
+            let dateStr = now.toLocaleDateString();
+            let timeStr = now.toLocaleTimeString();
+
+            let dataPayload = {
+                "Date": dateStr,
+                "Time": timeStr,
+                "Name": customerName,
+                "Game ID": gameIdFull,
+                "Package": packageName,
+                "MMK": curr === 'MMK' ? price : 0,
+                "THB": curr === 'THB' ? price : 0
+            };
+
+            if (activeMainTab === 'topup') {
+                if (userWallet[curr] >= price) {
+                    userWallet[curr] -= price;
+                    userSpent[curr] += price;
+                    
+                    document.getElementById('thb-balance').innerText = `฿ ${userWallet.THB.toFixed(2)} THB`;
+                    document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
+                    
+                    logOrderToSheet("Pre_Funded_2026-Oct", dataPayload);
+
+                    alert(`✅ Top Up အောင်မြင်ပါသည်။ Wallet ထဲမှ ${curr === 'THB' ? '฿' : 'Ks '}${price} ဖြတ်ယူပြီးပါပြီ။`);
+                    tg.close();
+                } else {
+                    alert(`❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`);
+                }
+            } else if (activeMainTab === 'manual') {
+                let slip = document.getElementById('f-slip').files[0];
+                if (!slip) {
+                    alert("ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။");
+                    return;
+                }
+                userSpent[curr] += price;
+
+                let targetSheetTab = (currentGame === 'Gift Card') ? 'orders' : 'Manual_Orders_2026-Oct';
+                logOrderToSheet(targetSheetTab, dataPayload);
+
+                alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Bot မှ အော်တိုဆောင်ရွက်ပေးနေပါပြီ။");
+                tg.close();
+            } else if (activeMainTab === 'order') {
+                logOrderToSheet("Event_Orders_2026-Oct", dataPayload);
+
+                alert("Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။");
+                tg.close();
+            }
+        }
+
+        function switchRechargeCurrency(curr) {
+            rechargeCurrency = curr;
+            tg.HapticFeedback.selectionChanged();
+            let mmkBtn = document.getElementById('recharge-curr-mmk');
+            let thbBtn = document.getElementById('recharge-curr-thb');
+            let mmkGrid = document.getElementById('recharge-amounts-mmk');
+            let thbGrid = document.getElementById('recharge-amounts-thb');
+            let bankBox = document.getElementById('recharge-bank-box');
+
+            if(curr === 'MMK') {
+                mmkBtn.className = "flex-1 py-2 rounded-lg bg-emerald-600 text-white text-center transition";
+                thbBtn.className = "flex-1 py-2 rounded-lg text-gray-600 text-center transition";
+                mmkGrid.classList.remove('hidden');
+                thbGrid.classList.add('hidden');
+                bankBox.innerHTML = `
+                    <p class="font-bold text-gray-800">🇲🇲 မြန်မာကျပ်ငွေလွှဲရန် အကောင့်များနှင့် QR:</p>
+                    <div class="bg-white p-2.5 rounded-lg border space-y-2">
+                        <div class="flex justify-between items-center border-b pb-1">
+                            <div>
+                                <span class="font-semibold text-emerald-600">KBZPay / WavePay</span>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('09779091686')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">09779091686 📋</p>
+                                <p class="text-[10px] text-gray-500">Ei Ei Phyu</p>
+                            </div>
+                            <button onclick="copyText('09779091686')" class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 my-2 border-t pt-2 text-center">
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold text-gray-600">KBZPay QR</p>
+                                <img src="7655.jpg" alt="KBZPay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
+                                <button onclick="openQRImage('7655.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
+                                    <i class="fa-solid fa-download"></i> Save KBZ
+                                </button>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold text-gray-600">WavePay QR</p>
+                                <img src="7656.jpg" alt="WavePay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
+                                <button onclick="openQRImage('7656.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
+                                    <i class="fa-solid fa-download"></i> Save Wave
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-red-500 font-semibold">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။ (dia, Skin, Weekly pass လုံးဝမရေးရပါ)</p>
+                    </div>
+                `;
+            } else {
+                thbBtn.className = "flex-1 py-2 rounded-lg bg-blue-600 text-white text-center transition";
+                mmkBtn.className = "flex-1 py-2 rounded-lg text-gray-600 text-center transition";
+                thbGrid.classList.remove('hidden');
+                mmkGrid.classList.add('hidden');
+                bankBox.innerHTML = `
+                    <p class="font-bold text-gray-800">🇹🇭 ထိုင်းဘတ်ငွေလွှဲရန် အကောင့်နှင့် QR:</p>
+                    <div class="bg-white p-2.5 rounded-lg border space-y-2 text-center">
+                        <div class="flex justify-between items-center text-left">
+                            <div>
+                                <span class="font-semibold text-blue-600">Bangkok Bank</span>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('0408228211')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">0408228211 📋</p>
+                                <p class="text-[10px] text-gray-500">Mr. Phyo Wanna Linn</p>
+                            </div>
+                            <button onclick="copyText('0408228211')" class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
+                        </div>
+                        <div class="my-2 border-t pt-2 space-y-2">
+                            <img src="7659.jpg" alt="Thai QR" class="w-36 h-36 mx-auto rounded-lg shadow border object-contain">
+                            <button onclick="openQRImage('7659.jpg')" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow hover:bg-blue-700 transition">
+                                <i class="fa-solid fa-download mr-1"></i> 📥 QR ပုံ Save ရန် ဖွင့်မည်
+                            </button>
+                        </div>
+                        <p class="text-[10px] text-red-500 font-semibold text-left">📌 Note / Memo တွင် (Payment) ဟုသာ ရေးပါ။ စိန်ဝယ်ခြင်း၊ ဂိမ်းနာမည်များ လုံးဝမရေးရပါ။</p>
+                    </div>
+                `;
+            }
+            selectedRechargeAmt = 0;
+            document.getElementById('custom-recharge-amount').value = '';
+        }
+
+        function selectRechargeAmount(amount) {
+            tg.HapticFeedback.selectionChanged();
+            selectedRechargeAmt = amount;
+            document.getElementById('custom-recharge-amount').value = amount;
+        }
+
+        function submitRecharge() {
+            tg.HapticFeedback.notificationOccurred('success');
+            let customVal = document.getElementById('custom-recharge-amount').value;
+            let finalAmt = customVal ? parseFloat(customVal) : selectedRechargeAmt;
+            let slip = document.getElementById('recharge-slip').files[0];
+
+            if(!finalAmt || finalAmt <= 0) {
+                alert("ကျေးဇူးပြု၍ ငွေဖြည့်မည့်ပမာဏ ရွေးချယ်ပါ သို့မဟုတ် ထည့်သွင်းပါ။");
+                return;
+            }
+            if(!slip) {
+                alert("ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။");
+                return;
+            }
+
+            userWallet[rechargeCurrency] += finalAmt;
+            if(rechargeCurrency === 'THB') {
+                document.getElementById('thb-balance').innerText = `฿ ${userWallet.THB.toFixed(2)} THB`;
+            } else {
+                document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
+            }
+
+            let now = new Date();
+            let dateStr = now.toLocaleDateString();
+            let timeStr = now.toLocaleTimeString();
+
+            let depositPayload = {
+                "Date": dateStr,
+                "Time": timeStr,
+                "Name": currentUser.name,
+                "MMK": rechargeCurrency === 'MMK' ? finalAmt : 0,
+                "THB": rechargeCurrency === 'THB' ? finalAmt : 0
+            };
+
+            logOrderToSheet("deposits", depositPayload);
+
+            alert(`✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) အောင်မြင်ပါသည်။ အတည်ပြုစစ်ဆေးနေပါပြီ။`);
+            document.getElementById('custom-recharge-amount').value = '';
+            document.getElementById('recharge-slip').value = '';
+        }
+
+        function updateProfileData() {
+            document.getElementById('profile-name').innerText = currentUser.name;
+            if(currentUser.photo) {
+                document.getElementById('profile-avatar-box').innerHTML = `<img src="${currentUser.photo}" class="w-full h-full object-cover">`;
+            } else {
+                document.getElementById('profile-avatar-box').innerText = currentUser.name.charAt(0);
+            }
+
+            document.getElementById('profile-total-thb').innerText = `฿ ${userSpent.THB.toFixed(2)}`;
+            document.getElementById('profile-total-mmk').innerText = `Ks ${userSpent.MMK.toLocaleString()}`;
+
+            document.getElementById('profile-wallet-thb').innerText = `฿ ${userWallet.THB.toFixed(2)} THB`;
+            document.getElementById('profile-wallet-mmk').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
+
+            let badgeEl = document.getElementById('profile-rank-badge');
+            let totalScoreTHB = userSpent.THB + (userSpent.MMK / 1400);
+            
+            if (totalScoreTHB > 1000) {
+                badgeEl.className = "inline-block bg-gradient-to-r from-yellow-500 to-amber-600 text-white font-bold text-[10px] px-3 py-1 rounded-full shadow-sm";
+                badgeEl.innerHTML = "👑 No. 1 VIP Customer";
+            } else if (totalScoreTHB > 500) {
+                badgeEl.className = "inline-block bg-gradient-to-r from-purple-500 to-indigo-600 text-white font-bold text-[10px] px-3 py-1 rounded-full shadow-sm";
+                badgeEl.innerHTML = "🥈 No. 2 VIP Customer";
+            } else {
+                badgeEl.className = "inline-block bg-gradient-to-r from-pink-400 to-purple-400 text-white font-bold text-[10px] px-3 py-1 rounded-full shadow-sm";
+                badgeEl.innerHTML = "⭐ Regular Customer";
+            }
+        }
+
+        function setActiveNav(page) {
+            const navIds = ['home', 'contact', 'recharge', 'gift', 'profile'];
+            navIds.forEach(id => {
+                let btn = document.getElementById('nav-btn-' + id);
+                if(btn) {
+                    if(id === page) {
+                        btn.className = "flex flex-col items-center text-pink-600 transition";
+                    } else {
+                        btn.className = "flex flex-col items-center text-gray-400 hover:text-pink-600 transition";
+                    }
+                }
+            });
+        }
+
+        function navClick(page) {
+            tg.HapticFeedback.selectionChanged();
+            setActiveNav(page);
+
+            document.getElementById('home-view').classList.add('hidden');
+            document.getElementById('game-page-view').classList.add('hidden');
+            document.getElementById('contact-view').classList.add('hidden');
+            document.getElementById('recharge-view').classList.add('hidden');
+            document.getElementById('profile-view').classList.add('hidden');
+
+            if(page === 'home') {
+                document.getElementById('home-view').classList.remove('hidden');
+            } else if(page === 'contact') {
+                document.getElementById('contact-view').classList.remove('hidden');
+            } else if(page === 'recharge') {
+                switchRechargeCurrency('MMK');
+                document.getElementById('recharge-view').classList.remove('hidden');
+            } else if(page === 'gift') {
+                openGamePage('Gift Card');
+            } else if(page === 'profile') {
+                updateProfileData();
+                document.getElementById('profile-view').classList.remove('hidden');
+            } else {
+                document.getElementById('home-view').classList.remove('hidden');
+                setActiveNav('home');
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            fetchSheetData();
+        });
+    </script>
+</body>
+</html>
