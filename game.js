@@ -1,29 +1,20 @@
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #121212;
-    color: #ffffff;
-    font-family: Arial, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+// Game Store / Mini App Core Logic
+let userBalance = 0;
+
+function initGame() {
+    console.log("May Lay Game Store Initialized");
+    loadUserData();
 }
 
-.container {
-    width: 100%;
-    max-width: 480px;
-    padding: 16px;
-    box-sizing: border-box;
+function loadUserData() {
+    // Fetch user or Telegram WebApp data
+    if (window.Telegram && window.Telegram.WebApp) {
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        console.log("Telegram User:", tg.initDataUnsafe);
+    }
 }
 
-button {
-    background-color: #ff4757;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-}
+window.addEventListener('DOMContentLoaded', () => {
+    initGame();
+});
