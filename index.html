@@ -52,7 +52,7 @@
                     <span>Wallet Balance</span>
                 </div>
                 <div class="text-xs font-semibold text-gray-700 mt-0.5">
-                    <span id="thb-balance" class="text-blue-600">฿ 150.00 THB</span> | <span id="mmk-balance" class="text-emerald-600">Ks 15,000 MMK</span>
+                    <span id="thb-balance" class="text-blue-600">฿ 0.00 THB</span> | <span id="mmk-balance" class="text-emerald-600">Ks 0 MMK</span>
                 </div>
             </div>
         </div>
@@ -383,8 +383,8 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        let userWallet = { THB: 150.00, MMK: 15000 };
-        let userSpent = { THB: 350.00, MMK: 35000 };
+        let userWallet = { THB: 0, MMK: 0 };
+        let userSpent = { THB: 0, MMK: 0 };
         let activeMainTab = 'topup'; // 'topup', 'manual', 'order'
         let rechargeCurrency = 'MMK';
         let currentCurrency = 'THB';
