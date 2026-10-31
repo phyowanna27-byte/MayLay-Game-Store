@@ -673,30 +673,36 @@
             }
         });
 
-        // Telegram Bot ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function (Token အသစ်နှင့် Chat ID အမှန်)
-        function sendOrderToTelegram(orderDetails) {
+        // Telegram Admin ဆီသို့ အော်ဒါအချက်အလက်နှင့် Slip ပုံ တိုက်ရိုက်ပို့ပေးမည့် Function
+        function sendOrderToTelegram(orderDetails, slipFile) {
             const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
-            const chatId = '8863215122';
+            const chatId = '8863215122'; // ဝန၏ Admin Chat ID
             
             const message = `🛍️ အော်ဒါအသစ်ဝင်ပါပြီ!\n\n` +
-                            `👤 ဝယ်ယူသူ: ${orderDetails.name}\n` +
+                            `👤 ဝယ်ယူသူ: ${orderDetails.name} (@${orderDetails.username})\n` +
                             `🎮 ဂိမ်း/ပစ္စည်း: ${orderDetails.item}\n` +
                             `🆔 Game ID: ${orderDetails.gameId}\n` +
                             `💰 ကျသင့်ငွေ: ${orderDetails.price} ${orderDetails.curr}\n` +
-                            `📌 အမျိုးအစား: ${orderDetails.type}`;
+                            `📌 အမျိုးအစား: ${orderDetails.type}\n\n` +
+                            `✨ အခြေအနေ: စိန်/ပစ္စည်း ဖြည့်ပေးရန် ဆောင်ရွက်နေပါသည်။\n` +
+                            `⚠️ (မှတ်ချက် - ID သို့မဟုတ် Slip မှားယွင်းပါက @${orderDetails.username} ထံ ဆက်သွယ်ရန်)`;
 
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+            if (slipFile) {
+                let formData = new FormData();
+                formData.append('chat_id', chatId);
+                formData.append('photo', slipFile);
+                formData.append('caption', message);
 
-            fetch(url)
-                .then(response => response.json())
-                .then(data => {
-                    if (data.ok) {
-                        console.log("Order sent to Telegram successfully!");
-                    } else {
-                        console.error("Failed to send order:", data);
-                    }
+                fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                    method: 'POST',
+                    body: formData
                 })
-                .catch(error => console.error("Error sending order:", error));
+                .then(res => res.json())
+                .catch(err => console.error(err));
+            } else {
+                let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+                fetch(url).catch(err => console.error(err));
+            }
         }
 
         function logOrderToSheet(targetTab, orderData) {
@@ -734,6 +740,7 @@
             let price = selectedPkg.price;
             let packageName = selectedPkg.name;
             let customerName = currentUser.name;
+            let customerUsername = (user && user.username) ? user.username : "N/A";
             let gameIdFull = `${uid} (${server})`;
 
             let now = new Date();
@@ -744,14 +751,18 @@
                 "Date": dateStr,
                 "Time": timeStr,
                 "Name": customerName,
+                "Username": customerUsername,
                 "Game ID": gameIdFull,
                 "Package": packageName,
                 "MMK": curr === 'MMK' ? price : 0,
                 "THB": curr === 'THB' ? price : 0
             };
 
+            let slip = document.getElementById('f-slip').files[0];
+
             let orderDetails = {
                 name: customerName,
+                username: customerUsername,
                 item: packageName,
                 gameId: gameIdFull,
                 price: price,
@@ -759,7 +770,7 @@
                 type: activeMainTab.toUpperCase()
             };
 
-            sendOrderToTelegram(orderDetails);
+            sendOrderToTelegram(orderDetails, slip);
 
             if (activeMainTab === 'topup') {
                 if (userWallet[curr] >= price) {
@@ -777,7 +788,6 @@
                     alert(`❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`);
                 }
             } else if (activeMainTab === 'manual') {
-                let slip = document.getElementById('f-slip').files[0];
                 if (!slip) {
                     alert("ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။");
                     return;
