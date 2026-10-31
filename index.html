@@ -508,7 +508,6 @@
             const container = document.getElementById('game-price-list');
             if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ စျေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
             
-            // SheetBest API Endpoint for fetching data (e.g., from main or specific tab if needed)
             const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
 
             fetch(apiURL)
@@ -740,11 +739,10 @@
             }
         }
 
-        // 2. SheetBest သို့ သက်ဆိုင်ရာ Tab အလိုက် အော်ဒါအချက်အလက် ပို့ပေးမည့် Function
+        // 2. SheetBest သို့ သက်ဆိုင်ရာ Tab အလိုက် တိကျစွာ ပို့ပေးမည့် Function
         function logOrderToSheet(orderDetails) {
             let targetTab = "";
             
-            // Google Sheet ထဲက Tab နာမည်များနှင့် အတိအကျ ချိန်ညှိခြင်း
             if (orderDetails.type === 'TOPUP') {
                 targetTab = "Pre_Funded_2026-Oct";
             } else if (orderDetails.type === 'MANUAL') {
@@ -780,10 +778,10 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(`Logged to Sheet (${targetTab}) successfully:`, data);
+                console.log(`Successfully logged to tab [${targetTab}]:`, data);
             })
             .catch(error => {
-                console.error(`Error logging to sheet (${targetTab}):`, error);
+                console.error(`Error logging to tab [${targetTab}]:`, error);
             });
         }
 
@@ -823,10 +821,10 @@
                 type: activeMainTab.toUpperCase()
             };
 
-            // 1. Telegram ဆီသို့ မက်ဆေ့ချ်/စလစ် ပို့မည်
+            // 1. Telegram သို့ ပို့မည်
             sendOrderToTelegram(orderDetails, slip);
 
-            // 2. SheetBest မှတဆင့် သက်ဆိုင်ရာ Google Sheet Tab ဆီသို့ ဒေတာပို့မည်
+            // 2. Google Sheet ၏ သက်ဆိုင်ရာ Tab သို့ ပို့မည်
             logOrderToSheet(orderDetails);
 
             if (activeMainTab === 'topup') {
