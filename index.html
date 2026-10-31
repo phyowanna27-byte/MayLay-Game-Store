@@ -100,7 +100,7 @@
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
-        <!-- ၄။ Game Categories (၅ ခု - MLBB, PUBG, HOK, MCGG, Starlight) -->
+        <!-- ၄။ Game Categories -->
         <div class="grid grid-cols-3 gap-3 mb-4">
             <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-cyan-400 h-20 flex items-center justify-center text-white font-bold shadow-inner">
@@ -154,7 +154,7 @@
         </div>
     </div>
 
-    <!-- GAME DETAIL / SHOP PAGE (ဂိမ်း သို့မဟုတ် Gift Card ကိုနှိပ်မှပေါ်လာမည့် ဈေးနှုန်းစာရင်းမျက်နှာပြင်) -->
+    <!-- GAME DETAIL / SHOP PAGE -->
     <div id="game-page-view" class="hidden p-4 max-w-md mx-auto">
         <div class="flex items-center justify-between mb-4 bg-white p-3 rounded-2xl shadow-sm">
             <button onclick="backToHome()" class="bg-pink-100 text-pink-700 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1">
@@ -165,7 +165,7 @@
             <div class="w-12"></div>
         </div>
 
-        <!-- Currency Selector (THB / MMK Toggle) -->
+        <!-- Currency Selector -->
         <div class="flex bg-white p-1 rounded-2xl shadow-sm mb-4 justify-between font-bold text-xs">
             <button onclick="switchCurrency('THB')" id="curr-thb" class="flex-1 py-2 rounded-xl bg-blue-600 text-white text-center transition">🇹🇭 ထိုင်းဘတ် (THB)</button>
             <button onclick="switchCurrency('MMK')" id="curr-mmk" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">🇲🇲 မြန်မာကျပ် (MMK)</button>
@@ -206,12 +206,8 @@
                 </div>
             </div>
 
-            <!-- Manual Mode ဖြစ်မှသာ ငွေလွှဲအကောင့်၊ QR နှင့် Slip တင်ရန် ပေါ်မည် -->
             <div id="manual-payment-container" class="space-y-3">
-                <div id="payment-account-box" class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2">
-                    <!-- Dynamic Bank/QR Info -->
-                </div>
-
+                <div id="payment-account-box" class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2"></div>
                 <div>
                     <label class="font-bold text-gray-700 block mb-1">ငွေလွှဲစလစ် (Slip) တင်ရန်</label>
                     <input type="file" id="f-slip" accept="image/*" class="w-full p-2 border border-gray-200 rounded-xl text-xs bg-gray-50">
@@ -245,7 +241,7 @@
         </div>
     </div>
 
-    <!-- RECHARGE VIEW (ပိုက်ဆံဖြည့်ရန်) -->
+    <!-- RECHARGE VIEW -->
     <div id="recharge-view" class="hidden p-4 max-w-md mx-auto space-y-4">
         <div class="bg-white p-4 rounded-2xl shadow-md space-y-4">
             <h2 class="font-extrabold text-pink-700 text-sm flex items-center space-x-1">
@@ -253,13 +249,11 @@
                 <span>ပိုက်ဆံအိတ်သို့ ငွေဖြည့်မည် (Recharge)</span>
             </h2>
 
-            <!-- Currency Selector for Recharge -->
             <div class="flex bg-gray-100 p-1 rounded-xl justify-between font-bold text-xs">
                 <button onclick="switchRechargeCurrency('MMK')" id="recharge-curr-mmk" class="flex-1 py-2 rounded-lg bg-emerald-600 text-white text-center transition">🇲🇲 မြန်မာကျပ် (MMK)</button>
                 <button onclick="switchRechargeCurrency('THB')" id="recharge-curr-thb" class="flex-1 py-2 rounded-lg text-gray-600 text-center transition">🇹🇭 ထိုင်းဘတ် (THB)</button>
             </div>
 
-            <!-- MMK Amounts Grid -->
             <div id="recharge-amounts-mmk" class="grid grid-cols-2 gap-2">
                 <button onclick="selectRechargeAmount(10000)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">10,000 MMK</button>
                 <button onclick="selectRechargeAmount(20000)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">20,000 MMK</button>
@@ -267,7 +261,6 @@
                 <button onclick="selectRechargeAmount(40000)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">40,000 MMK</button>
             </div>
 
-            <!-- THB Amounts Grid (Initially Hidden) -->
             <div id="recharge-amounts-thb" class="grid grid-cols-2 gap-2 hidden">
                 <button onclick="selectRechargeAmount(100)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">100 THB</button>
                 <button onclick="selectRechargeAmount(200)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">200 THB</button>
@@ -275,18 +268,13 @@
                 <button onclick="selectRechargeAmount(400)" class="recharge-btn p-2.5 rounded-xl border border-pink-200 bg-pink-50 text-xs font-bold text-gray-800 hover:bg-pink-500 hover:text-white transition">400 THB</button>
             </div>
 
-            <!-- Custom Amount Input -->
             <div>
                 <label class="font-bold text-gray-700 block mb-1 text-xs">Custom ပမာဏ ထည့်ရန်</label>
                 <input type="number" id="custom-recharge-amount" placeholder="လိုသလောက် ငွေပမာဏ ရိုက်ထည့်ပါ" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500">
             </div>
 
-            <!-- Bank & QR Account Info Display -->
-            <div id="recharge-bank-box" class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2 text-xs">
-                <!-- Dynamic MMK Accounts & QR -->
-            </div>
+            <div id="recharge-bank-box" class="bg-gray-50 p-3 rounded-xl border border-gray-200 space-y-2 text-xs"></div>
 
-            <!-- Slip Upload -->
             <div class="text-xs space-y-1">
                 <label class="font-bold text-gray-700 block">ငွေလွှဲပြီး စလစ် (Slip) တင်ရန်</label>
                 <input type="file" id="recharge-slip" accept="image/*" class="w-full p-2 border border-gray-200 rounded-xl bg-gray-50">
@@ -298,7 +286,7 @@
         </div>
     </div>
 
-    <!-- PROFILE VIEW (ကိုယ်ပိုင် အချက်အလက်နှင့် ဝယ်ယူမှုမှတ်တမ်း) -->
+    <!-- PROFILE VIEW -->
     <div id="profile-view" class="hidden p-4 max-w-md mx-auto space-y-4">
         <div class="bg-white p-5 rounded-3xl shadow-md text-center space-y-3">
             <div id="profile-avatar-box" class="w-20 h-20 bg-pink-400 rounded-full mx-auto flex items-center justify-center text-white text-3xl font-bold shadow border-4 border-pink-100 overflow-hidden">
@@ -334,7 +322,7 @@
         </div>
     </div>
 
-    <!-- LOGIN MODAL (Telegram သို့မဟုတ် Gmail ဖြင့် ဝင်ရန်) -->
+    <!-- LOGIN MODAL -->
     <div id="login-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-50 p-4">
         <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl text-center space-y-4">
             <h3 class="font-extrabold text-pink-700 text-base">အကောင့်ဝင်ရောက်ရန်</h3>
@@ -355,7 +343,7 @@
         </div>
     </div>
 
-    <!-- ၅။ Bottom Navigation (၅ ခု) -->
+    <!-- Bottom Navigation -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-pink-200 flex justify-around py-2.5 shadow-lg z-50">
         <button onclick="navClick('home')" id="nav-btn-home" class="flex flex-col items-center text-pink-600 transition">
             <i class="fa-solid fa-house text-base"></i>
@@ -385,7 +373,7 @@
 
         let userWallet = { THB: 0, MMK: 0 };
         let userSpent = { THB: 0, MMK: 0 };
-        let activeMainTab = 'topup'; // 'topup', 'manual', 'order'
+        let activeMainTab = 'topup';
         let rechargeCurrency = 'MMK';
         let currentCurrency = 'THB';
         let selectedRechargeAmt = 0;
@@ -685,6 +673,32 @@
             }
         });
 
+        // Telegram Bot ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function
+        function sendOrderToTelegram(orderDetails) {
+            const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
+            const chatId = '6432109875';
+            
+            const message = `🛍️ အော်ဒါအသစ်ဝင်ပါပြီ!\n\n` +
+                            `👤 ဝယ်ယူသူ: ${orderDetails.name}\n` +
+                            `🎮 ဂိမ်း/ပစ္စည်း: ${orderDetails.item}\n` +
+                            `🆔 Game ID: ${orderDetails.gameId}\n` +
+                            `💰 ကျသင့်ငွေ: ${orderDetails.price} ${orderDetails.curr}\n` +
+                            `📌 အမျိုးအစား: ${orderDetails.type}`;
+
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok) {
+                        console.log("Order sent to Telegram successfully!");
+                    } else {
+                        console.error("Failed to send order:", data);
+                    }
+                })
+                .catch(error => console.error("Error sending order:", error));
+        }
+
         function logOrderToSheet(targetTab, orderData) {
             let apiEndpoint = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935"; 
             let fullUrl = `${apiEndpoint}/tabs/${encodeURIComponent(targetTab)}`;
@@ -735,6 +749,17 @@
                 "MMK": curr === 'MMK' ? price : 0,
                 "THB": curr === 'THB' ? price : 0
             };
+
+            let orderDetails = {
+                name: customerName,
+                item: packageName,
+                gameId: gameIdFull,
+                price: price,
+                curr: curr,
+                type: activeMainTab.toUpperCase()
+            };
+
+            sendOrderToTelegram(orderDetails);
 
             if (activeMainTab === 'topup') {
                 if (userWallet[curr] >= price) {
