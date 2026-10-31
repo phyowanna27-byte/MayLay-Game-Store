@@ -19,7 +19,7 @@ function loadUserData() {
             currentUser.photo = user.photo_url || "";
             console.log("Telegram User:", user);
             
-            // Profile UI ပေါ်မှာ နာမည်နဲ့ ပုံပြရန် (ရှိခဲ့ရင်)
+            // Profile UI ပေါ်မှာ နာမည်နဲ့ ပုံပြရန်
             updateProfileUI(currentUser.name, currentUser.photo);
         }
     }
@@ -42,10 +42,10 @@ function updateProfileUI(name, photo) {
     }
 }
 
-// Telegram Bot ဆီသို့ အော်ဒါအချက်အလက် ပို့ရန် Function
+// Telegram Bot ဆီသို့ အော်ဒါအချက်အလက် ပို့ရန် Function (Token နဲ့ Chat ID ထည့်ပြီးသား)
 function sendOrderToTelegram(orderDetails) {
-    const botToken = 'YOUR_BOT_TOKEN_အမှန်ကိုထည့်ပါ'; // ကိုယ့်ရဲ့ Bot Token ထည့်ရန်
-    const chatId = 'YOUR_CHAT_ID_အမှန်ကိုထည့်ပါ';       // ကိုယ့်ရဲ့ Chat ID ထည့်ရန်
+    const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE'; // ဝန ပေးထားတဲ့ Bot Token
+    const chatId = '6432109875';                                      // ဝန ပေးထားတဲ့ Chat ID
     
     const message = `🛍️ အော်ဒါအသစ်ဝင်ပါပြီ!\n\n` +
                     `👤 ဝယ်ယူသူ: ${orderDetails.name || currentUser.name}\n` +
