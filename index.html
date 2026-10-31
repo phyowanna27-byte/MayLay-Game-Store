@@ -673,19 +673,21 @@
             }
         });
 
-        // Telegram Admin ဆီသို့ အော်ဒါအချက်အလက်နှင့် Slip ပုံ တိုက်ရိုက်ပို့ပေးမည့် Function
+        // Telegram Admin ဆီသို့ အော်ဒါအချက်အလက်၊ Username နှင့် Slip ပုံ တိုက်ရိုက်ပို့ပေးမည့် Function
         function sendOrderToTelegram(orderDetails, slipFile) {
             const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
-            const chatId = '8863215122'; // ဝန၏ Admin Chat ID
+            const chatId = '8863215122'; // ဝန၏ Admin Chat ID[span_2](start_span)[span_2](end_span)
             
+            let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
+
             const message = `🛍️ အော်ဒါအသစ်ဝင်ပါပြီ!\n\n` +
-                            `👤 ဝယ်ယူသူ: ${orderDetails.name} (@${orderDetails.username})\n` +
+                            `👤 ဝယ်ယူသူ: ${userDisplay}[span_3](start_span)[span_3](end_span)\n` +
                             `🎮 ဂိမ်း/ပစ္စည်း: ${orderDetails.item}\n` +
                             `🆔 Game ID: ${orderDetails.gameId}\n` +
                             `💰 ကျသင့်ငွေ: ${orderDetails.price} ${orderDetails.curr}\n` +
                             `📌 အမျိုးအစား: ${orderDetails.type}\n\n` +
                             `✨ အခြေအနေ: စိန်/ပစ္စည်း ဖြည့်ပေးရန် ဆောင်ရွက်နေပါသည်။\n` +
-                            `⚠️ (မှတ်ချက် - ID သို့မဟုတ် Slip မှားယွင်းပါက @${orderDetails.username} ထံ ဆက်သွယ်ရန်)`;
+                            `⚠️ (မှတ်ချက် - ID သို့မဟုတ် Slip မှားယွင်းပါက ဆက်သွယ်ရန်)`;
 
             if (slipFile) {
                 let formData = new FormData();
