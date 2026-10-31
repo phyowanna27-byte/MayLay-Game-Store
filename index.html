@@ -508,6 +508,7 @@
             const container = document.getElementById('game-price-list');
             if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ စျေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
             
+            // SheetBest API Endpoint for fetching data (e.g., from main or specific tab if needed)
             const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
 
             fetch(apiURL)
@@ -581,7 +582,6 @@
             let titleElement = document.getElementById('form-section-title');
             let eventDatetimeContainer = document.getElementById('event-datetime-container');
 
-            // Order Tab ဖြစ်ပါက Event ရက်စွဲနှင့် အချိန် Box ကို ဖော်ပြမည်
             if (activeMainTab === 'order') {
                 titleElement.innerText = "📦 Order ကြိုတင်စာရင်းပေးသွင်းရန်";
                 eventDatetimeContainer.classList.remove('hidden');
@@ -687,15 +687,15 @@
             }
         });
 
-        // Telegram Channel / Admin ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function (Event ရက်စွဲနှင့် အချိန်ပါ ထည့်သွင်းထားသည်)
+        // 1. Telegram ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function
         function sendOrderToTelegram(orderDetails, slipFile) {
             const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
-            const chatId = '8863215122'; // @MayLayGameStore သို့မဟုတ် Admin Chat ID
+            const chatId = '8863215122';
             
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
 
             let message = `🛍️ အော်ဒါအသစ်ဝင်ပါပြီ!\n\n` +
-                          `👤 ဝယ်ယူသူ: ${userDisplay}[span_0](start_span)[span_0](end_span)\n` +
+                          `👤 ဝယ်ယူသူ: ${userDisplay}\n` +
                           `🎮 ဂိမ်း/ပစ္စည်း: ${orderDetails.item}\n` +
                           `🆔 Game ID: ${orderDetails.gameId}\n`;
 
@@ -707,7 +707,6 @@
                        `📌 အမျိုးအစား: ${orderDetails.type}\n\n` +
                        `✨ အခြေအနေ: စိန်/ပစ္စည်း ဖြည့်ပေးပြီးပါပြီ။`;
 
-            // Inline Button ဖြင့် "✅ စိန်ဖြည့်ပြီးပါပြီ" ခလုတ်ကို တွဲလျက်ပို့ရန် (Callback Data ဖြင့် Group သို့ အလိုအလျောက် ပြန်ပို့ရန် ချိတ်ဆက်နိုင်သည်)
             const inlineKeyboard = {
                 inline_keyboard: [
                     [
@@ -726,12 +725,7 @@
                 fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                     method: 'POST',
                     body: formData
-                })
-                .then(res => res.json())
-                .then(data => {
-                    console.log("Slip photo and message sent successfully", data);
-                })
-                .catch(err => console.error("Error sending slip photo:", err));
+                }).catch(err => console.error("Error sending slip photo:", err));
             } else {
                 let url = `https://api.telegram.org/bot${botToken}/sendMessage`;
                 fetch(url, {
@@ -744,6 +738,53 @@
                     })
                 }).catch(err => console.error(err));
             }
+        }
+
+        // 2. SheetBest သို့ သက်ဆိုင်ရာ Tab အလိုက် အော်ဒါအချက်အလက် ပို့ပေးမည့် Function
+        function logOrderToSheet(orderDetails) {
+            let targetTab = "";
+            
+            // Google Sheet ထဲက Tab နာမည်များနှင့် အတိအကျ ချိန်ညှိခြင်း
+            if (orderDetails.type === 'TOPUP') {
+                targetTab = "Pre_Funded_2026-Oct";
+            } else if (orderDetails.type === 'MANUAL') {
+                targetTab = "Manual_Orders_2026-Oct";
+            } else if (orderDetails.type === 'ORDER') {
+                targetTab = "Event_Orders_2026-Oct";
+            } else {
+                targetTab = "Manual_Orders_2026-Oct";
+            }
+
+            let apiEndpoint = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
+            let fullUrl = `${apiEndpoint}/tabs/${encodeURIComponent(targetTab)}`;
+
+            let payload = {
+                "Timestamp": new Date().toLocaleString(),
+                "Name": orderDetails.name,
+                "Username": orderDetails.username,
+                "Package": orderDetails.item,
+                "Game ID": orderDetails.gameId,
+                "Event Datetime": orderDetails.eventDatetime || "-",
+                "Price": orderDetails.price,
+                "Currency": orderDetails.curr,
+                "Type": orderDetails.type
+            };
+
+            fetch(fullUrl, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(`Logged to Sheet (${targetTab}) successfully:`, data);
+            })
+            .catch(error => {
+                console.error(`Error logging to sheet (${targetTab}):`, error);
+            });
         }
 
         function submitGameOrder() {
@@ -782,7 +823,11 @@
                 type: activeMainTab.toUpperCase()
             };
 
+            // 1. Telegram ဆီသို့ မက်ဆေ့ချ်/စလစ် ပို့မည်
             sendOrderToTelegram(orderDetails, slip);
+
+            // 2. SheetBest မှတဆင့် သက်ဆိုင်ရာ Google Sheet Tab ဆီသို့ ဒေတာပို့မည်
+            logOrderToSheet(orderDetails);
 
             if (activeMainTab === 'topup') {
                 if (userWallet[curr] >= price) {
