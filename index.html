@@ -739,7 +739,7 @@
             }
         }
 
-        // 2. SheetBest သို့ သက်ဆိုင်ရာ Tab အလိုက် တိကျစွာ ပို့ပေးမည့် Function
+        // 2. SheetBest သို့ Tab အလိုက် တိကျစွာ ပို့ပေးမည့် Function (/sheet/ Endpoint ပုံစံ)
         function logOrderToSheet(orderDetails) {
             let targetTab = "";
             
@@ -754,7 +754,7 @@
             }
 
             let apiEndpoint = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
-            let fullUrl = `${apiEndpoint}/tabs/${encodeURIComponent(targetTab)}`;
+            let fullUrl = `${apiEndpoint}/sheet/${encodeURIComponent(targetTab)}`;
 
             let payload = {
                 "Timestamp": new Date().toLocaleString(),
@@ -778,10 +778,10 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(`Successfully logged to tab [${targetTab}]:`, data);
+                console.log(`Successfully logged to sheet [${targetTab}]:`, data);
             })
             .catch(error => {
-                console.error(`Error logging to tab [${targetTab}]:`, error);
+                console.error(`Error logging to sheet [${targetTab}]:`, error);
             });
         }
 
