@@ -686,7 +686,7 @@
             }
         });
 
-        // 1. Telegram ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function (မူလပုံစံအတိုင်း)
+        // 1. Telegram ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function
         function sendOrderToTelegram(orderDetails, slipFile) {
             const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
             const chatId = '8863215122';
@@ -739,23 +739,36 @@
             }
         }
 
-        // 2. SheetBest သို့ ဒေတာပို့မည့် Function (မူလ ပင်မလင့်ခ်တိုက်ရိုက်ချိတ်ဆက်သည့် ပုံစံ)
+        // 2. SheetBest သို့ သက်ဆိုင်ရာ Tab အလိုက် တိကျစွာ ပို့ပေးမည့် Function
         function logOrderToSheet(orderDetails) {
+            let targetTab = "";
+            
+            if (orderDetails.type === 'TOPUP') {
+                targetTab = "Pre_Funded_2026-Oct";
+            } else if (orderDetails.type === 'MANUAL') {
+                targetTab = "Manual_Orders_2026-Oct";
+            } else if (orderDetails.type === 'ORDER') {
+                targetTab = "Event_Orders_2026-Oct";
+            } else {
+                targetTab = "Manual_Orders_2026-Oct";
+            }
+
             let apiEndpoint = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
+            let fullUrl = `${apiEndpoint}/tabs/${encodeURIComponent(targetTab)}`;
 
             let payload = {
                 "Timestamp": new Date().toLocaleString(),
-                "Type": orderDetails.type,
                 "Name": orderDetails.name,
                 "Username": orderDetails.username,
                 "Package": orderDetails.item,
                 "Game ID": orderDetails.gameId,
                 "Event Datetime": orderDetails.eventDatetime || "-",
                 "Price": orderDetails.price,
-                "Currency": orderDetails.curr
+                "Currency": orderDetails.curr,
+                "Type": orderDetails.type
             };
 
-            fetch(apiEndpoint, {
+            fetch(fullUrl, {
                 method: "POST",
                 mode: "cors",
                 headers: {
@@ -765,10 +778,10 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Logged to sheet successfully:", data);
+                console.log(`Successfully logged to tab [${targetTab}]:`, data);
             })
             .catch(error => {
-                console.error("Error logging to sheet:", error);
+                console.error(`Error logging to tab [${targetTab}]:`, error);
             });
         }
 
@@ -811,7 +824,7 @@
             // 1. Telegram သို့ ပို့မည်
             sendOrderToTelegram(orderDetails, slip);
 
-            // 2. Google Sheet သို့ ပို့မည်
+            // 2. Google Sheet ၏ သက်ဆိုင်ရာ Tab သို့ ပို့မည်
             logOrderToSheet(orderDetails);
 
             if (activeMainTab === 'topup') {
