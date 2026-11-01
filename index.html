@@ -29,15 +29,12 @@
 
     <!-- HOME VIEW (ပင်မမျက်နှာပြင်) -->
     <div id="home-view" class="p-4 max-w-md mx-auto">
-        
-        <!-- ၁။ May Lay Game Store Animation Title -->
         <div class="text-center my-3">
             <h1 class="text-pink-700 font-extrabold text-2xl tracking-wide animate-store-title">
                 ✨ May Lay Game Store ✨
             </h1>
         </div>
 
-        <!-- ၂။ Telegram & Gmail Login & Wallet -->
         <div class="flex justify-between items-center bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-sm mb-4">
             <div id="user-profile-section" class="flex items-center space-x-2">
                 <button onclick="openLoginModal()" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow flex items-center space-x-1">
@@ -57,7 +54,6 @@
             </div>
         </div>
 
-        <!-- ၃။ Updated Banner Slides -->
         <div class="relative overflow-hidden rounded-2xl shadow-md mb-4 bg-gradient-to-r from-teal-400 via-purple-500 to-pink-500 text-white p-5 min-h-[110px] flex items-center justify-between">
             <div id="banner-container" class="w-full">
                 <div class="banner-slide flex items-center justify-between">
@@ -93,14 +89,12 @@
             </div>
         </div>
 
-        <!-- TOPUP | Manual | Order Tabs -->
         <div class="flex bg-white p-1 rounded-2xl shadow-sm mb-4 justify-between font-bold text-xs">
             <button onclick="switchMainTab('topup')" id="tab-topup" class="flex-1 py-2 rounded-xl bg-pink-500 text-white text-center transition">TOPUP</button>
             <button onclick="switchMainTab('manual')" id="tab-manual" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Manual</button>
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
-        <!-- ၄။ Game Categories -->
         <div class="grid grid-cols-3 gap-3 mb-4">
             <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-cyan-400 h-20 flex items-center justify-center text-white font-bold shadow-inner">
@@ -165,13 +159,11 @@
             <div class="w-12"></div>
         </div>
 
-        <!-- Currency Selector -->
         <div class="flex bg-white p-1 rounded-2xl shadow-sm mb-4 justify-between font-bold text-xs">
             <button onclick="switchCurrency('THB')" id="curr-thb" class="flex-1 py-2 rounded-xl bg-blue-600 text-white text-center transition">🇹🇭 ထိုင်းဘတ် (THB)</button>
             <button onclick="switchCurrency('MMK')" id="curr-mmk" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">🇲🇲 မြန်မာကျပ် (MMK)</button>
         </div>
 
-        <!-- ဈေးနှုန်းစာရင်းပြကွက် -->
         <div class="bg-white p-4 rounded-2xl shadow-md mb-4">
             <h3 class="font-bold text-pink-700 text-xs mb-3">💎 ရွေးချယ်နိုင်သော ပက်ကေ့ဂျ်များ</h3>
             <div id="game-price-list" class="space-y-2">
@@ -179,7 +171,6 @@
             </div>
         </div>
 
-        <!-- Order Form & Payment Section -->
         <div id="game-order-section" class="hidden bg-white p-4 rounded-2xl shadow-md space-y-3 text-xs">
             <h3 id="form-section-title" class="font-bold text-pink-700 text-sm mb-2">🛒 ဝယ်ယူရန် အချက်အလက်ဖြည့်ပါ</h3>
             
@@ -189,7 +180,6 @@
                 <p id="form-item-price" class="font-bold text-blue-600 mt-1">-</p>
             </div>
 
-            <!-- Event ရက်စွဲနှင့် အချိန် ရွေးချယ်ရန် (ORDER Tab အတွက် အထူးထုတ်ထားသည်) -->
             <div id="event-datetime-container" class="hidden space-y-2 bg-purple-50 p-3 rounded-xl border border-purple-200">
                 <label class="font-bold text-purple-900 block"><i class="fa-solid fa-calendar-days mr-1"></i> Event ရက်စွဲနှင့် အချိန် (ကြိုတင်စာရင်း)</label>
                 <input type="datetime-local" id="f-event-datetime" class="w-full p-2.5 border border-purple-200 rounded-xl bg-white text-xs focus:outline-none focus:border-purple-500 font-semibold text-purple-800">
@@ -686,7 +676,7 @@
             }
         });
 
-        // 1. Telegram ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function (ခလုတ်နှိပ်ပါက Customer ထံသို့ ချက်ချင်း အကြောင်းကြားမည်)
+        // 1. Telegram သို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function (CORS အမှားအယွင်းမရှိစေရန် No-Cors ဖြင့် ပြင်ဆင်ထားသည်)
         function sendOrderToTelegram(orderDetails, slipFile) {
             const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
             const chatId = '8863215122';
@@ -706,88 +696,32 @@
                        `📌 အမျိုးအစား: ${orderDetails.type}\n\n` +
                        `✨ အခြေအနေ: စိန်/ပစ္စည်း ဖြည့်ပေးနေပါပြီ။`;
 
-            const inlineKeyboard = {
-                inline_keyboard: [
-                    [
-                        { text: "✅ စိန်ဖြည့်ပြီးပါပြီ", callback_data: "done_filling_diamonds" }
-                    ]
-                ]
-            };
-
             if (slipFile) {
                 let formData = new FormData();
                 formData.append('chat_id', chatId);
                 formData.append('photo', slipFile);
                 formData.append('caption', message);
-                formData.append('reply_markup', JSON.stringify(inlineKeyboard));
 
                 fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                     method: 'POST',
+                    mode: 'no-cors',
                     body: formData
-                }).then(res => res.json()).then(data => {
-                    if(data && data.result && data.result.message_id) {
-                        listenForAdminAction(botToken, chatId, data.result.message_id, orderDetails.name);
-                    }
                 }).catch(err => console.error("Error sending slip photo:", err));
             } else {
                 let url = `https://api.telegram.org/bot${botToken}/sendMessage`;
                 fetch(url, {
                     method: 'POST',
+                    mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         chat_id: chatId,
-                        text: message,
-                        reply_markup: inlineKeyboard
+                        text: message
                     })
-                }).then(res => res.json()).then(data => {
-                    if(data && data.result && data.result.message_id) {
-                        listenForAdminAction(botToken, chatId, data.result.message_id, orderDetails.name);
-                    }
                 }).catch(err => console.error(err));
             }
         }
 
-        // Admin က ခလုတ်နှိပ်သည်ကို စောင့်ဆိုင်းပြီး ပြီးဆုံးကြောင်း Customer ဆီသို့ အကြောင်းကြားမည့် Function
-        function listenForAdminAction(token, chatId, messageId, customerName) {
-            let interval = setInterval(() => {
-                fetch(`https://api.telegram.org/bot${token}/getUpdates?allowed_updates=["callback_query"]`)
-                    .then(res => res.json())
-                    .then(data => {
-                        if(data.result && data.result.length > 0) {
-                            let latest = data.result[data.result.length - 1];
-                            if(latest.callback_query && latest.callback_query.message.message_id === messageId) {
-                                if(latest.callback_query.data === "done_filling_diamonds") {
-                                    // 1. Admin ဆီက မက်ဆေ့ချ်ကို ပြီးစီးကြောင်း ပြောင်းမည်
-                                    fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({
-                                            chat_id: chatId,
-                                            message_id: messageId,
-                                            text: `✅ အော်ဒါပြီးစီးပါပြီ (${customerName} အတွက် စိန်/ပစ္စည်း ဖြည့်ပြီးပါပြီ)`,
-                                            reply_markup: { inline_keyboard: [] }
-                                        })
-                                    });
-
-                                    // 2. Customer ဆီသို့ ပြီးစီးကြောင်း အကြောင်းကြားစာ ပို့မည်
-                                    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
-                                        method: 'POST',
-                                        headers: { 'Content-Type': 'application/json' },
-                                        body: JSON.stringify({
-                                            chat_id: chatId,
-                                            text: `🎉 ကျေးဇူးတင်ပါတယ် ${customerName} ရေ၊ တောင်းဆိုထားသော စိန်/ပစ္စည်းများကို ဖြည့်သွင်းပေးပြီးဖြစ်ပါသည်! ✨`
-                                        })
-                                    });
-
-                                    clearInterval(interval);
-                                }
-                            }
-                        }
-                    }).catch(err => console.log(err));
-            }, 3000);
-        }
-
-        // 2. Google Sheet သို့ Tab တွေအလိုက် အော်ဒါပို့မည့် Function (Order list Sheet အသစ်)
+        // 2. Google Sheet သို့ Tab တွေအလိုက် အော်ဒါပို့မည့် Function (SheetBest CORS ဖြေရှင်းထားသည်)
         function logOrderToSheet(orderDetails) {
             let baseURL = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0";
             let targetTab = "";
@@ -820,7 +754,7 @@
 
             fetch(apiEndpoint, {
                 method: "POST",
-                mode: "cors",
+                mode: "no-cors",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -869,10 +803,10 @@
                 type: orderType
             };
 
-            // 1. Telegram သို့ ပို့မည် (Admin ခလုတ်ဖြင့်)
+            // 1. Telegram သို့ ပို့မည်
             sendOrderToTelegram(orderDetails, slip);
 
-            // 2. Google Sheet (Order list) သို့ ပို့မည်
+            // 2. Google Sheet သို့ ပို့မည်
             logOrderToSheet(orderDetails);
 
             if (activeMainTab === 'topup') {
@@ -992,7 +926,7 @@
 
             fetch(apiEndpoint, {
                 method: "POST",
-                mode: "cors",
+                mode: "no-cors",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -1021,7 +955,6 @@
                 return;
             }
 
-            // SheetBest ရဲ့ deposits Tab သို့ မှတ်တမ်းပို့မည်
             logDepositToSheet(finalAmt, rechargeCurrency, slip);
 
             userWallet[rechargeCurrency] += finalAmt;
