@@ -318,11 +318,11 @@
                 <p class="font-bold text-gray-700">💼 ပိုက်ဆံအိတ် လက်ကျန်ငွေ:</p>
                 <div class="flex justify-between text-gray-600 font-semibold">
                     <span>ထိုင်းဘတ်:</span>
-                    <span id="profile-wallet-thb" class="text-blue-600">฿ 150.00 THB</span>
+                    <span id="profile-wallet-thb" class="text-blue-600">฿ 0.00 THB</span>
                 </div>
                 <div class="flex justify-between text-gray-600 font-semibold">
                     <span>မြန်မာကျပ်:</span>
-                    <span id="profile-wallet-mmk" class="text-emerald-600">Ks 15,000 MMK</span>
+                    <span id="profile-wallet-mmk" class="text-emerald-600">Ks 0 MMK</span>
                 </div>
             </div>
         </div>
@@ -508,7 +508,6 @@
             const container = document.getElementById('game-price-list');
             if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ ဈေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
             
-            // ဈေးနှုန်းများအတွက် မူလ Sheet လင့်ခ် (သို့မဟုတ် Order list ထဲမှ ဈေးနှုန်း Tab လင့်ခ်)
             const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
 
             fetch(apiURL)
@@ -687,7 +686,7 @@
             }
         });
 
-        // 1. Telegram ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function
+        // 1. Telegram ဆီသို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function (ခလုတ်နှိပ်ပါက Customer ထံသို့ ချက်ချင်း အကြောင်းကြားမည်)
         function sendOrderToTelegram(orderDetails, slipFile) {
             const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
             const chatId = '8863215122';
@@ -705,7 +704,7 @@
 
             message += `💰 ကျသင့်ငွေ: ${orderDetails.price} ${orderDetails.curr}\n` +
                        `📌 အမျိုးအစား: ${orderDetails.type}\n\n` +
-                       `✨ အခြေအနေ: စိန်/ပစ္စည်း ဖြည့်ပေးပြီးပါပြီ။`;
+                       `✨ အခြေအနေ: စိန်/ပစ္စည်း ဖြည့်ပေးနေပါပြီ။`;
 
             const inlineKeyboard = {
                 inline_keyboard: [
@@ -725,6 +724,10 @@
                 fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
                     method: 'POST',
                     body: formData
+                }).then(res => res.json()).then(data => {
+                    if(data && data.result && data.result.message_id) {
+                        listenForAdminAction(botToken, chatId, data.result.message_id, orderDetails.name);
+                    }
                 }).catch(err => console.error("Error sending slip photo:", err));
             } else {
                 let url = `https://api.telegram.org/bot${botToken}/sendMessage`;
@@ -736,8 +739,52 @@
                         text: message,
                         reply_markup: inlineKeyboard
                     })
+                }).then(res => res.json()).then(data => {
+                    if(data && data.result && data.result.message_id) {
+                        listenForAdminAction(botToken, chatId, data.result.message_id, orderDetails.name);
+                    }
                 }).catch(err => console.error(err));
             }
+        }
+
+        // Admin က ခလုတ်နှိပ်သည်ကို စောင့်ဆိုင်းပြီး ပြီးဆုံးကြောင်း Customer ဆီသို့ အကြောင်းကြားမည့် Function
+        function listenForAdminAction(token, chatId, messageId, customerName) {
+            let interval = setInterval(() => {
+                fetch(`https://api.telegram.org/bot${token}/getUpdates?allowed_updates=["callback_query"]`)
+                    .then(res => res.json())
+                    .then(data => {
+                        if(data.result && data.result.length > 0) {
+                            let latest = data.result[data.result.length - 1];
+                            if(latest.callback_query && latest.callback_query.message.message_id === messageId) {
+                                if(latest.callback_query.data === "done_filling_diamonds") {
+                                    // 1. Admin ဆီက မက်ဆေ့ချ်ကို ပြီးစီးကြောင်း ပြောင်းမည်
+                                    fetch(`https://api.telegram.org/bot${token}/editMessageText`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            chat_id: chatId,
+                                            message_id: messageId,
+                                            text: `✅ အော်ဒါပြီးစီးပါပြီ (${customerName} အတွက် စိန်/ပစ္စည်း ဖြည့်ပြီးပါပြီ)`,
+                                            reply_markup: { inline_keyboard: [] }
+                                        })
+                                    });
+
+                                    // 2. Customer ဆီသို့ ပြီးစီးကြောင်း အကြောင်းကြားစာ ပို့မည်
+                                    fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+                                        method: 'POST',
+                                        headers: { 'Content-Type': 'application/json' },
+                                        body: JSON.stringify({
+                                            chat_id: chatId,
+                                            text: `🎉 ကျေးဇူးတင်ပါတယ် ${customerName} ရေ၊ တောင်းဆိုထားသော စိန်/ပစ္စည်းများကို ဖြည့်သွင်းပေးပြီးဖြစ်ပါသည်! ✨`
+                                        })
+                                    });
+
+                                    clearInterval(interval);
+                                }
+                            }
+                        }
+                    }).catch(err => console.log(err));
+            }, 3000);
         }
 
         // 2. Google Sheet သို့ Tab တွေအလိုက် အော်ဒါပို့မည့် Function (Order list Sheet အသစ်)
@@ -745,7 +792,6 @@
             let baseURL = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0";
             let targetTab = "";
 
-            // အော်ဒါအမျိုးအစားအလိုက် Tab ရွေးချယ်ခြင်း
             if (orderDetails.type === "ORDER") {
                 targetTab = "/tabs/Event_Orders_2026-Oct";
             } else if (orderDetails.type === "MANUAL") {
@@ -755,7 +801,7 @@
             } else if (orderDetails.type === "GIFT") {
                 targetTab = "/tabs/gift card order";
             } else {
-                targetTab = ""; // ပင်မ Tab
+                targetTab = "";
             }
 
             let apiEndpoint = baseURL + targetTab;
@@ -779,14 +825,7 @@
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(payload)
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log("Logged to sheet successfully:", data);
-            })
-            .catch(error => {
-                console.error("Error logging to sheet:", error);
-            });
+            }).catch(error => console.error("Error logging to sheet:", error));
         }
 
         function submitGameOrder() {
@@ -830,7 +869,7 @@
                 type: orderType
             };
 
-            // 1. Telegram သို့ ပို့မည်
+            // 1. Telegram သို့ ပို့မည် (Admin ခလုတ်ဖြင့်)
             sendOrderToTelegram(orderDetails, slip);
 
             // 2. Google Sheet (Order list) သို့ ပို့မည်
