@@ -506,8 +506,9 @@
 
         function fetchSheetData() {
             const container = document.getElementById('game-price-list');
-            if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ စျေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
+            if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ ဈေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
             
+            // ဈေးနှုန်းများအတွက် မူလ Sheet လင့်ခ် (သို့မဟုတ် Order list ထဲမှ ဈေးနှုန်း Tab လင့်ခ်)
             const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
 
             fetch(apiURL)
@@ -739,36 +740,39 @@
             }
         }
 
-        // 2. SheetBest သို့ သက်ဆိုင်ရာ Tab အလိုက် တိကျစွာ ပို့ပေးမည့် Function
+        // 2. Google Sheet သို့ Tab တွေအလိုက် အော်ဒါပို့မည့် Function (Order list Sheet အသစ်)
         function logOrderToSheet(orderDetails) {
+            let baseURL = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0";
             let targetTab = "";
-            
-            if (orderDetails.type === 'TOPUP') {
-                targetTab = "Pre_Funded_2026-Oct";
-            } else if (orderDetails.type === 'MANUAL') {
-                targetTab = "Manual_Orders_2026-Oct";
-            } else if (orderDetails.type === 'ORDER') {
-                targetTab = "Event_Orders_2026-Oct";
+
+            // အော်ဒါအမျိုးအစားအလိုက် Tab ရွေးချယ်ခြင်း
+            if (orderDetails.type === "ORDER") {
+                targetTab = "/tabs/Event_Orders_2026-Oct";
+            } else if (orderDetails.type === "MANUAL") {
+                targetTab = "/tabs/Manual_Orders_2026-Oct";
+            } else if (orderDetails.type === "TOPUP") {
+                targetTab = "/tabs/Pre_Funded_2026-Oct";
+            } else if (orderDetails.type === "GIFT") {
+                targetTab = "/tabs/gift card order";
             } else {
-                targetTab = "Manual_Orders_2026-Oct";
+                targetTab = ""; // ပင်မ Tab
             }
 
-            let apiEndpoint = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
-            let fullUrl = `${apiEndpoint}/tabs/${encodeURIComponent(targetTab)}`;
+            let apiEndpoint = baseURL + targetTab;
 
             let payload = {
                 "Timestamp": new Date().toLocaleString(),
+                "Type": orderDetails.type,
                 "Name": orderDetails.name,
                 "Username": orderDetails.username,
                 "Package": orderDetails.item,
                 "Game ID": orderDetails.gameId,
                 "Event Datetime": orderDetails.eventDatetime || "-",
                 "Price": orderDetails.price,
-                "Currency": orderDetails.curr,
-                "Type": orderDetails.type
+                "Currency": orderDetails.curr
             };
 
-            fetch(fullUrl, {
+            fetch(apiEndpoint, {
                 method: "POST",
                 mode: "cors",
                 headers: {
@@ -778,10 +782,10 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log(`Successfully logged to tab [${targetTab}]:`, data);
+                console.log("Logged to sheet successfully:", data);
             })
             .catch(error => {
-                console.error(`Error logging to tab [${targetTab}]:`, error);
+                console.error("Error logging to sheet:", error);
             });
         }
 
@@ -810,6 +814,11 @@
 
             let slip = document.getElementById('f-slip').files[0];
 
+            let orderType = activeMainTab.toUpperCase();
+            if (currentGame === 'Gift Card') {
+                orderType = 'GIFT';
+            }
+
             let orderDetails = {
                 name: customerName,
                 username: customerUsername,
@@ -818,13 +827,13 @@
                 eventDatetime: eventDatetime ? eventDatetime.replace('T', ' ') : null,
                 price: price,
                 curr: curr,
-                type: activeMainTab.toUpperCase()
+                type: orderType
             };
 
             // 1. Telegram သို့ ပို့မည်
             sendOrderToTelegram(orderDetails, slip);
 
-            // 2. Google Sheet ၏ သက်ဆိုင်ရာ Tab သို့ ပို့မည်
+            // 2. Google Sheet (Order list) သို့ ပို့မည်
             logOrderToSheet(orderDetails);
 
             if (activeMainTab === 'topup') {
@@ -929,6 +938,29 @@
             document.getElementById('custom-recharge-amount').value = '';
         }
 
+        // Deposit (ငွေဖြည့်ခြင်း) အချက်အလက်များကို deposits Tab သို့ ပို့ပေးမည့် Function
+        function logDepositToSheet(amount, curr, slipFile) {
+            let apiEndpoint = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0/tabs/deposits";
+
+            let payload = {
+                "Timestamp": new Date().toLocaleString(),
+                "Name": currentUser.name,
+                "Username": (user && user.username) ? user.username : "N/A",
+                "Amount": amount,
+                "Currency": curr,
+                "Status": "Pending"
+            };
+
+            fetch(apiEndpoint, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(payload)
+            }).catch(err => console.error("Error logging deposit:", err));
+        }
+
         function selectRechargeAmount(amount) {
             tg.HapticFeedback.selectionChanged();
             selectedRechargeAmt = amount;
@@ -949,6 +981,9 @@
                 alert("ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။");
                 return;
             }
+
+            // SheetBest ရဲ့ deposits Tab သို့ မှတ်တမ်းပို့မည်
+            logDepositToSheet(finalAmt, rechargeCurrency, slip);
 
             userWallet[rechargeCurrency] += finalAmt;
             if(rechargeCurrency === 'THB') {
