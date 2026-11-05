@@ -198,7 +198,7 @@
             <div>
                 <label class="font-bold text-gray-700 block mb-1">In-game Name</label>
                 <div id="f-ingame-name" class="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 font-semibold">
-                    🔍 UID ထည့်ပါ...
+                    🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...
                 </div>
             </div>
 
@@ -666,17 +666,49 @@
             });
         }
 
-        document.getElementById('f-uid').addEventListener('input', function() {
-            let uid = this.value;
-            let nameDisp = document.getElementById('f-ingame-name');
-            if (uid.length > 3) {
-                nameDisp.innerHTML = `<span class="text-emerald-600 font-bold">✨ Player_${uid} (Verified)</span>`;
-            } else {
-                nameDisp.innerHTML = `🔍 စစ်ဆေးနေသည်...`;
-            }
-        });
+        // UID နှင့် Zone ပြည့်စုံမှသာ API ခေါ်ပြီး၊ မပြည့်စုံလျှင် သတိပေးချက်ပြမည့် ပုံစံ
+        document.getElementById('f-uid').addEventListener('input', checkPlayerName);
+        document.getElementById('f-server').addEventListener('input', checkPlayerName);
 
-        // 1. Telegram သို့ အော်ဒါအချက်အလက် ပို့ပေးမည့် Function (CORS အမှားအယွင်းမရှိစေရန် No-Cors ဖြင့် ပြင်ဆင်ထားသည်)
+        function checkPlayerName() {
+            let uid = document.getElementById('f-uid').value.trim();
+            let server = document.getElementById('f-server').value.trim();
+            let nameDisp = document.getElementById('f-ingame-name');
+
+            // UID (အနည်းဆုံး 7 လုံး) သို့မဟုတ် Server (အနည်းဆုံး 3 လုံး) မပြည့်စုံသေးလျှင်
+            if (uid.length < 7 || server.length < 3) {
+                if (uid.length > 0 || server.length > 0) {
+                    nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ ID မကန်ပါ, ပြန်လည်ဖြည့်သွင်းပေးပါ</span>`;
+                } else {
+                    nameDisp.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
+                }
+                return;
+            }
+
+            // အချက်အလက် ပြည့်စုံမှသာ API လှမ်းခေါ်မည်
+            nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
+            
+            fetch('http://193.180.209.213:5000/api/check-player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ uid: uid, zone: server })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status && data.name) {
+                    nameDisp.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${data.name} (Verified)</span>`;
+                } else {
+                    nameDisp.innerHTML = `<span class="text-amber-600 font-bold">⚠️ ${data.name || 'Player_' + uid}</span>`;
+                }
+            })
+            .catch(err => {
+                console.error("API Error:", err);
+                nameDisp.innerHTML = `<span class="text-red-500 font-bold">❌ ချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။</span>`;
+            });
+        }
+
         function sendOrderToTelegram(orderDetails, slipFile) {
             const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
             const chatId = '8863215122';
@@ -721,7 +753,6 @@
             }
         }
 
-        // 2. Google Sheet သို့ Tab တွေအလိုက် အော်ဒါပို့မည့် Function (SheetBest CORS ဖြေရှင်းထားသည်)
         function logOrderToSheet(orderDetails) {
             let baseURL = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0";
             let targetTab = "";
@@ -803,10 +834,7 @@
                 type: orderType
             };
 
-            // 1. Telegram သို့ ပို့မည်
             sendOrderToTelegram(orderDetails, slip);
-
-            // 2. Google Sheet သို့ ပို့မည်
             logOrderToSheet(orderDetails);
 
             if (activeMainTab === 'topup') {
@@ -911,7 +939,6 @@
             document.getElementById('custom-recharge-amount').value = '';
         }
 
-        // Deposit (ငွေဖြည့်ခြင်း) အချက်အလက်များကို deposits Tab သို့ ပို့ပေးမည့် Function
         function logDepositToSheet(amount, curr, slipFile) {
             let apiEndpoint = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0/tabs/deposits";
 
