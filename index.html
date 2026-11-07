@@ -697,46 +697,38 @@
             })
             .then(res => res.json())
             .then(data => {
-                let playerName = data.name || "May Lay♥";
-                let serverName = data.server || "Thailand";
-
-                nameDisp.innerHTML = `
-                    <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
-                        <div class="flex items-center justify-between border-b pb-1.5">
-                            <span class="text-xs font-bold text-emerald-700 flex items-center">
-                                <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
+                if (data.status === true) {
+                    nameDisp.innerHTML = `
+                        <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
+                            <div class="flex items-center justify-between border-b pb-1.5">
+                                <span class="text-xs font-bold text-emerald-700 flex items-center">
+                                    <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
+                                <span class="font-extrabold text-purple-700 text-sm">${data.name}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs border-t pt-1.5">
+                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
+                                <span class="font-extrabold text-sky-600">${data.server}</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    nameDisp.innerHTML = `
+                        <div class="bg-white p-3 rounded-xl border border-red-300 shadow-sm space-y-1">
+                            <span class="text-xs font-bold text-red-600 flex items-center">
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> စစ်ဆေးမရပါ
                             </span>
+                            <p class="text-[11px] text-gray-600 font-semibold">${data.name}</p>
                         </div>
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
-                            <span class="font-extrabold text-purple-700 text-sm">${playerName}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs border-t pt-1.5">
-                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
-                            <span class="font-extrabold text-sky-600">${serverName}</span>
-                        </div>
-                    </div>
-                `;
+                    `;
+                }
             })
             .catch(err => {
                 console.error("API Error:", err);
-                nameDisp.innerHTML = `
-                    <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
-                        <div class="flex items-center justify-between border-b pb-1.5">
-                            <span class="text-xs font-bold text-emerald-700 flex items-center">
-                                <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
-                            <span class="font-extrabold text-purple-700 text-sm">May Lay♥</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs border-t pt-1.5">
-                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
-                            <span class="font-extrabold text-sky-600">Thailand</span>
-                        </div>
-                    </div>
-                `;
+                nameDisp.innerHTML = `<span class="text-red-500 font-bold text-xs">⚠️ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။</span>`;
             });
         }
 
