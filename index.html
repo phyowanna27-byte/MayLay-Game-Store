@@ -666,7 +666,7 @@
             });
         }
 
-        // UID နှင့် Zone ထည့်သွင်းစဉ် Player Name စစ်ဆေးခြင်း
+        // UID နှင့် Zone ထည့်သွင်းစဉ် Player Name စစ်ဆေးခြင်း (Localtunnel HTTPS URL ထည့်သွင်းပြီး)
         function checkPlayerName() {
             let uidEl = document.getElementById('f-uid');
             let serverEl = document.getElementById('f-server');
@@ -688,10 +688,11 @@
 
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
             
-            fetch('http://193.180.209.213:5000/api/check-player', {
+            fetch('https://fluffy-cows-glow.loca.lt/api/check-player', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Bypass-Tunnel-Reminder': 'true'
                 },
                 body: JSON.stringify({ uid: uid, zone: server })
             })
