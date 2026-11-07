@@ -666,7 +666,7 @@
             });
         }
 
-        // UID နှင့် Zone ထည့်သွင်းစဉ် Player Name စစ်ဆေးခြင်း (Localtunnel HTTPS URL ထည့်သွင်းပြီး)
+        // UID နှင့် Zone ထည့်သွင်းစဉ် Player Name စစ်ဆေးခြင်း (Ngrok Static URL ဖြင့် ချိတ်ဆက်ထားသည်)
         function checkPlayerName() {
             let uidEl = document.getElementById('f-uid');
             let serverEl = document.getElementById('f-server');
@@ -688,14 +688,13 @@
 
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
             
-                                    fetch'https://tame-things-cry.loca.lt/api/check-player', {
+            fetch('https://agreeably-knelt-large.ngrok-free.dev/api/check-player', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json',
-                    'Bypass-Tunnel-Reminder': 'true'
+                    'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({ uid: uid, zone: server })
-            }
+            })
             .then(res => res.json())
             .then(data => {
                 if (data.status === true) {
@@ -1096,4 +1095,4 @@
         });
     </script>
 </body>
-            </html>
+</html>
