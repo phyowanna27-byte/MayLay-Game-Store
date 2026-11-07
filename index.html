@@ -688,14 +688,14 @@
 
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
             
-            fetch('https://fluffy-cows-glow.loca.lt/api/check-player', {
+                                    fetch'https://tame-things-cry.loca.lt/api/check-player', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Bypass-Tunnel-Reminder': 'true'
                 },
                 body: JSON.stringify({ uid: uid, zone: server })
-            })
+            }
             .then(res => res.json())
             .then(data => {
                 if (data.status === true) {
@@ -1096,4 +1096,4 @@
         });
     </script>
 </body>
-</html>
+            </html>
