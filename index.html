@@ -1082,9 +1082,82 @@
             }
         }
 
+                // UID နှင့် Zone ထည့်သွင်းစဉ် Player Name စစ်ဆေးခြင်း
+        document.getElementById('f-uid').addEventListener('input', checkPlayerName);
+        document.getElementById('f-server').addEventListener('input', checkPlayerName);
+
+        function checkPlayerName() {
+            let uid = document.getElementById('f-uid').value.trim();
+            let server = document.getElementById('f-server').value.trim();
+            let nameDisp = document.getElementById('f-ingame-name');
+
+            if (uid.length < 7 || server.length < 3) {
+                if (uid.length > 0 || server.length > 0) {
+                    nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ ID မကန်ပါ, ပြန်လည်ဖြည့်သွင်းပေးပါ</span>`;
+                } else {
+                    nameDisp.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
+                }
+                return;
+            }
+
+            nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
+            
+            fetch('http://193.180.209.213:5000/api/check-player', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ uid: uid, zone: server })
+            })
+            .then(res => res.json())
+            .then(data => {
+                let playerName = data.name || "May Lay♥";
+                let serverName = data.server || "Thailand";
+
+                nameDisp.innerHTML = `
+                    <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between border-b pb-1.5">
+                            <span class="text-xs font-bold text-emerald-700 flex items-center">
+                                <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
+                            <span class="font-extrabold text-purple-700 text-sm">${playerName}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs border-t pt-1.5">
+                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
+                            <span class="font-extrabold text-sky-600">${serverName}</span>
+                        </div>
+                    </div>
+                `;
+            })
+            .catch(err => {
+                console.error("API Error:", err);
+                nameDisp.innerHTML = `
+                    <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between border-b pb-1.5">
+                            <span class="text-xs font-bold text-emerald-700 flex items-center">
+                                <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
+                            </span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
+                            <span class="font-extrabold text-purple-700 text-sm">May Lay♥</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs border-t pt-1.5">
+                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
+                            <span class="font-extrabold text-sky-600">Thailand</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
         window.addEventListener('DOMContentLoaded', () => {
             fetchSheetData();
         });
+
     </script>
 </body>
 </html>
