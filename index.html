@@ -666,7 +666,7 @@
             });
         }
 
-        // UID နှင့် Zone ပြည့်စုံမှသာ API ခေါ်ပြီး၊ မပြည့်စုံလျှင် သတိပေးချက်ပြမည့် ပုံစံ
+        // UID နှင့် Zone ထည့်သွင်းစဉ် Player Name စစ်ဆေးခြင်း
         document.getElementById('f-uid').addEventListener('input', checkPlayerName);
         document.getElementById('f-server').addEventListener('input', checkPlayerName);
 
@@ -675,7 +675,6 @@
             let server = document.getElementById('f-server').value.trim();
             let nameDisp = document.getElementById('f-ingame-name');
 
-            // UID (အနည်းဆုံး 7 လုံး) သို့မဟုတ် Server (အနည်းဆုံး 3 လုံး) မပြည့်စုံသေးလျှင်
             if (uid.length < 7 || server.length < 3) {
                 if (uid.length > 0 || server.length > 0) {
                     nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ ID မကန်ပါ, ပြန်လည်ဖြည့်သွင်းပေးပါ</span>`;
@@ -685,7 +684,6 @@
                 return;
             }
 
-            // အချက်အလက် ပြည့်စုံမှသာ API လှမ်းခေါ်မည်
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
             
             fetch('http://193.180.209.213:5000/api/check-player', {
@@ -697,10 +695,27 @@
             })
             .then(res => res.json())
             .then(data => {
-                if (data.status && data.name) {
-                    nameDisp.innerHTML = `<span class="text-emerald-600 font-bold">✨ ${data.name} (Verified)</span>`;
+                if (data.status) {
+                    // အကွက် ၂ ကွက် (နာမည် နှင့် ဆာဗာ) ပုံစံဖော်ပြခြင်း
+                    nameDisp.innerHTML = `
+                        <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
+                            <div class="flex items-center justify-between border-b pb-1.5">
+                                <span class="text-xs font-bold text-emerald-700 flex items-center">
+                                    <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
+                                </span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs">
+                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
+                                <span class="font-extrabold text-purple-700 text-sm">${data.name}</span>
+                            </div>
+                            <div class="flex justify-between items-center text-xs border-t pt-1.5">
+                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
+                                <span class="font-extrabold text-sky-600">${data.server || 'Thailand'}</span>
+                            </div>
+                        </div>
+                    `;
                 } else {
-                    nameDisp.innerHTML = `<span class="text-amber-600 font-bold">⚠️ ${data.name || 'Player_' + uid}</span>`;
+                    nameDisp.innerHTML = `<span class="text-amber-600 font-bold">⚠️ ${data.name || 'Account မမှန်ကန်ပါ။'}</span>`;
                 }
             })
             .catch(err => {
