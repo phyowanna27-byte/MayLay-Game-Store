@@ -679,7 +679,7 @@
 
             if (uid.length < 7 || server.length < 3) {
                 if (uid.length > 0 || server.length > 0) {
-                    nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ ID မကန်ပါ, ပြန်လည်ဖြည့်သွင်းပေးပါ</span>`;
+                    nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ ID မမှန်ကန်ပါ, ပြန်လည်ဖြည့်သွင်းပေးပါ</span>`;
                 } else {
                     nameDisp.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
                 }
@@ -697,7 +697,7 @@
             })
             .then(res => res.json())
             .then(data => {
-                if (data.status === true) {
+                if (data.status) {
                     nameDisp.innerHTML = `
                         <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
                             <div class="flex items-center justify-between border-b pb-1.5">
