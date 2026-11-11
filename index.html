@@ -185,7 +185,7 @@
                 <input type="datetime-local" id="f-event-datetime" class="w-full p-2.5 border border-purple-200 rounded-xl bg-white text-xs focus:outline-none focus:border-purple-500 font-semibold text-purple-800">
             </div>
 
-            <!-- ဂိမ်းရွေးချယ်စရာ (RapidAPI ဖြင့် ချိတ်ဆက်ရန်) -->
+            <!-- ဂိမ်းရွေးချယ်စရာ -->
             <div>
                 <label class="font-bold text-gray-700 block mb-1">ဂိမ်းအမျိုးအစား</label>
                 <select id="game-select" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500" onchange="toggleZoneInput()">
@@ -480,7 +480,6 @@
             document.getElementById('game-page-title').innerText = gameKey + " Store";
             document.getElementById('game-order-section').classList.add('hidden');
             
-            // ဂိမ်းအလိုက် select box ကို အလိုအလျောက် ရွေးပေးရန်
             let gameSelect = document.getElementById('game-select');
             if(gameSelect) {
                 if(gameKey === 'MLBB') gameSelect.value = 'mlbb';
@@ -519,7 +518,6 @@
         function toggleZoneInput() {
             const game = document.getElementById('game-select').value;
             const zoneWrapper = document.getElementById('zone-id-wrapper');
-            // mlbb နဲ့ mcgg တွေမှာသာ zone_id လိုအပ်သည်[span_0](start_span)[span_0](end_span)
             if (game === 'mlbb' || game === 'mcgg') {
                 zoneWrapper.style.display = 'block';
             } else {
@@ -699,7 +697,7 @@
             });
         }
 
-        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (MLBB, PUBG, HOK, Free Fire, MCGG အစုံပါဝင်သည်)
+        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (ngrok-skip-browser-warning ပါဝင်သည်)
         async function checkPlayerName() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
@@ -730,8 +728,9 @@
                     method: 'POST',
                     headers: {
                         'content-type': 'application/json',
-                        'X-RapidAPI-Key': '65d116a2ddmshe0c1954f29997f0p11513c19b7b29', // 👈 ကိုယ့်ရဲ့ RapidAPI Key အမှန်[span_1](start_span)[span_1](end_span)
-                        'X-RapidAPI-Host': 'game-id-checker-api.p.rapidapi.com'
+                        'X-RapidAPI-Key': '65d116a2ddmshe0c1954f29997f0p11513c19b7b29', // 👈 ကိုယ့်ရဲ့ RapidAPI Key
+                        'X-RapidAPI-Host': 'game-id-checker-api.p.rapidapi.com',
+                        'ngrok-skip-browser-warning': 'true' // 👈 Ngrok Warning ကျော်ရန် ထည့်ထားသည်
                     },
                     body: JSON.stringify({
                         game: game,
