@@ -42,6 +42,48 @@ function updateProfileUI(name, photo) {
     }
 }
 
+// 🎮 Game ID စစ်ဆေးခြင်း (Aiden API ကို အသုံးပြုရန်)
+async function fetchPlayerName() {
+    const game = document.getElementById('game-select').value; // ဥပမာ: mobile-legends, honor-of-kings, mcgg, pubgm-lite
+    const playerId = document.getElementById('player-id').value;
+    const zoneId = document.getElementById('zone-id').value;
+    
+    const accountFoundBox = document.getElementById('account-found-box');
+    const nicknameField = document.getElementById('nickname-result');
+    const serverField = document.getElementById('server-result');
+
+    if (!playerId) {
+        alert("ကျေးဇူးပြု၍ Game UID ထည့်ပါ။");
+        return;
+    }
+
+    // Aiden API URL တည်ဆောက်ခြင်း
+    let apiUrl = `https://aiden-api.vercel.app/API/${game}?id=${playerId}`;
+    if (zoneId && (game === 'mobile-legends' || game === 'mcgg')) {
+        apiUrl += `&zone=${zoneId}`;
+    }
+
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+
+        // API မှ ရလာသော နာမည်
+        const username = data.username || data.nickname || data.name;
+
+        if (response.ok && username) {
+            if (nicknameField) nicknameField.innerText = username;
+            if (serverField) serverField.innerText = zoneId ? zoneId : "N/A";
+            if (accountFoundBox) accountFoundBox.style.display = "block";
+        } else {
+            alert("ကစားသမား အချက်အလက် မတွေ့ရှိပါ။ ID သို့မဟုတ် Zone မှားနေပါသည် ။");
+            if (accountFoundBox) accountFoundBox.style.display = "none";
+        }
+    } catch (error) {
+        console.error("API Error:", error);
+        alert("ချိတ်ဆက်မှု အမှားအယွင်း ရှိပါသည်။");
+    }
+}
+
 // Telegram Bot ဆီသို့ အော်ဒါအချက်အလက် ပို့ရန် Function (Token နဲ့ Chat ID ထည့်ပြီးသား)
 function sendOrderToTelegram(orderDetails) {
     const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE'; // ဝန ပေးထားတဲ့ Bot Token
