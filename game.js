@@ -64,7 +64,10 @@ async function fetchPlayerName() {
     }
 
     try {
-        const response = await fetch(apiUrl);
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            mode: 'cors'
+        });
         const data = await response.json();
 
         // API မှ ရလာသော နာမည်
