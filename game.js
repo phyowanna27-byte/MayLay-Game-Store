@@ -39,11 +39,11 @@ function updateProfileUI(name, photo) {
     }
 }
 
-// 🎮 Game ID စစ်ဆေးခြင်း (RapidAPI Hub ကို အသုံးပြုရန်)[span_2](start_span)[span_2](end_span)
+// 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (ဂိမ်းအားလုံးအတွက် တစ်ခုတည်းသုံးသည်)
 async function fetchPlayerName() {
-    const game = document.getElementById('game-select').value; // ဥပမာ: mobile-legends, pubg, hok
-    const playerId = document.getElementById('player-id').value;
-    const zoneId = document.getElementById('zone-id').value;
+    const game = document.getElementById('game-select').value; // mlbb, pubgm, hok, freefire, mcgg
+    const playerId = document.getElementById('player-id').value.trim();
+    const zoneId = document.getElementById('zone-id').value.trim();
     
     const accountFoundBox = document.getElementById('account-found-box');
     const nicknameField = document.getElementById('nickname-result');
@@ -54,24 +54,34 @@ async function fetchPlayerName() {
         return;
     }
 
-    // RapidAPI Endpoint (ကိုယ်သုံးမယ့် API ရဲ့ URL နဲ့ Host ကို ထည့်ရန်)[span_3](start_span)[span_3](end_span)
-    const apiUrl = `https://id-game-checker.p.rapidapi.com/check?game_code=${game}&user_id=${playerId}&zone_id=${zoneId || ''}`;
+    if ((game === 'mlbb' || game === 'mcgg') && !zoneId) {
+        alert("ဤဂိမ်းအတွက် Zone ID ထည့်ရန် လိုအပ်ပါသည်။");
+        return;
+    }
+
+    const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
 
     try {
         const response = await fetch(apiUrl, {
-            method: 'GET',
+            method: 'POST',
             headers: {
-                'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY', // ကိုယ့်ရဲ့ RapidAPI Key ကို ဤနေရာတွင် ထည့်ပါ
-                'X-RapidAPI-Host': 'id-game-checker.p.rapidapi.com'
-            }
+                'content-type': 'application/json',
+                'X-RapidAPI-Key': '65d116a2ddmshe0c1954f29997f0p11513c19b7b29', // 👈 ကိုယ့်ရဲ့ RapidAPI Key အမှန်
+                'X-RapidAPI-Host': 'game-id-checker-api.p.rapidapi.com'
+            },
+            body: JSON.stringify({
+                game: game,
+                player_id: playerId,
+                zone_id: (game === 'mlbb' || game === 'mcgg') ? zoneId : undefined
+            })
         });
         const data = await response.json();
 
-        // API မှ ရလာသော နာမည် (JSON format အလျောက်)[span_4](start_span)[span_4](end_span)
-        const username = data.username || data.PlayerName || data.name;
+        const nickname = data.data && data.data.nickname ? data.data.nickname : (data.username || data.PlayerName);
+        const isValid = data.data && data.data.valid;
 
-        if (response.ok && username) {
-            if (nicknameField) nicknameField.innerText = username;
+        if (response.ok && isValid && nickname) {
+            if (nicknameField) nicknameField.innerText = nickname;
             if (serverField) serverField.innerText = zoneId ? zoneId : "N/A";
             if (accountFoundBox) accountFoundBox.style.display = "block";
         } else {
