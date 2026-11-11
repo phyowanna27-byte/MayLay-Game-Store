@@ -185,12 +185,24 @@
                 <input type="datetime-local" id="f-event-datetime" class="w-full p-2.5 border border-purple-200 rounded-xl bg-white text-xs focus:outline-none focus:border-purple-500 font-semibold text-purple-800">
             </div>
 
+            <!-- ဂိမ်းရွေးချယ်စရာ (RapidAPI ဖြင့် ချိတ်ဆက်ရန်) -->
+            <div>
+                <label class="font-bold text-gray-700 block mb-1">ဂိမ်းအမျိုးအစား</label>
+                <select id="game-select" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500" onchange="toggleZoneInput()">
+                    <option value="mlbb">Mobile Legends (MLBB)</option>
+                    <option value="pubgm">PUBG Mobile</option>
+                    <option value="hok">Honor of Kings (HOK)</option>
+                    <option value="freefire">Free Fire</option>
+                    <option value="mcgg">Magic Chess: Go Go</option>
+                </select>
+            </div>
+
             <div>
                 <label class="font-bold text-gray-700 block mb-1">Game UID / ID</label>
                 <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 12345678" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
             </div>
 
-            <div>
+            <div id="zone-id-wrapper">
                 <label class="font-bold text-gray-700 block mb-1">Server / Zone</label>
                 <input type="text" id="f-server" oninput="checkPlayerName()" placeholder="ဥပမာ - 1234" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
             </div>
@@ -468,6 +480,16 @@
             document.getElementById('game-page-title').innerText = gameKey + " Store";
             document.getElementById('game-order-section').classList.add('hidden');
             
+            // ဂိမ်းအလိုက် select box ကို အလိုအလျောက် ရွေးပေးရန်
+            let gameSelect = document.getElementById('game-select');
+            if(gameSelect) {
+                if(gameKey === 'MLBB') gameSelect.value = 'mlbb';
+                else if(gameKey === 'PUBG') gameSelect.value = 'pubgm';
+                else if(gameKey === 'HOK') gameSelect.value = 'hok';
+                else if(gameKey === 'MCGG') gameSelect.value = 'mcgg';
+                toggleZoneInput();
+            }
+
             fetchSheetData();
         }
 
@@ -491,6 +513,17 @@
             renderPrices();
             if(!document.getElementById('game-order-section').classList.contains('hidden') && activeMainTab === 'manual') {
                 updatePaymentBox(curr);
+            }
+        }
+
+        function toggleZoneInput() {
+            const game = document.getElementById('game-select').value;
+            const zoneWrapper = document.getElementById('zone-id-wrapper');
+            // mlbb နဲ့ mcgg တွေမှာသာ zone_id လိုအပ်သည်[span_0](start_span)[span_0](end_span)
+            if (game === 'mlbb' || game === 'mcgg') {
+                zoneWrapper.style.display = 'block';
+            } else {
+                zoneWrapper.style.display = 'none';
             }
         }
 
@@ -666,38 +699,52 @@
             });
         }
 
-        // UID နှင့် Zone ထည့်သွင်းစဉ် Player Name စစ်ဆေးခြင်း (Ngrok Static URL ဖြင့် ချိတ်ဆက်ထားသည်)
-        function checkPlayerName() {
-            let uidEl = document.getElementById('f-uid');
-            let serverEl = document.getElementById('f-server');
-            let nameDisp = document.getElementById('f-ingame-name');
+        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (MLBB, PUBG, HOK, Free Fire, MCGG အစုံပါဝင်သည်)
+        async function checkPlayerName() {
+            const game = document.getElementById('game-select').value;
+            const uidEl = document.getElementById('f-uid');
+            const serverEl = document.getElementById('f-server');
+            const nameDisp = document.getElementById('f-ingame-name');
             
-            if(!uidEl || !serverEl || !nameDisp) return;
+            if(!uidEl || !nameDisp) return;
 
             let uid = uidEl.value.trim();
             let server = serverEl.value.trim();
 
-            if (uid.length < 7 || server.length < 3) {
-                if (uid.length > 0 || server.length > 0) {
-                    nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ ID မမှန်ကန်ပါ, ပြန်လည်ဖြည့်သွင်းပေးပါ</span>`;
-                } else {
-                    nameDisp.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
-                }
+            if (!uid) {
+                nameDisp.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
+                return;
+            }
+
+            if ((game === 'mlbb' || game === 'mcgg') && !server) {
+                nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ Server / Zone ID ထည့်ရန် လိုအပ်ပါသည်။</span>`;
                 return;
             }
 
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
             
-            fetch('https://agreeably-knelt-large.ngrok-free.dev/api/check-player', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ uid: uid, zone: server })
-            })
-            .then(res => res.json())
-            .then(data => {
-                if (data.status) {
+            const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json',
+                        'X-RapidAPI-Key': '65d116a2ddmshe0c1954f29997f0p11513c19b7b29', // 👈 ကိုယ့်ရဲ့ RapidAPI Key အမှန်[span_1](start_span)[span_1](end_span)
+                        'X-RapidAPI-Host': 'game-id-checker-api.p.rapidapi.com'
+                    },
+                    body: JSON.stringify({
+                        game: game,
+                        player_id: uid,
+                        zone_id: (game === 'mlbb' || game === 'mcgg') ? server : undefined
+                    })
+                });
+                const data = await response.json();
+
+                const nickname = data.data && data.data.nickname ? data.data.nickname : (data.username || data.PlayerName);
+                const isValid = data.data && data.data.valid;
+
+                if (response.ok && isValid && nickname) {
                     nameDisp.innerHTML = `
                         <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
                             <div class="flex items-center justify-between border-b pb-1.5">
@@ -707,11 +754,11 @@
                             </div>
                             <div class="flex justify-between items-center text-xs">
                                 <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
-                                <span class="font-extrabold text-purple-700 text-sm">${data.name}</span>
+                                <span class="font-extrabold text-purple-700 text-sm">${nickname}</span>
                             </div>
                             <div class="flex justify-between items-center text-xs border-t pt-1.5">
                                 <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
-                                <span class="font-extrabold text-sky-600">${data.server}</span>
+                                <span class="font-extrabold text-sky-600">${server ? server : 'N/A'}</span>
                             </div>
                         </div>
                     `;
@@ -719,22 +766,21 @@
                     nameDisp.innerHTML = `
                         <div class="bg-white p-3 rounded-xl border border-red-300 shadow-sm space-y-1">
                             <span class="text-xs font-bold text-red-600 flex items-center">
-                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> စစ်ဆေးမရပါ
+                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> အချက်အလက် မတွေ့ရှိပါ
                             </span>
-                            <p class="text-[11px] text-gray-600 font-semibold">${data.name}</p>
+                            <p class="text-[11px] text-gray-600 font-semibold">ID သို့မဟုတ် Zone မှားယွင်းနေပါသည် ။</p>
                         </div>
                     `;
                 }
-            })
-            .catch(err => {
-                console.error("API Error:", err);
+            } catch (error) {
+                console.error("API Error:", error);
                 nameDisp.innerHTML = `<span class="text-red-500 font-bold text-xs">⚠️ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။</span>`;
-            });
+            }
         }
 
         function sendOrderToTelegram(orderDetails, slipFile) {
-            const botToken = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
-            const chatId = '8863215122';
+            const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
+            const chatId = '6432109875';
             
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
 
@@ -821,9 +867,15 @@
             let uid = document.getElementById('f-uid').value;
             let server = document.getElementById('f-server').value;
             let eventDatetime = document.getElementById('f-event-datetime').value;
+            let gameType = document.getElementById('game-select').value;
 
-            if (!uid || !server) {
-                alert("ကျေးဇူးပြု၍ UID နှင့် Server ဖြည့်ပါ။");
+            if (!uid) {
+                alert("ကျေးဇူးပြု၍ Game UID ဖြည့်ပါ။");
+                return;
+            }
+
+            if ((gameType === 'mlbb' || gameType === 'mcgg') && !server) {
+                alert("ကျေးဇူးပြု၍ Server / Zone ID ဖြည့်ပါ။");
                 return;
             }
 
@@ -837,7 +889,7 @@
             let packageName = selectedPkg.name;
             let customerName = currentUser.name;
             let customerUsername = (user && user.username) ? user.username : "N/A";
-            let gameIdFull = `${uid} (${server})`;
+            let gameIdFull = `${uid} ${server ? '(' + server + ')' : ''} [${gameType.toUpperCase()}]`;
 
             let slip = document.getElementById('f-slip').files[0];
 
