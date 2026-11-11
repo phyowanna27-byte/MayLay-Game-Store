@@ -39,9 +39,9 @@ function updateProfileUI(name, photo) {
     }
 }
 
-// 🎮 Game ID စစ်ဆေးခြင်း (Cloudflare Workers API ကို CORS Proxy ဖြင့် ချိတ်ဆက်ရန်)
+// 🎮 Game ID စစ်ဆေးခြင်း (RapidAPI Hub ကို အသုံးပြုရန်)[span_2](start_span)[span_2](end_span)
 async function fetchPlayerName() {
-    const game = document.getElementById('game-select').value; 
+    const game = document.getElementById('game-select').value; // ဥပမာ: mobile-legends, pubg, hok
     const playerId = document.getElementById('player-id').value;
     const zoneId = document.getElementById('zone-id').value;
     
@@ -54,16 +54,21 @@ async function fetchPlayerName() {
         return;
     }
 
-    // CORS Error မတက်စေရန် Proxy URL ဖြင့် တွဲသုံးခြင်း
-    let targetUrl = `https://api.isan.eu.org/nickname?id=${playerId}&zone=${zoneId}`;
-    let apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+    // RapidAPI Endpoint (ကိုယ်သုံးမယ့် API ရဲ့ URL နဲ့ Host ကို ထည့်ရန်)[span_3](start_span)[span_3](end_span)
+    const apiUrl = `https://id-game-checker.p.rapidapi.com/check?game_code=${game}&user_id=${playerId}&zone_id=${zoneId || ''}`;
 
     try {
-        const response = await fetch(apiUrl);
-        const resData = await response.json();
-        const data = JSON.parse(resData.contents);
+        const response = await fetch(apiUrl, {
+            method: 'GET',
+            headers: {
+                'X-RapidAPI-Key': 'YOUR_RAPIDAPI_KEY', // ကိုယ့်ရဲ့ RapidAPI Key ကို ဤနေရာတွင် ထည့်ပါ
+                'X-RapidAPI-Host': 'id-game-checker.p.rapidapi.com'
+            }
+        });
+        const data = await response.json();
 
-        const username = data.username || data.name || data.nickname;
+        // API မှ ရလာသော နာမည် (JSON format အလျောက်)[span_4](start_span)[span_4](end_span)
+        const username = data.username || data.PlayerName || data.name;
 
         if (response.ok && username) {
             if (nicknameField) nicknameField.innerText = username;
