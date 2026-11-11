@@ -8,7 +8,6 @@ function initGame() {
 }
 
 function loadUserData() {
-    // Fetch user or Telegram WebApp data
     if (window.Telegram && window.Telegram.WebApp) {
         const tg = window.Telegram.WebApp;
         tg.expand();
@@ -18,8 +17,6 @@ function loadUserData() {
             currentUser.name = user.first_name || "User";
             currentUser.photo = user.photo_url || "";
             console.log("Telegram User:", user);
-            
-            // Profile UI ပေါ်မှာ နာမည်နဲ့ ပုံပြရန်
             updateProfileUI(currentUser.name, currentUser.photo);
         }
     }
@@ -42,9 +39,9 @@ function updateProfileUI(name, photo) {
     }
 }
 
-// 🎮 Game ID စစ်ဆေးခြင်း (Cloudflare Workers API - isan.eu.org ကို အသုံးပြုရန်)
+// 🎮 Game ID စစ်ဆေးခြင်း (Cloudflare Workers API ကို CORS Proxy ဖြင့် ချိတ်ဆက်ရန်)
 async function fetchPlayerName() {
-    const game = document.getElementById('game-select').value; // ဥပမာ: mobile-legends, mcgg
+    const game = document.getElementById('game-select').value; 
     const playerId = document.getElementById('player-id').value;
     const zoneId = document.getElementById('zone-id').value;
     
@@ -57,14 +54,15 @@ async function fetchPlayerName() {
         return;
     }
 
-    // Cloudflare Workers API URL တည်ဆောက်ခြင်း (MLBB / MCGG အတွက်)
-    let apiUrl = `https://api.isan.eu.org/nickname?id=${playerId}&zone=${zoneId}`;
+    // CORS Error မတက်စေရန် Proxy URL ဖြင့် တွဲသုံးခြင်း
+    let targetUrl = `https://api.isan.eu.org/nickname?id=${playerId}&zone=${zoneId}`;
+    let apiUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
 
     try {
         const response = await fetch(apiUrl);
-        const data = await response.json();
+        const resData = await response.json();
+        const data = JSON.parse(resData.contents);
 
-        // API မှ ရလာသော နာမည်
         const username = data.username || data.name || data.nickname;
 
         if (response.ok && username) {
@@ -81,10 +79,10 @@ async function fetchPlayerName() {
     }
 }
 
-// Telegram Bot ဆီသို့ အော်ဒါအချက်အလက် ပို့ရန် Function (Token နဲ့ Chat ID ထည့်ပြီးသား)
+// Telegram Bot ဆီသို့ အော်ဒါအချက်အလက် ပို့ရန် Function
 function sendOrderToTelegram(orderDetails) {
-    const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE'; // ဝန ပေးထားတဲ့ Bot Token
-    const chatId = '6432109875';                                      // ဝန ပေးထားတဲ့ Chat ID
+    const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE'; 
+    const chatId = '6432109875';                                      
     
     const message = `🛍️ အော်ဒါအသစ်ဝင်ပါပြီ!\n\n` +
                     `👤 ဝယ်ယူသူ: ${orderDetails.name || currentUser.name}\n` +
