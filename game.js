@@ -42,9 +42,9 @@ function updateProfileUI(name, photo) {
     }
 }
 
-// 🎮 Game ID စစ်ဆေးခြင်း (Aiden API ကို အသုံးပြုရန်)
+// 🎮 Game ID စစ်ဆေးခြင်း (Cloudflare Workers API - isan.eu.org ကို အသုံးပြုရန်)
 async function fetchPlayerName() {
-    const game = document.getElementById('game-select').value; // ဥပမာ: mobile-legends, honor-of-kings, mcgg, pubgm-lite
+    const game = document.getElementById('game-select').value; // ဥပမာ: mobile-legends, mcgg
     const playerId = document.getElementById('player-id').value;
     const zoneId = document.getElementById('zone-id').value;
     
@@ -57,21 +57,15 @@ async function fetchPlayerName() {
         return;
     }
 
-    // Aiden API URL တည်ဆောက်ခြင်း
-    let apiUrl = `https://aiden-api.vercel.app/API/${game}?id=${playerId}`;
-    if (zoneId && (game === 'mobile-legends' || game === 'mcgg')) {
-        apiUrl += `&zone=${zoneId}`;
-    }
+    // Cloudflare Workers API URL တည်ဆောက်ခြင်း (MLBB / MCGG အတွက်)
+    let apiUrl = `https://api.isan.eu.org/nickname?id=${playerId}&zone=${zoneId}`;
 
     try {
-        const response = await fetch(apiUrl, {
-            method: 'GET',
-            mode: 'cors'
-        });
+        const response = await fetch(apiUrl);
         const data = await response.json();
 
         // API မှ ရလာသော နာမည်
-        const username = data.username || data.nickname || data.name;
+        const username = data.username || data.name || data.nickname;
 
         if (response.ok && username) {
             if (nicknameField) nicknameField.innerText = username;
