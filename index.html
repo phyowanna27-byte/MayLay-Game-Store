@@ -697,7 +697,7 @@
             });
         }
 
-        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (Game ID Checker API by 1xApi)
+        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (cURL Host နှင့် Key အပြည့်အစုံဖြင့်)
         async function checkPlayerName() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
@@ -727,9 +727,9 @@
                 const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
-                        'content-type': 'application/json',
-                        'X-RapidAPI-Key': '65d116a2ddmshe0c1954f29997f0p11513c19b7b29', // 👈 ကိုယ့်ရဲ့ RapidAPI Key
-                        'X-RapidAPI-Host': 'game-id-checker-api.p.rapidapi.com'
+                        'Content-Type': 'application/json',
+                        'x-rapidapi-host': 'game-id-checker-api.p.rapidapi.com',
+                        'x-rapidapi-key': '65d116a2ddmshe0c1954f29997f0p11513cjsne76cf19b7b29'
                     },
                     body: JSON.stringify({
                         game: game,
@@ -741,21 +741,14 @@
                 console.log("API Response:", data);
 
                 let nickname = "";
-                if (data.data && data.data.nickname) {
-                    nickname = data.data.nickname;
-                } else if (data.nickname) {
-                    nickname = data.nickname;
-                } else if (data.username) {
-                    nickname = data.username;
-                } else if (data.PlayerName) {
-                    nickname = data.PlayerName;
-                }
-
                 let isValid = false;
-                if (data.data && (data.data.valid === true || data.data.valid === "true")) {
-                    isValid = true;
-                } else if (data.valid === true || response.ok) {
-                    isValid = true;
+
+                if (data.data) {
+                    nickname = data.data.nickname || "";
+                    isValid = data.data.valid === true || data.data.valid === "true";
+                } else {
+                    nickname = data.nickname || data.username || data.PlayerName || "";
+                    isValid = data.valid === true || response.ok;
                 }
 
                 if (response.ok && nickname) {
