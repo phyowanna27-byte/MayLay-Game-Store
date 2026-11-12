@@ -115,10 +115,12 @@
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
+        <!-- 🎮 Game Cards with Official Logo Placeholders -->
         <div class="grid grid-cols-3 gap-3 mb-4">
+            <!-- MLBB -->
             <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
-                <div class="bg-cyan-400 h-20 flex items-center justify-center text-white font-bold shadow-inner">
-                    <i class="fa-solid fa-gamepad text-3xl"></i>
+                <div class="bg-cyan-400 h-20 flex items-center justify-center text-white font-bold shadow-inner p-2">
+                    <img src="YOUR_MLBB_LOGO_URL_OR_FILENAME" alt="MLBB" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=MLBB';">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">MLBB</p>
@@ -126,9 +128,10 @@
                 </div>
             </div>
 
+            <!-- PUBG -->
             <div onclick="openGamePage('PUBG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
-                <div class="bg-amber-500 h-20 flex items-center justify-center text-white font-bold shadow-inner">
-                    <i class="fa-solid fa-crosshairs text-3xl"></i>
+                <div class="bg-amber-500 h-20 flex items-center justify-center text-white font-bold shadow-inner p-2">
+                    <img src="YOUR_PUBG_LOGO_URL_OR_FILENAME" alt="PUBG" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=PUBG';">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">PUBG</p>
@@ -136,9 +139,10 @@
                 </div>
             </div>
 
+            <!-- HOK -->
             <div onclick="openGamePage('HOK')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
-                <div class="bg-indigo-700 h-20 flex items-center justify-center text-white font-bold shadow-inner">
-                    <i class="fa-solid fa-shield-halved text-3xl"></i>
+                <div class="bg-indigo-700 h-20 flex items-center justify-center text-white font-bold shadow-inner p-2">
+                    <img src="YOUR_HOK_LOGO_URL_OR_FILENAME" alt="HOK" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=HOK';">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">HOK</p>
@@ -146,9 +150,10 @@
                 </div>
             </div>
 
+            <!-- MCGG -->
             <div onclick="openGamePage('MCGG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
-                <div class="bg-purple-700 h-20 flex items-center justify-center text-white font-bold shadow-inner">
-                    <i class="fa-solid fa-chess text-3xl"></i>
+                <div class="bg-purple-700 h-20 flex items-center justify-center text-white font-bold shadow-inner p-2">
+                    <img src="YOUR_MCGG_LOGO_URL_OR_FILENAME" alt="MCGG" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=MCGG';">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">MCGG</p>
@@ -156,9 +161,10 @@
                 </div>
             </div>
 
+            <!-- STARLIGHT -->
             <div onclick="openGamePage('Starlight')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
-                <div class="bg-pink-600 h-20 flex items-center justify-center text-white font-bold shadow-inner">
-                    <i class="fa-solid fa-star text-3xl"></i>
+                <div class="bg-pink-600 h-20 flex items-center justify-center text-white font-bold shadow-inner p-2">
+                    <img src="YOUR_STARLIGHT_LOGO_URL_OR_FILENAME" alt="Starlight" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=Starlight';">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">STARLIGHT</p>
@@ -550,18 +556,21 @@
             
             const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
 
-            fetch(apiURL)
+            const minLoadingTime = new Promise(resolve => setTimeout(resolve, 5000));
+
+            const apiCall = fetch(apiURL)
                 .then(res => res.json())
                 .then(data => {
                     rawSheetData = data;
                     renderPrices();
-                    // ဒေတာအကုန်ရောက်တာနဲ့ Splash screen ဖယ်ရှားမည်
-                    hideSplashScreen();
                 })
                 .catch(err => {
                     if(container) container.innerHTML = `<p class="text-xs text-red-500 text-center py-2">ဒေတာဆွဲယူရာတွင် အမှားအယွင်းရှိပါသည်။</p>`;
-                    hideSplashScreen();
                 });
+
+            Promise.all([apiCall, minLoadingTime]).then(() => {
+                hideSplashScreen();
+            });
         }
 
         function hideSplashScreen() {
