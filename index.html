@@ -115,41 +115,61 @@
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
-        <!-- 🎮 Game Cards -->
+        <!-- 🎮 Game Cards (GitHub Root ထဲက ပုံနာမည်အတိုင်း တိုက်ရိုက်ချိတ်ဆက်ခြင်း) -->
         <div class="grid grid-cols-3 gap-3 mb-4">
             <!-- MLBB -->
-            <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1 p-4 text-center">
-                <div class="w-12 h-12 bg-cyan-400 rounded-2xl mx-auto flex items-center justify-center text-white font-bold text-lg shadow-md mb-2">💎</div>
-                <p class="font-bold text-gray-900 text-xs">MLBB</p>
-                <p class="text-[10px] text-gray-500 mt-0.5 truncate">Mobile Legend</p>
+            <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-cyan-400 h-20 flex items-center justify-center shadow-inner p-2">
+                    <img src="mlbb. png.jpg" alt="MLBB" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=MLBB';">
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">MLBB</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Mobile Legend</p>
+                </div>
             </div>
 
             <!-- PUBG -->
-            <div onclick="openGamePage('PUBG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1 p-4 text-center">
-                <div class="w-12 h-12 bg-amber-500 rounded-2xl mx-auto flex items-center justify-center text-white font-bold text-lg shadow-md mb-2">🪖</div>
-                <p class="font-bold text-gray-900 text-xs">PUBG</p>
-                <p class="text-[10px] text-gray-500 mt-0.5 truncate">Pubg Mobile</p>
+            <div onclick="openGamePage('PUBG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-amber-500 h-20 flex items-center justify-center shadow-inner p-2">
+                    <img src="pubg. png.jpg" alt="PUBG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=PUBG';">
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">PUBG</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Pubg Mobile</p>
+                </div>
             </div>
 
             <!-- HOK -->
-            <div onclick="openGamePage('HOK')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1 p-4 text-center">
-                <div class="w-12 h-12 bg-indigo-700 rounded-2xl mx-auto flex items-center justify-center text-white font-bold text-lg shadow-md mb-2">⚔️</div>
-                <p class="font-bold text-gray-900 text-xs">HOK</p>
-                <p class="text-[10px] text-gray-500 mt-0.5 truncate">HOK</p>
+            <div onclick="openGamePage('HOK')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-indigo-700 h-20 flex items-center justify-center shadow-inner p-2">
+                    <img src="hok.png.jpg" alt="HOK" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=HOK';">
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">HOK</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">HOK</p>
+                </div>
             </div>
 
             <!-- MCGG -->
-            <div onclick="openGamePage('MCGG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1 p-4 text-center">
-                <div class="w-12 h-12 bg-purple-700 rounded-2xl mx-auto flex items-center justify-center text-white font-bold text-lg shadow-md mb-2">♟️</div>
-                <p class="font-bold text-gray-900 text-xs">MCGG</p>
-                <p class="text-[10px] text-gray-500 mt-0.5 truncate">Magic Chess</p>
+            <div onclick="openGamePage('MCGG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-purple-700 h-20 flex items-center justify-center shadow-inner p-2">
+                    <img src="mcgg.png.png" alt="MCGG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=MCGG';">
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">MCGG</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Magic Chess</p>
+                </div>
             </div>
 
             <!-- STARLIGHT -->
-            <div onclick="openGamePage('Starlight')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1 p-4 text-center">
-                <div class="w-12 h-12 bg-pink-600 rounded-2xl mx-auto flex items-center justify-center text-white font-bold text-lg shadow-md mb-2">⭐</div>
-                <p class="font-bold text-gray-900 text-xs">STARLIGHT</p>
-                <p class="text-[10px] text-gray-500 mt-0.5 truncate">Starlight card</p>
+            <div onclick="openGamePage('Starlight')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
+                <div class="bg-pink-600 h-20 flex items-center justify-center shadow-inner p-2">
+                    <img src="starlight.png.jpg" alt="Starlight" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=Starlight';">
+                </div>
+                <div class="p-2 text-center">
+                    <p class="font-bold text-gray-900 text-xs">STARLIGHT</p>
+                    <p class="text-[10px] text-gray-500 mt-0.5 truncate">Starlight card</p>
+                </div>
             </div>
         </div>
     </div>
@@ -736,7 +756,7 @@
             });
         }
 
-        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (Region ပါအပါအဝင်)
+        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း
         let globalRegionCode = "N/A";
         let globalNickname = "";
 
@@ -823,7 +843,6 @@
             }
         }
 
-        // 🤖 Top-Up အတွက် API ဖြင့် အော်တိုဝယ်ယူပြီး Customer ဆီ တိုက်ရိုက်အကြောင်းပြန်ခြင်း
         async function processAutoTopUp(orderDetails) {
             const userId = "922531";
             const partnerId = "cec85a9f4e695e6cb368468942bd4e98";
@@ -863,10 +882,9 @@
             }
         }
 
-        // 👨‍💻 Manual နဲ့ Order တွေအတွက် Admin ဆီ Transaction Report ပို့ပေးခြင်း (Region အပါအဝင်)
         function sendTransactionReportToAdmin(orderDetails, slipFile) {
             const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
-            const adminChatId = '6432109875'; // ဝနရဲ့ Admin Chat ID
+            const adminChatId = '6432109875';
             
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
 
@@ -914,7 +932,6 @@
             }
         }
 
-        // 💳 Recharge အတွက် Admin ဆီ ငွေလွှဲစလစ်နှင့် အကြောင်းကြားစာပို့ခြင်း
         function sendRechargeReportToAdmin(amount, curr, slipFile) {
             const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
             const adminChatId = '6432109875';
