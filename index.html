@@ -27,6 +27,26 @@
 </head>
 <body class="pb-24">
 
+    <!-- 🌀 Custom Loading / Splash Screen with Welcome Message -->
+    <div id="splash-screen" class="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center z-[9999] transition-opacity duration-500 p-6 text-center">
+        <div class="flex flex-col items-center space-y-4">
+            <div class="w-20 h-20 bg-gradient-to-tr from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg animate-pulse">
+                <span class="text-white font-extrabold text-2xl">ML</span>
+            </div>
+            
+            <div class="space-y-1">
+                <h1 class="text-white font-extrabold text-base tracking-wide">May Lay Game Store</h1>
+                <p class="text-pink-300 font-semibold text-xs animate-pulse">🙏 May Lay Game Store မှ လှိုက်လှဲစွာ ကြိုဆိုပါတယ် ✨</p>
+            </div>
+        </div>
+
+        <div class="mt-8 flex items-center space-x-1.5">
+            <div class="w-2.5 h-2.5 bg-pink-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+            <div class="w-2.5 h-2.5 bg-pink-500 rounded-full animate-bounce" style="animation-delay: 0.2s;"></div>
+            <div class="w-2.5 h-2.5 bg-pink-500 rounded-full animate-bounce" style="animation-delay: 0.3s;"></div>
+        </div>
+    </div>
+
     <!-- HOME VIEW (ပင်မမျက်နှာပြင်) -->
     <div id="home-view" class="p-4 max-w-md mx-auto">
         <div class="text-center my-3">
@@ -185,7 +205,6 @@
                 <input type="datetime-local" id="f-event-datetime" class="w-full p-2.5 border border-purple-200 rounded-xl bg-white text-xs focus:outline-none focus:border-purple-500 font-semibold text-purple-800">
             </div>
 
-            <!-- ဂိမ်းရွေးချယ်စရာ -->
             <div>
                 <label class="font-bold text-gray-700 block mb-1">ဂိမ်းအမျိုးအစား</label>
                 <select id="game-select" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500" onchange="toggleZoneInput()">
@@ -536,10 +555,23 @@
                 .then(data => {
                     rawSheetData = data;
                     renderPrices();
+                    // ဒေတာအကုန်ရောက်တာနဲ့ Splash screen ဖယ်ရှားမည်
+                    hideSplashScreen();
                 })
                 .catch(err => {
                     if(container) container.innerHTML = `<p class="text-xs text-red-500 text-center py-2">ဒေတာဆွဲယူရာတွင် အမှားအယွင်းရှိပါသည်။</p>`;
+                    hideSplashScreen();
                 });
+        }
+
+        function hideSplashScreen() {
+            const splash = document.getElementById('splash-screen');
+            if (splash) {
+                splash.style.opacity = '0';
+                setTimeout(() => {
+                    splash.style.display = 'none';
+                }, 500);
+            }
         }
 
         function renderPrices() {
@@ -697,7 +729,7 @@
             });
         }
 
-        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (cURL Host နှင့် Key အပြည့်အစုံဖြင့်)
+        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (Region ဖြင့် ဖော်ပြရန် ပြင်ဆင်ပြီး)
         async function checkPlayerName() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
@@ -741,13 +773,16 @@
                 console.log("API Response:", data);
 
                 let nickname = "";
+                let regionCode = "";
                 let isValid = false;
 
                 if (data.data) {
                     nickname = data.data.nickname || "";
+                    regionCode = data.data.region_code || "N/A";
                     isValid = data.data.valid === true || data.data.valid === "true";
                 } else {
                     nickname = data.nickname || data.username || data.PlayerName || "";
+                    regionCode = data.region_code || data.region || "N/A";
                     isValid = data.valid === true || response.ok;
                 }
 
@@ -764,8 +799,8 @@
                                 <span class="font-extrabold text-purple-700 text-sm">${nickname}</span>
                             </div>
                             <div class="flex justify-between items-center text-xs border-t pt-1.5">
-                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> ဆာဗာ</span>
-                                <span class="font-extrabold text-sky-600">${server ? server : 'N/A'}</span>
+                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> Region</span>
+                                <span class="font-extrabold text-sky-600">${regionCode}</span>
                             </div>
                         </div>
                     `;
