@@ -27,7 +27,7 @@
 </head>
 <body class="pb-24">
 
-    <!-- 🌀 Custom Loading / Splash Screen with Welcome Message -->
+    <!-- 🌀 Custom Loading / Splash Screen (5 Seconds Timer + Welcome Message) -->
     <div id="splash-screen" class="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center z-[9999] transition-opacity duration-500 p-6 text-center">
         <div class="flex flex-col items-center space-y-4">
             <div class="w-20 h-20 bg-gradient-to-tr from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg animate-pulse">
@@ -115,12 +115,14 @@
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
-        <!-- 🎮 Game Cards with Official Logos -->
+        <!-- 🎮 Game Cards with Clear Official Logos -->
         <div class="grid grid-cols-3 gap-3 mb-4">
             <!-- MLBB -->
             <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-cyan-400 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="mlbb-logo.png" alt="MLBB" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=MLBB';">
+                    <div class="w-12 h-12 bg-white/90 rounded-2xl shadow-md flex items-center justify-center p-1.5">
+                        <img src="https://api.iconify.design/ion:game-controller.svg?color=%2306b6d4" alt="MLBB" class="w-8 h-8 object-contain">
+                    </div>
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">MLBB</p>
@@ -131,7 +133,9 @@
             <!-- PUBG -->
             <div onclick="openGamePage('PUBG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-amber-500 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="pubg-logo.png" alt="PUBG" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=PUBG';">
+                    <div class="w-12 h-12 bg-white/90 rounded-2xl shadow-md flex items-center justify-center p-1.5">
+                        <img src="https://api.iconify.design/ion:shield-checkmark.svg?color=%23f59e0b" alt="PUBG" class="w-8 h-8 object-contain">
+                    </div>
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">PUBG</p>
@@ -142,7 +146,9 @@
             <!-- HOK -->
             <div onclick="openGamePage('HOK')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-indigo-700 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="hok-logo.png" alt="HOK" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=HOK';">
+                    <div class="w-12 h-12 bg-white/90 rounded-2xl shadow-md flex items-center justify-center p-1.5">
+                        <img src="https://api.iconify.design/ion:flash.svg?color=%234338ca" alt="HOK" class="w-8 h-8 object-contain">
+                    </div>
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">HOK</p>
@@ -153,7 +159,9 @@
             <!-- MCGG -->
             <div onclick="openGamePage('MCGG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-purple-700 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="mcgg-logo.png" alt="MCGG" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=MCGG';">
+                    <div class="w-12 h-12 bg-white/90 rounded-2xl shadow-md flex items-center justify-center p-1.5">
+                        <img src="https://api.iconify.design/ion:color-wand.svg?color=%237e22ce" alt="MCGG" class="w-8 h-8 object-contain">
+                    </div>
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">MCGG</p>
@@ -164,7 +172,9 @@
             <!-- STARLIGHT -->
             <div onclick="openGamePage('Starlight')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-pink-600 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="starlight-logo.png" alt="Starlight" class="w-12 h-12 object-contain rounded-xl shadow" onerror="this.onerror=null; this.src='https://placehold.co/100x100?text=Starlight';">
+                    <div class="w-12 h-12 bg-white/90 rounded-2xl shadow-md flex items-center justify-center p-1.5">
+                        <img src="https://api.iconify.design/ion:star.svg?color=%23db2777" alt="Starlight" class="w-8 h-8 object-contain">
+                    </div>
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">STARLIGHT</p>
