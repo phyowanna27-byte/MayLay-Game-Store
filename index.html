@@ -697,7 +697,7 @@
             });
         }
 
-        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (ngrok-skip-browser-warning ပါဝင်သည်)
+        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (Game ID Checker API by 1xApi)
         async function checkPlayerName() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
@@ -729,8 +729,7 @@
                     headers: {
                         'content-type': 'application/json',
                         'X-RapidAPI-Key': '65d116a2ddmshe0c1954f29997f0p11513c19b7b29', // 👈 ကိုယ့်ရဲ့ RapidAPI Key
-                        'X-RapidAPI-Host': 'game-id-checker-api.p.rapidapi.com',
-                        'ngrok-skip-browser-warning': 'true' // 👈 Ngrok Warning ကျော်ရန် ထည့်ထားသည်
+                        'X-RapidAPI-Host': 'game-id-checker-api.p.rapidapi.com'
                     },
                     body: JSON.stringify({
                         game: game,
@@ -739,11 +738,27 @@
                     })
                 });
                 const data = await response.json();
+                console.log("API Response:", data);
 
-                const nickname = data.data && data.data.nickname ? data.data.nickname : (data.username || data.PlayerName);
-                const isValid = data.data && data.data.valid;
+                let nickname = "";
+                if (data.data && data.data.nickname) {
+                    nickname = data.data.nickname;
+                } else if (data.nickname) {
+                    nickname = data.nickname;
+                } else if (data.username) {
+                    nickname = data.username;
+                } else if (data.PlayerName) {
+                    nickname = data.PlayerName;
+                }
 
-                if (response.ok && isValid && nickname) {
+                let isValid = false;
+                if (data.data && (data.data.valid === true || data.data.valid === "true")) {
+                    isValid = true;
+                } else if (data.valid === true || response.ok) {
+                    isValid = true;
+                }
+
+                if (response.ok && nickname) {
                     nameDisp.innerHTML = `
                         <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
                             <div class="flex items-center justify-between border-b pb-1.5">
