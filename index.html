@@ -27,7 +27,7 @@
 </head>
 <body class="pb-24">
 
-    <!-- 🌀 Custom Loading / Splash Screen (5 Seconds Timer + Welcome Message) -->
+    <!-- 🌀 Custom Loading / Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center z-[9999] transition-opacity duration-500 p-6 text-center">
         <div class="flex flex-col items-center space-y-4">
             <div class="w-20 h-20 bg-gradient-to-tr from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg animate-pulse">
@@ -115,12 +115,12 @@
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
-        <!-- 🎮 Game Cards with Correct Filenames -->
+        <!-- 🎮 Game Cards -->
         <div class="grid grid-cols-3 gap-3 mb-4">
             <!-- MLBB -->
             <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-cyan-400 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="mlbb. png.jpg" alt="MLBB" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=MLBB'">
+                    <img src="images/mlbb.jpg" alt="MLBB" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='images/mlbb.png'; this.onerror=function(){this.src='https://placehold.co/100x100?text=MLBB';};">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">MLBB</p>
@@ -131,7 +131,7 @@
             <!-- PUBG -->
             <div onclick="openGamePage('PUBG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-amber-500 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="pubg. png.jpg" alt="PUBG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=PUBG'">
+                    <img src="images/pubg.jpg" alt="PUBG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='images/pubg.png'; this.onerror=function(){this.src='https://placehold.co/100x100?text=PUBG';};">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">PUBG</p>
@@ -142,7 +142,7 @@
             <!-- HOK -->
             <div onclick="openGamePage('HOK')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-indigo-700 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="hok.png.jpg" alt="HOK" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=HOK'">
+                    <img src="images/hok.jpg" alt="HOK" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='images/hok.png'; this.onerror=function(){this.src='https://placehold.co/100x100?text=HOK';};">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">HOK</p>
@@ -153,7 +153,7 @@
             <!-- MCGG -->
             <div onclick="openGamePage('MCGG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-purple-700 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="mcgg.png.png" alt="MCGG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=MCGG'">
+                    <img src="images/mcgg.png" alt="MCGG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=MCGG';">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">MCGG</p>
@@ -164,7 +164,7 @@
             <!-- STARLIGHT -->
             <div onclick="openGamePage('Starlight')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-pink-600 h-20 flex items-center justify-center shadow-inner p-2">
-                    <img src="starlight.png.jpg" alt="Starlight" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=Starlight'">
+                    <img src="images/starlight.jpg" alt="Starlight" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='images/starlight.png'; this.onerror=function(){this.src='https://placehold.co/100x100?text=Starlight';};">
                 </div>
                 <div class="p-2 text-center">
                     <p class="font-bold text-gray-900 text-xs">STARLIGHT</p>
@@ -195,6 +195,17 @@
             <div id="game-price-list" class="space-y-2">
                 <p class="text-xs text-gray-500 text-center py-2">ဒေတာဆွဲယူနေပါပြီ...</p>
             </div>
+        </div>
+
+        <!-- Gift Card Contact Notice Box -->
+        <div id="gift-card-notice" class="hidden bg-white p-5 rounded-2xl shadow-md text-center space-y-3">
+            <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto text-xl">
+                <i class="fa-solid fa-headset"></i>
+            </div>
+            <p class="font-bold text-gray-800 text-xs">Gift Card ဝယ်ယူမယ်ဆိုပါက Admin ကို ဆက်သွယ်ပေးပါရန်</p>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="inline-block bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow">
+                💬 Admin သို့ ဆက်သွယ်မည် (@MayLayGameStore)
+            </a>
         </div>
 
         <div id="game-order-section" class="hidden bg-white p-4 rounded-2xl shadow-md space-y-3 text-xs">
@@ -247,7 +258,7 @@
                 </div>
             </div>
 
-            <button onclick="submitGameOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition">
+            <button id="order-submit-btn" onclick="submitGameOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition">
                 🚀 Order တင်မည် / ဝယ်ယူမည်
             </button>
         </div>
@@ -314,7 +325,7 @@
             </div>
 
             <button onclick="submitRecharge()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md text-xs hover:opacity-90 transition">
-                💳 ငွေဖြည့်မည် (Submit)
+                💳 ငွေဖြည့်မည် (Admin ထံ စစ်ဆေးရန် ပို့မည်)
             </button>
         </div>
     </div>
@@ -503,10 +514,20 @@
             document.getElementById('game-page-view').classList.remove('hidden');
             
             document.getElementById('game-page-title').innerText = gameKey + " Store";
-            document.getElementById('game-order-section').classList.add('hidden');
+            
+            let giftNotice = document.getElementById('gift-card-notice');
+            let orderSection = document.getElementById('game-order-section');
+
+            if (gameKey === 'Gift Card') {
+                giftNotice.classList.remove('hidden');
+                orderSection.classList.add('hidden');
+            } else {
+                giftNotice.classList.add('hidden');
+                orderSection.classList.add('hidden');
+            }
             
             let gameSelect = document.getElementById('game-select');
-            if(gameSelect) {
+            if(gameSelect && gameKey !== 'Gift Card') {
                 if(gameKey === 'MLBB') gameSelect.value = 'mlbb';
                 else if(gameKey === 'PUBG') gameSelect.value = 'pubgm';
                 else if(gameKey === 'HOK') gameSelect.value = 'hok';
@@ -556,7 +577,6 @@
             
             const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
 
-            // ⏱️ Loading Screen ၅ စက္ကန့်တိတိ ကြာစေရန်
             const minLoadingTime = new Promise(resolve => setTimeout(resolve, 5000));
 
             const apiCall = fetch(apiURL)
@@ -594,13 +614,9 @@
                 let isMatch = false;
 
                 if (currentGame === 'Gift Card') {
-                    if (cat === 'GIFT CARD') {
-                        isMatch = true;
-                    }
+                    if (cat === 'GIFT CARD') isMatch = true;
                 } else {
-                    if (cat.includes(currentGame.toUpperCase())) {
-                        isMatch = true;
-                    }
+                    if (cat.includes(currentGame.toUpperCase())) isMatch = true;
                 }
 
                 if (isMatch) {
@@ -619,9 +635,10 @@
                                 <div class="text-right">
                                     <p class="text-xs font-bold ${currentCurrency === 'THB' ? 'text-blue-600' : 'text-emerald-600'}">${currSymbol}${price.toLocaleString()}</p>
                                 </div>
+                                ${currentGame !== 'Gift Card' ? `
                                 <button onclick="selectPackage('${pkgName}', ${price}, '${currentCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
                                     ဝယ်ယူမည်
-                                </button>
+                                </button>` : ''}
                             </div>
                         </div>
                     `;
@@ -649,7 +666,7 @@
                 eventDatetimeContainer.classList.remove('hidden');
                 manualContainer.classList.add('hidden');
             } else if (activeMainTab === 'topup') {
-                titleElement.innerText = "🛒 Top Up ဖြင့် ဝယ်ယူရန် (Wallet Balance ဖြင့် ဖြတ်မည်)";
+                titleElement.innerText = "🛒 Top Up ဖြင့် ဝယ်ယူရန် (အော်တိုစိန်ဖြည့်မည်)";
                 eventDatetimeContainer.classList.add('hidden');
                 manualContainer.classList.add('hidden');
             } else {
@@ -739,7 +756,10 @@
             });
         }
 
-        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း (Region ဖြင့် ဖော်ပြရန် ပြင်ဆင်ပြီး)
+        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း
+        let globalRegionCode = "N/A";
+        let globalNickname = "";
+
         async function checkPlayerName() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
@@ -780,23 +800,16 @@
                     })
                 });
                 const data = await response.json();
-                console.log("API Response:", data);
-
-                let nickname = "";
-                let regionCode = "";
-                let isValid = false;
 
                 if (data.data) {
-                    nickname = data.data.nickname || "";
-                    regionCode = data.data.region_code || "N/A";
-                    isValid = data.data.valid === true || data.data.valid === "true";
+                    globalNickname = data.data.nickname || "";
+                    globalRegionCode = data.data.region_code || "N/A";
                 } else {
-                    nickname = data.nickname || data.username || data.PlayerName || "";
-                    regionCode = data.region_code || data.region || "N/A";
-                    isValid = data.valid === true || response.ok;
+                    globalNickname = data.nickname || data.username || data.PlayerName || "";
+                    globalRegionCode = data.region_code || data.region || "N/A";
                 }
 
-                if (response.ok && nickname) {
+                if (response.ok && globalNickname) {
                     nameDisp.innerHTML = `
                         <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
                             <div class="flex items-center justify-between border-b pb-1.5">
@@ -806,11 +819,11 @@
                             </div>
                             <div class="flex justify-between items-center text-xs">
                                 <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
-                                <span class="font-extrabold text-purple-700 text-sm">${nickname}</span>
+                                <span class="font-extrabold text-purple-700 text-sm">${globalNickname}</span>
                             </div>
                             <div class="flex justify-between items-center text-xs border-t pt-1.5">
                                 <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> Region</span>
-                                <span class="font-extrabold text-sky-600">${regionCode}</span>
+                                <span class="font-extrabold text-sky-600">${globalRegionCode}</span>
                             </div>
                         </div>
                     `;
@@ -830,28 +843,75 @@
             }
         }
 
-        function sendOrderToTelegram(orderDetails, slipFile) {
+        // 🤖 Top-Up အတွက် API ဖြင့် အော်တိုဝယ်ယူပြီး Customer ဆီ တိုက်ရိုက်အကြောင်းပြန်ခြင်း
+        async function processAutoTopUp(orderDetails) {
+            const userId = "922531";
+            const partnerId = "cec85a9f4e695e6cb368468942bd4e98";
+            const secret = "tH27CikO7E";
+            const apiUrl = "https://your-api-endpoint.com/api/v1/topup";
+
+            let timestamp = Math.floor(Date.now() / 1000);
+
+            let payload = {
+                user_id: userId,
+                partner_id: partnerId,
+                timestamp: timestamp,
+                game: orderDetails.gameType,
+                player_id: orderDetails.uid,
+                zone_id: orderDetails.server,
+                package_code: orderDetails.item
+            };
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                const result = await response.json();
+
+                if (response.ok && result.status === "success") {
+                    alert(`✅ Top-up အောင်မြင်ပါသည်။ Bot မှ ${orderDetails.item} ကို Customer ထံသို့ အော်တို ဖြည့်သွင်းပြီးပါပြီ။`);
+                    tg.close();
+                } else {
+                    alert(`⚠️ စိန်ဖြည့်ရာတွင် အမှားအယွင်းရှိပါသည်: ${result.message || 'ဆာဗာချိတ်ဆက်မှု မအောင်မြင်ပါ'}`);
+                }
+            } catch (error) {
+                console.error("Auto Top-Up Error:", error);
+                alert("❌ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။");
+            }
+        }
+
+        // 👨‍💻 Manual နဲ့ Order တွေအတွက် Admin (ဝန) ဆီကို Transaction Report ပို့ပေးခြင်း (အတည်ပြုချက်ယူရန်)
+        function sendTransactionReportToAdmin(orderDetails, slipFile) {
             const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
-            const chatId = '6432109875';
+            const adminChatId = '6432109875'; // ဝနရဲ့ Admin Chat ID
             
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
 
-            let message = `🛍️ အော်ဒါအသစ်ဝင်ပါပြီ!\n\n` +
-                          `👤 ဝယ်ယူသူ: ${userDisplay}\n` +
-                          `🎮 ဂိမ်း/ပစ္စည်း: ${orderDetails.item}\n` +
-                          `🆔 Game ID: ${orderDetails.gameId}\n`;
+            let message = `==== Transaction Report (Pending Admin Approval) ====\n\n` +
+                          `UID : ${orderDetails.uid}\n` +
+                          `(${orderDetails.server || 'N/A'})\n` +
+                          `Name : ${orderDetails.inGameName || '-'}\n` +
+                          `Region : ${orderDetails.region || 'N/A'}\n` +
+                          `Order : ${orderDetails.item}\n`;
 
             if (orderDetails.eventDatetime) {
                 message += `📅 Event ရက်စွဲ/အချိန်: ${orderDetails.eventDatetime}\n`;
             }
 
-            message += `💰 ကျသင့်ငွေ: ${orderDetails.price} ${orderDetails.curr}\n` +
-                       `📌 အမျိုးအစား: ${orderDetails.type}\n\n` +
-                       `✨ အခြေအနေ: စိန်/ပစ္စည်း ဖြည့်ပေးနေပါပြီ။`;
+            message += `SN : S${Date.now()}\n` +
+                       `Time : ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n` +
+                       `Date : ${new Date().toLocaleDateString()}\n` +
+                       `===== ${userDisplay} =====\n` +
+                       `Amount: ${orderDetails.price} ${orderDetails.curr}\n` +
+                       `Type: ${orderDetails.type}\n\n` +
+                       `📌 [Admin မှ Bot ဖြင့် အတည်ပြုရန် စောင့်ဆိုင်းနေသည်]`;
 
             if (slipFile) {
                 let formData = new FormData();
-                formData.append('chat_id', chatId);
+                formData.append('chat_id', adminChatId);
                 formData.append('photo', slipFile);
                 formData.append('caption', message);
 
@@ -867,38 +927,52 @@
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        chat_id: chatId,
+                        chat_id: adminChatId,
                         text: message
                     })
                 }).catch(err => console.error(err));
             }
         }
 
+        // 💳 Recharge အတွက် Admin ဆီ ငွေလွှဲစလစ်နှင့် အကြောင်းကြားစာပို့ခြင်း
+        function sendRechargeReportToAdmin(amount, curr, slipFile) {
+            const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
+            const adminChatId = '6432109875';
+
+            let message = `💳 👛 Wallet ငွေဖြည့်တောင်းဆိုမှု အသစ်!\n\n` +
+                          `👤 အမည်: ${currentUser.name}\n` +
+                          `💰 ပမာဏ: ${amount} ${curr}\n` +
+                          `⏱️ အချိန်: ${new Date().toLocaleString()}\n\n` +
+                          `📌 [Admin မှ စစ်ဆေးပြီး Wallet ထဲသို့ အော်တိုထည့်ရန် စောင့်ဆိုင်းနေသည်]`;
+
+            let formData = new FormData();
+            formData.append('chat_id', adminChatId);
+            formData.append('photo', slipFile);
+            formData.append('caption', message);
+
+            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
+                method: 'POST',
+                mode: 'no-cors',
+                body: formData
+            }).catch(err => console.error("Error sending recharge slip:", err));
+        }
+
         function logOrderToSheet(orderDetails) {
             let baseURL = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0";
             let targetTab = "";
 
-            if (orderDetails.type === "ORDER") {
-                targetTab = "/tabs/Event_Orders_2026-Oct";
-            } else if (orderDetails.type === "MANUAL") {
-                targetTab = "/tabs/Manual_Orders_2026-Oct";
-            } else if (orderDetails.type === "TOPUP") {
-                targetTab = "/tabs/Pre_Funded_2026-Oct";
-            } else if (orderDetails.type === "GIFT") {
-                targetTab = "/tabs/gift card order";
-            } else {
-                targetTab = "";
-            }
+            if (orderDetails.type === "ORDER") targetTab = "/tabs/Event_Orders_2026-Oct";
+            else if (orderDetails.type === "MANUAL") targetTab = "/tabs/Manual_Orders_2026-Oct";
+            else if (orderDetails.type === "TOPUP") targetTab = "/tabs/Pre_Funded_2026-Oct";
 
             let apiEndpoint = baseURL + targetTab;
-
             let payload = {
                 "Timestamp": new Date().toLocaleString(),
                 "Type": orderDetails.type,
                 "Name": orderDetails.name,
                 "Username": orderDetails.username,
                 "Package": orderDetails.item,
-                "Game ID": orderDetails.gameId,
+                "Game ID": `${orderDetails.uid} (${orderDetails.server || '-'}) [${orderDetails.region}]`,
                 "Event Datetime": orderDetails.eventDatetime || "-",
                 "Price": orderDetails.price,
                 "Currency": orderDetails.curr
@@ -907,9 +981,7 @@
             fetch(apiEndpoint, {
                 method: "POST",
                 mode: "no-cors",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload)
             }).catch(error => console.error("Error logging to sheet:", error));
         }
@@ -941,27 +1013,23 @@
             let packageName = selectedPkg.name;
             let customerName = currentUser.name;
             let customerUsername = (user && user.username) ? user.username : "N/A";
-            let gameIdFull = `${uid} ${server ? '(' + server + ')' : ''} [${gameType.toUpperCase()}]`;
-
             let slip = document.getElementById('f-slip').files[0];
-
-            let orderType = activeMainTab.toUpperCase();
-            if (currentGame === 'Gift Card') {
-                orderType = 'GIFT';
-            }
 
             let orderDetails = {
                 name: customerName,
                 username: customerUsername,
                 item: packageName,
-                gameId: gameIdFull,
+                uid: uid,
+                server: server,
+                region: globalRegionCode,
+                inGameName: globalNickname,
                 eventDatetime: eventDatetime ? eventDatetime.replace('T', ' ') : null,
                 price: price,
                 curr: curr,
-                type: orderType
+                type: activeMainTab.toUpperCase(),
+                gameType: gameType
             };
 
-            sendOrderToTelegram(orderDetails, slip);
             logOrderToSheet(orderDetails);
 
             if (activeMainTab === 'topup') {
@@ -972,8 +1040,7 @@
                     document.getElementById('thb-balance').innerText = `฿ ${userWallet.THB.toFixed(2)} THB`;
                     document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
 
-                    alert(`✅ Top Up အောင်မြင်ပါသည်။ Wallet ထဲမှ ${curr === 'THB' ? '฿' : 'Ks '}${price} ဖြတ်ယူပြီးပါပြီ။`);
-                    tg.close();
+                    processAutoTopUp(orderDetails);
                 } else {
                     alert(`❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`);
                 }
@@ -983,10 +1050,12 @@
                     return;
                 }
                 userSpent[curr] += price;
+                sendTransactionReportToAdmin(orderDetails, slip);
 
-                alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Bot မှ အော်တိုဆောင်ရွက်ပေးနေပါပြီ။");
+                alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက Bot မှ အော်တိုဆောင်ရွက်ပေးပါမည်။");
                 tg.close();
             } else if (activeMainTab === 'order') {
+                sendTransactionReportToAdmin(orderDetails, null);
                 alert("Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။");
                 tg.close();
             }
@@ -1012,7 +1081,7 @@
                         <div class="flex justify-between items-center border-b pb-1">
                             <div>
                                 <span class="font-semibold text-emerald-600">KBZPay / WavePay</span>
-                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('09779091686')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">09779091686 📋</p>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('09779091686')" style="cursor:pointer;">09779091686 📋</p>
                                 <p class="text-[10px] text-gray-500">Ei Ei Phyu</p>
                             </div>
                             <button onclick="copyText('09779091686')" class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
@@ -1021,19 +1090,15 @@
                             <div class="space-y-1">
                                 <p class="text-[10px] font-bold text-gray-600">KBZPay QR</p>
                                 <img src="7655.jpg" alt="KBZPay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
-                                <button onclick="openQRImage('7655.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
-                                    <i class="fa-solid fa-download"></i> Save KBZ
-                                </button>
+                                <button onclick="openQRImage('7655.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow">Save KBZ</button>
                             </div>
                             <div class="space-y-1">
                                 <p class="text-[10px] font-bold text-gray-600">WavePay QR</p>
                                 <img src="7656.jpg" alt="WavePay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
-                                <button onclick="openQRImage('7656.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
-                                    <i class="fa-solid fa-download"></i> Save Wave
-                                </button>
+                                <button onclick="openQRImage('7656.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow">Save Wave</button>
                             </div>
                         </div>
-                        <p class="text-[10px] text-red-500 font-semibold">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။ (dia, Skin, Weekly pass လုံးဝမရေးရပါ)</p>
+                        <p class="text-[10px] text-red-500 font-semibold">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။</p>
                     </div>
                 `;
             } else {
@@ -1047,45 +1112,21 @@
                         <div class="flex justify-between items-center text-left">
                             <div>
                                 <span class="font-semibold text-blue-600">Bangkok Bank</span>
-                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('0408228211')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">0408228211 📋</p>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('0408228211')" style="cursor:pointer;">0408228211 📋</p>
                                 <p class="text-[10px] text-gray-500">Mr. Phyo Wanna Linn</p>
                             </div>
                             <button onclick="copyText('0408228211')" class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
                         </div>
                         <div class="my-2 border-t pt-2 space-y-2">
                             <img src="7659.jpeg" alt="Thai QR" class="w-36 h-36 mx-auto rounded-lg shadow border object-contain">
-                            <button onclick="openQRImage('7659.jpeg')" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow hover:bg-blue-700 transition">
-                                <i class="fa-solid fa-download mr-1"></i> 📥 QR ပုံ Save ရန် ဖွင့်မည်
-                            </button>
+                            <button onclick="openQRImage('7659.jpeg')" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow">📥 QR ပုံ Save ရန် ဖွင့်မည်</button>
                         </div>
-                        <p class="text-[10px] text-red-500 font-semibold text-left">📌 Note / Memo တွင် (Payment) ဟုသာ ရေးပါ။ စိန်ဝယ်ခြင်း၊ ဂိမ်းနာမည်များ လုံးဝမရေးရပါ။</p>
+                        <p class="text-[10px] text-red-500 font-semibold text-left">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။</p>
                     </div>
                 `;
             }
             selectedRechargeAmt = 0;
             document.getElementById('custom-recharge-amount').value = '';
-        }
-
-        function logDepositToSheet(amount, curr, slipFile) {
-            let apiEndpoint = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0/tabs/deposits";
-
-            let payload = {
-                "Timestamp": new Date().toLocaleString(),
-                "Name": currentUser.name,
-                "Username": (user && user.username) ? user.username : "N/A",
-                "Amount": amount,
-                "Currency": curr,
-                "Status": "Pending"
-            };
-
-            fetch(apiEndpoint, {
-                method: "POST",
-                mode: "no-cors",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload)
-            }).catch(err => console.error("Error logging deposit:", err));
         }
 
         function selectRechargeAmount(amount) {
@@ -1109,18 +1150,13 @@
                 return;
             }
 
-            logDepositToSheet(finalAmt, rechargeCurrency, slip);
+            // Admin ဆီသို့ ငွေဖြည့်စလစ် ပို့မည် (ဝန အတည်ပြုမှ Wallet ထဲ Auto ထည့်ပေးရန်)
+            sendRechargeReportToAdmin(finalAmt, rechargeCurrency, slip);
 
-            userWallet[rechargeCurrency] += finalAmt;
-            if(rechargeCurrency === 'THB') {
-                document.getElementById('thb-balance').innerText = `฿ ${userWallet.THB.toFixed(2)} THB`;
-            } else {
-                document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
-            }
-
-            alert(`✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) အောင်မြင်ပါသည်။ အတည်ပြုစစ်ဆေးနေပါပြီ။`);
+            alert(`✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`);
             document.getElementById('custom-recharge-amount').value = '';
             document.getElementById('recharge-slip').value = '';
+            tg.close();
         }
 
         function updateProfileData() {
