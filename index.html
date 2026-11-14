@@ -115,7 +115,7 @@
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
-                <!-- 🎮 Game Cards (GitHub Raw Links ဖြင့် ပုံများ အမှန်တကယ် ပေါ်စေရန် ချိတ်ဆက်ခြင်း) -->
+        <!-- 🎮 Game Cards (GitHub Raw Links ဖြင့် ပုံများ အမှန်တကယ် ပေါ်စေရန် ချိတ်ဆက်ခြင်း) -->
         <div class="grid grid-cols-3 gap-3 mb-4">
             <!-- MLBB -->
             <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
@@ -895,7 +895,7 @@
             const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
 
             try {
-                await fetch(url, {
+                const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -903,8 +903,10 @@
                         text: messageText
                     })
                 });
+                return await res.json();
             } catch (err) {
                 console.error("Error sending Telegram message:", err);
+                return null;
             }
         }
 
@@ -1043,11 +1045,11 @@
                 sendTransactionReportToAdmin(orderDetails, slip);
 
                 alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။");
-                tg.close();
+                setTimeout(() => { tg.close(); }, 1200);
             } else if (activeMainTab === 'order') {
                 sendTransactionReportToAdmin(orderDetails, null);
                 alert("Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။");
-                tg.close();
+                setTimeout(() => { tg.close(); }, 1200);
             }
         }
 
@@ -1145,7 +1147,7 @@
             alert(`✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`);
             document.getElementById('custom-recharge-amount').value = '';
             document.getElementById('recharge-slip').value = '';
-            tg.close();
+            setTimeout(() => { tg.close(); }, 1200);
         }
 
         function updateProfileData() {
