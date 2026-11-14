@@ -225,7 +225,7 @@
 
             <div>
                 <label class="font-bold text-gray-700 block mb-1">ဂိမ်းအမျိုးအစား</label>
-                <select id="game-select" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500" onchange="toggleZoneInput()">
+                <select id="game-select" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500" onchange="toggleZoneInput(); checkPlayerName();">
                     <option value="mlbb">Mobile Legends (MLBB)</option>
                     <option value="pubgm">PUBG Mobile</option>
                     <option value="hok">Honor of Kings (HOK)</option>
@@ -678,6 +678,7 @@
             }
 
             document.getElementById('game-order-section').classList.remove('hidden');
+            checkPlayerName();
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
@@ -760,8 +761,14 @@
         // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း
         let globalRegionCode = "N/A";
         let globalNickname = "";
+        let checkTimer = null;
 
-        async function checkPlayerName() {
+        function checkPlayerName() {
+            clearTimeout(checkTimer);
+            checkTimer = setTimeout(runPlayerCheck, 500);
+        }
+
+        async function runPlayerCheck() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
             const serverEl = document.getElementById('f-server');
@@ -770,7 +777,10 @@
             if(!uidEl || !nameDisp) return;
 
             let uid = uidEl.value.trim();
-            let server = serverEl.value.trim();
+            let server = serverEl ? serverEl.value.trim() : "";
+
+            globalNickname = "";
+            globalRegionCode = "N/A";
 
             if (!uid) {
                 nameDisp.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
@@ -785,6 +795,10 @@
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
             
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
+            const payload = { game: game, player_id: uid };
+            if (game === 'mlbb' || game === 'mcgg') {
+                payload.zone_id = server;
+            }
 
             try {
                 const response = await fetch(apiUrl, {
@@ -794,23 +808,15 @@
                         'x-rapidapi-host': 'game-id-checker-api.p.rapidapi.com',
                         'x-rapidapi-key': '65d116a2ddmshe0c1954f29997f0p11513cjsne76cf19b7b29'
                     },
-                    body: JSON.stringify({
-                        game: game,
-                        player_id: uid,
-                        zone_id: (game === 'mlbb' || game === 'mcgg') ? server : undefined
-                    })
+                    body: JSON.stringify(payload)
                 });
                 const data = await response.json();
+                const src = (data && typeof data.data === 'object' && data.data !== null) ? data.data : data;
 
-                if (data.data) {
-                    globalNickname = data.data.nickname || "";
-                    globalRegionCode = data.data.region_code || "N/A";
-                } else {
-                    globalNickname = data.nickname || data.username || data.PlayerName || "";
-                    globalRegionCode = data.region_code || data.region || "N/A";
-                }
+                globalNickname = (src && (src.nickname || src.username || src.PlayerName || src.name)) || "";
+                globalRegionCode = (src && (src.region_code || src.region || src.country)) || "N/A";
 
-                if (response.ok && globalNickname) {
+                if (globalNickname) {
                     nameDisp.innerHTML = `
                         <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
                             <div class="flex items-center justify-between border-b pb-1.5">
@@ -883,10 +889,26 @@
             }
         }
 
-        function sendTransactionReportToAdmin(orderDetails, slipFile) {
+        async function sendTelegramNotification(messageText) {
             const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
             const adminChatId = '6432109875';
-            
+            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+
+            try {
+                await fetch(url, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: adminChatId,
+                        text: messageText
+                    })
+                });
+            } catch (err) {
+                console.error("Error sending Telegram message:", err);
+            }
+        }
+
+        function sendTransactionReportToAdmin(orderDetails, slipFile) {
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
 
             let message = `==== Transaction Report (Pending Admin Approval) ====\n\n` +
@@ -899,6 +921,9 @@
             if (orderDetails.eventDatetime) {
                 message += `📅 Event ရက်စွဲ/အချိန်: ${orderDetails.eventDatetime}\n`;
             }
+            if (slipFile) {
+                message += `🖼️ Slip File: ${slipFile.name} (တင်ထားပါသည်)\n`;
+            }
 
             message += `SN : S${Date.now()}\n` +
                        `Time : ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n` +
@@ -908,51 +933,18 @@
                        `Type: ${orderDetails.type}\n\n` +
                        `📌 [Admin မှ အတည်ပြုရန် စောင့်ဆိုင်းနေသည်]`;
 
-            if (slipFile) {
-                let formData = new FormData();
-                formData.append('chat_id', adminChatId);
-                formData.append('photo', slipFile);
-                formData.append('caption', message);
-
-                fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    body: formData
-                }).catch(err => console.error("Error sending slip photo:", err));
-            } else {
-                let url = `https://api.telegram.org/bot${botToken}/sendMessage`;
-                fetch(url, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: adminChatId,
-                        text: message
-                    })
-                }).catch(err => console.error(err));
-            }
+            sendTelegramNotification(message);
         }
 
         function sendRechargeReportToAdmin(amount, curr, slipFile) {
-            const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
-            const adminChatId = '6432109875';
-
             let message = `💳 👛 Wallet ငွေဖြည့်တောင်းဆိုမှု အသစ်!\n\n` +
                           `👤 အမည်: ${currentUser.name}\n` +
                           `💰 ပမာဏ: ${amount} ${curr}\n` +
+                          `🖼️ Slip File: ${slipFile ? slipFile.name : 'N/A'}\n` +
                           `⏱️ အချိန်: ${new Date().toLocaleString()}\n\n` +
                           `📌 [Admin မှ စစ်ဆေးပြီး Wallet ထဲသို့ ထည့်ရန် စောင့်ဆိုင်းနေသည်]`;
 
-            let formData = new FormData();
-            formData.append('chat_id', adminChatId);
-            formData.append('photo', slipFile);
-            formData.append('caption', message);
-
-            fetch(`https://api.telegram.org/bot${botToken}/sendPhoto`, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: formData
-            }).catch(err => console.error("Error sending recharge slip:", err));
+            sendTelegramNotification(message);
         }
 
         function logOrderToSheet(orderDetails) {
