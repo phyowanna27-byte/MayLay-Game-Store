@@ -115,9 +115,8 @@
             <button onclick="switchMainTab('order')" id="tab-order" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">Order</button>
         </div>
 
-        <!-- 🎮 Game Cards (GitHub Raw Links ဖြင့် ပုံများ အမှန်တကယ် ပေါ်စေရန် ချိတ်ဆက်ခြင်း) -->
+        <!-- 🎮 Game Cards -->
         <div class="grid grid-cols-3 gap-3 mb-4">
-            <!-- MLBB -->
             <div onclick="openGamePage('MLBB')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-cyan-400 h-20 flex items-center justify-center shadow-inner p-2">
                     <img src="https://raw.githubusercontent.com/phyowanna27-byte/MayLay-Game-Store/main/mlbb.%20png.jpg" alt="MLBB" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=MLBB';">
@@ -128,7 +127,6 @@
                 </div>
             </div>
 
-            <!-- PUBG -->
             <div onclick="openGamePage('PUBG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-amber-500 h-20 flex items-center justify-center shadow-inner p-2">
                     <img src="https://raw.githubusercontent.com/phyowanna27-byte/MayLay-Game-Store/main/pubg.%20png.jpg" alt="PUBG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=PUBG';">
@@ -139,7 +137,6 @@
                 </div>
             </div>
 
-            <!-- HOK -->
             <div onclick="openGamePage('HOK')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-indigo-700 h-20 flex items-center justify-center shadow-inner p-2">
                     <img src="https://raw.githubusercontent.com/phyowanna27-byte/MayLay-Game-Store/main/hok.png.jpg" alt="HOK" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=HOK';">
@@ -150,7 +147,6 @@
                 </div>
             </div>
 
-            <!-- MCGG -->
             <div onclick="openGamePage('MCGG')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-purple-700 h-20 flex items-center justify-center shadow-inner p-2">
                     <img src="https://raw.githubusercontent.com/phyowanna27-byte/MayLay-Game-Store/main/mcgg.png.png" alt="MCGG" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=MCGG';">
@@ -161,7 +157,6 @@
                 </div>
             </div>
 
-            <!-- STARLIGHT -->
             <div onclick="openGamePage('Starlight')" class="bg-white rounded-2xl shadow-sm overflow-hidden border border-pink-100 cursor-pointer hover:shadow-md transition transform hover:-translate-y-1">
                 <div class="bg-pink-600 h-20 flex items-center justify-center shadow-inner p-2">
                     <img src="https://raw.githubusercontent.com/phyowanna27-byte/MayLay-Game-Store/main/starlight.png.jpg" alt="Starlight" class="w-12 h-12 object-cover rounded-2xl shadow-md border border-white/40" onerror="this.src='https://placehold.co/100x100?text=Starlight';">
@@ -172,7 +167,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <!-- GAME DETAIL / SHOP PAGE -->
@@ -198,7 +192,6 @@
             </div>
         </div>
 
-        <!-- Gift Card Contact Notice Box -->
         <div id="gift-card-notice" class="hidden bg-white p-5 rounded-2xl shadow-md text-center space-y-3">
             <div class="w-12 h-12 bg-pink-100 text-pink-600 rounded-full flex items-center justify-center mx-auto text-xl">
                 <i class="fa-solid fa-headset"></i>
@@ -236,12 +229,12 @@
 
             <div>
                 <label class="font-bold text-gray-700 block mb-1">Game UID / ID</label>
-                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 12345678" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
+                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 1472575847" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
             </div>
 
             <div id="zone-id-wrapper">
                 <label class="font-bold text-gray-700 block mb-1">Server / Zone</label>
-                <input type="text" id="f-server" oninput="checkPlayerName()" placeholder="ဥပမာ - 1234" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
+                <input type="text" id="f-server" oninput="checkPlayerName()" placeholder="ဥပမာ - 16142" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
             </div>
 
             <div>
@@ -273,7 +266,6 @@
             </div>
             <h2 class="font-extrabold text-pink-700 text-lg">ဆက်သွယ်ရန် (Contact Us)</h2>
             <p class="text-xs text-gray-500">အဆင်မပြေသည်များရှိပါက အောက်ပါ Telegram Channel သို့ ဆက်သွယ်နိုင်ပါသည် -</p>
-            
             <div class="bg-pink-50 p-3 rounded-2xl border border-pink-100 flex items-center justify-between">
                 <div class="flex items-center space-x-2">
                     <i class="fa-brands fa-telegram text-sky-500 text-xl"></i>
@@ -372,7 +364,6 @@
         <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl text-center space-y-4">
             <h3 class="font-extrabold text-pink-700 text-base">အကောင့်ဝင်ရောက်ရန်</h3>
             <p class="text-xs text-gray-500">ကြိုက်နှစ်သက်ရာ နည်းလမ်းဖြင့် ဝင်ရောက်နိုင်ပါသည်</p>
-            
             <div class="space-y-2">
                 <button onclick="loginWithTelegram()" class="w-full bg-sky-500 hover:bg-sky-600 text-white py-2.5 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow">
                     <i class="fa-brands fa-telegram text-base"></i>
@@ -383,7 +374,6 @@
                     <span>Gmail ဖြင့် ဝင်မည်</span>
                 </button>
             </div>
-
             <button onclick="closeLoginModal()" class="text-xs text-gray-400 font-bold hover:text-gray-600 mt-2">ပိတ်မည်</button>
         </div>
     </div>
@@ -580,8 +570,7 @@
             if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ ဈေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
             
             const apiURL = "https://api.sheetbest.com/sheets/629dfa0a-eefc-4a3f-be08-c71268298935";
-
-            const minLoadingTime = new Promise(resolve => setTimeout(resolve, 5000));
+            const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3000));
 
             const apiCall = fetch(apiURL)
                 .then(res => res.json())
@@ -887,27 +876,40 @@
             }
         }
 
-        // 🔔 Telegram Bot Notification (BOT_TOKEN & CHAT_ID ထည့်သွင်းပြီး)
+        // 🔔 Telegram Bot Notification
         const BOT_TOKEN = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
         const ADMIN_CHAT_ID = '8863215122';
 
-        async function sendTelegramNotification(messageText, inlineKeyboard = null) {
-            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
-            const bodyData = {
-                chat_id: ADMIN_CHAT_ID,
-                text: messageText
-            };
-            if (inlineKeyboard) {
-                bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
-            }
-
+        async function sendTelegramNotification(messageText, inlineKeyboard = null, photoFile = null) {
             try {
-                const res = await fetch(url, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bodyData)
-                });
-                return await res.json();
+                if (photoFile) {
+                    const formData = new FormData();
+                    formData.append('chat_id', ADMIN_CHAT_ID);
+                    formData.append('photo', photoFile);
+                    formData.append('caption', messageText);
+                    if (inlineKeyboard) {
+                        formData.append('reply_markup', JSON.stringify({ inline_keyboard: inlineKeyboard }));
+                    }
+                    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                        method: 'POST',
+                        body: formData
+                    });
+                    return await res.json();
+                } else {
+                    const bodyData = {
+                        chat_id: ADMIN_CHAT_ID,
+                        text: messageText
+                    };
+                    if (inlineKeyboard) {
+                        bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
+                    }
+                    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(bodyData)
+                    });
+                    return await res.json();
+                }
             } catch (err) {
                 console.error("Error sending Telegram message:", err);
                 return null;
@@ -916,58 +918,53 @@
 
         function sendTransactionReportToAdmin(orderDetails, slipFile) {
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
-            let shortPkg = encodeURIComponent((orderDetails.item || 'Order').slice(0, 20));
-            let custId = orderDetails.tgId || "";
+            let custId = orderDetails.tgId || (user && user.id) || "0";
+            let shortPkg = (orderDetails.item || 'Order').replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 18).trim();
 
             let message = `==== Transaction Report (Pending Admin Approval) ====\n\n` +
                           `UID : ${orderDetails.uid}\n` +
                           `(${orderDetails.server || 'N/A'})\n` +
                           `Name : ${orderDetails.inGameName || '-'}\n` +
                           `Region : ${orderDetails.region || 'N/A'}\n` +
-                          `Order : ${orderDetails.item}\n`;
+                          `Order : ${orderDetails.item}\n` +
+                          `SN : S${Date.now()}\n` +
+                          `Time : ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n` +
+                          `Date : ${new Date().toLocaleDateString()}\n` +
+                          `===== ${userDisplay} =====\n` +
+                          `Amount: ${orderDetails.price} ${orderDetails.curr}\n` +
+                          `Type: ${orderDetails.type}\n\n` +
+                          `📌 [Admin မှ အတည်ပြုရန် စောင့်ဆိုင်းနေသည်]`;
 
-            if (orderDetails.eventDatetime) {
-                message += `📅 Event ရက်စွဲ/အချိန်: ${orderDetails.eventDatetime}\n`;
-            }
-            if (slipFile) {
-                message += `🖼️ Slip File: ${slipFile.name} (တင်ထားပါသည်)\n`;
-            }
-
-            message += `SN : S${Date.now()}\n` +
-                       `Time : ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n` +
-                       `Date : ${new Date().toLocaleDateString()}\n` +
-                       `===== ${userDisplay} =====\n` +
-                       `Amount: ${orderDetails.price} ${orderDetails.curr}\n` +
-                       `Type: ${orderDetails.type}\n\n` +
-                       `📌 [Admin မှ အတည်ပြုရန် စောင့်ဆိုင်းနေသည်]`;
+            const cbData = `ok|${custId}|${orderDetails.uid}|${shortPkg}|${orderDetails.price}${orderDetails.curr}`.slice(0, 64);
 
             const keyboard = [[
                 {
                     text: "✅ ဖြည့်ပြီးပါပြီ",
-                    url: `https://t.me/${BOT_TOKEN.split(':')[0]}?start=done_${custId}_${shortPkg}`
+                    callback_data: cbData
                 }
             ]];
 
-            sendTelegramNotification(message, keyboard);
+            sendTelegramNotification(message, keyboard, slipFile);
         }
 
         function sendRechargeReportToAdmin(amount, curr, slipFile) {
-            let custId = currentUser.tgId || "";
+            let custId = currentUser.tgId || (user && user.id) || "0";
             let message = `💳 👛 Wallet ငွေဖြည့်တောင်းဆိုမှု အသစ်!\n\n` +
                           `👤 အမည်: ${currentUser.name}\n` +
                           `💰 ပမာဏ: ${amount} ${curr}\n` +
-                          `🖼️ Slip File: ${slipFile ? slipFile.name : 'N/A'}\n` +
                           `⏱️ အချိန်: ${new Date().toLocaleString()}\n\n` +
                           `📌 [Admin မှ စစ်ဆေးပြီး Wallet ထဲသို့ ထည့်ရန် စောင့်ဆိုင်းနေသည်]`;
+
+            const cbData = `rok|${custId}|${amount}${curr}`.slice(0, 64);
 
             const keyboard = [[
                 {
                     text: "✅ ဖြည့်ပြီးပါပြီ",
-                    url: `https://t.me/${BOT_TOKEN.split(':')[0]}?start=rechargedone_${custId}_${amount}${curr}`
+                    callback_data: cbData
                 }
             ]];
 
-            sendTelegramNotification(message, keyboard);
+            sendTelegramNotification(message, keyboard, slipFile);
         }
 
         function logOrderToSheet(orderDetails) {
