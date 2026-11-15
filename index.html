@@ -571,15 +571,15 @@
             if(container) container.innerHTML = `<p class="text-xs text-gray-500 text-center py-2">Google Sheet မှ ဈေးနှုန်းများ ဆွဲယူနေပါပြီ...</p>`;
             
             const apiURL = "https://docs.google.com/spreadsheets/d/19Ryx-h258rS8duejpKA2Y0WoD2drx77CkFzc-6MYBbg/export?format=csv&gid=0";
-            const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3000));
 
-            const apiCall = fetch(apiURL)
+            const minLoadingTime = new Promise(resolve => setTimeout(resolve, 3000));
+const apiCall = fetch(apiURL)
   .then(res => res.text())
   .then(csvText => {
-    const lines = csvText.trim().split(/\r?\n/);
+    const lines = csvText.trim().split(/\r?\n/).filter(l => l.trim());
     const headers = lines[0].split(',').map(h => h.replace(/^"|"$/g, '').trim());
     const data = lines.slice(1).map(line => {
-      const cols = line.match(/(".*?"|[^",]+)(?=\s*,|\s*$)/g) || [];
+      const cols = line.split(',');
       const obj = {};
       headers.forEach((h, i) => {
         obj[h] = (cols[i] || '').replace(/^"|"$/g, '').trim();
