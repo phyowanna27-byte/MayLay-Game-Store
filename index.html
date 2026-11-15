@@ -30,11 +30,9 @@
     <!-- 🌀 Custom Loading / Splash Screen -->
     <div id="splash-screen" class="fixed inset-0 bg-[#0f172a] flex flex-col items-center justify-center z-[9999] transition-opacity duration-500 p-6 text-center">
         <div class="flex flex-col items-center space-y-4">
-            <div class="w-20 h-20 bg-gradient-to-tr from-pink-500 to-purple-600 rounded-3xl flex items-center justify-center shadow-lg animate-pulse">
-                <span class="text-white font-extrabold text-2xl">ML</span>
-            </div>
-         <div class="w-24 h-24 rounded-3xl flex items-center justify-center shadow-lg animate-pulse overflow-hidden border-2 border-pink-400/50">
-                <img src="https://raw.githubusercontent.com/phyowanna27-byte/MayLay-Game-Store/main/Logo.png.png" alt="May Lay Game Store" class="w-full h-full object-cover" onerror="this.parentElement.innerHTML='<span class=\'text-white font-extrabold text-2xl\'>ML</span>';">
+            <div class="w-64 h-64 max-w-[75vw] max-h-[75vw] rounded-3xl flex items-center justify-center shadow-2xl animate-pulse overflow-hidden border-2 border-pink-400/50 bg-slate-800">
+                <img src="https://raw.githubusercontent.com/phyowanna27-byte/MayLay-Game-Store/main/Logo.png.png" alt="May Lay Game Store" class="w-full h-full object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <span class="hidden text-white font-extrabold text-3xl">ML</span>
             </div>
 
             <div class="space-y-1">
