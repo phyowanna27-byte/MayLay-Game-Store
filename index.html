@@ -425,13 +425,15 @@
 
         let currentUser = {
             name: "Guest User",
-            photo: null
+            photo: null,
+            tgId: null
         };
 
         const user = tg.initDataUnsafe && tg.initDataUnsafe.user;
         if (user) {
             currentUser.name = user.first_name;
             currentUser.photo = user.photo_url;
+            currentUser.tgId = user.id;
             updateUserProfileUI(currentUser.name, currentUser.photo);
         }
 
@@ -463,6 +465,7 @@
         function loginWithTelegram() {
             tg.HapticFeedback.notificationOccurred('success');
             if (user) {
+                currentUser.tgId = user.id;
                 updateUserProfileUI(user.first_name, user.photo_url);
                 alert("Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။");
             } else {
@@ -610,7 +613,7 @@
             if(!container) return;
             let html = "";
 
-            rawSheetData.forEach(item => {
+            rawSheetData.forEach((item, idx) => {
                 let cat = item.Category ? item.Category.toUpperCase().trim() : '';
                 let isMatch = false;
 
@@ -625,6 +628,7 @@
                     let price = currentCurrency === 'THB' ? parseFloat(item.THB || 0) : parseFloat(item.MMK || 0);
                     let currSymbol = currentCurrency === 'THB' ? '฿' : 'Ks ';
                     let badge = item.Badge || '';
+                    let safePkgName = pkgName.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
 
                     html += `
                         <div class="flex justify-between items-center p-2.5 bg-pink-50 rounded-xl border border-pink-100">
@@ -637,7 +641,7 @@
                                     <p class="text-xs font-bold ${currentCurrency === 'THB' ? 'text-blue-600' : 'text-emerald-600'}">${currSymbol}${price.toLocaleString()}</p>
                                 </div>
                                 ${currentGame !== 'Gift Card' ? `
-                                <button onclick="selectPackage('${pkgName}', ${price}, '${currentCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
+                                <button onclick="selectPackage('${safePkgName}', ${price}, '${currentCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
                                     ဝယ်ယူမည်
                                 </button>` : ''}
                             </div>
@@ -753,7 +757,7 @@
             navigator.clipboard.writeText(text).then(() => {
                 tg.HapticFeedback.notificationOccurred('success');
                 alert("📋 Copied: " + text);
-            }).catch(err => {
+            }).catch(() => {
                 alert("Copy လုပ်၍ မရပါ။");
             });
         }
@@ -879,7 +883,7 @@
 
                 if (response.ok && result.status === "success") {
                     alert(`✅ Top-up အောင်မြင်ပါသည်။ Bot မှ ${orderDetails.item} ကို Customer ထံသို့ အော်တို ဖြည့်သွင်းပြီးပါပြီ။`);
-                    tg.close();
+                    setTimeout(() => { tg.close(); }, 1500);
                 } else {
                     alert(`⚠️ စိန်ဖြည့်ရာတွင် အမှားအယွင်းရှိပါသည်: ${result.message || 'ဆာဗာချိတ်ဆက်မှု မအောင်မြင်ပါ'}`);
                 }
@@ -889,19 +893,24 @@
             }
         }
 
-        async function sendTelegramNotification(messageText) {
-            const botToken = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
-            const adminChatId = '6432109875';
-            const url = `https://api.telegram.org/bot${botToken}/sendMessage`;
+        const BOT_TOKEN = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
+        const ADMIN_CHAT_ID = '6432109875';
+
+        async function sendTelegramNotification(messageText, inlineKeyboard = null) {
+            const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+            const bodyData = {
+                chat_id: ADMIN_CHAT_ID,
+                text: messageText
+            };
+            if (inlineKeyboard) {
+                bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
+            }
 
             try {
                 const res = await fetch(url, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: adminChatId,
-                        text: messageText
-                    })
+                    body: JSON.stringify(bodyData)
                 });
                 return await res.json();
             } catch (err) {
@@ -912,6 +921,8 @@
 
         function sendTransactionReportToAdmin(orderDetails, slipFile) {
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
+            let shortPkg = encodeURIComponent((orderDetails.item || 'Order').slice(0, 20));
+            let custId = orderDetails.tgId || "";
 
             let message = `==== Transaction Report (Pending Admin Approval) ====\n\n` +
                           `UID : ${orderDetails.uid}\n` +
@@ -935,10 +946,18 @@
                        `Type: ${orderDetails.type}\n\n` +
                        `📌 [Admin မှ အတည်ပြုရန် စောင့်ဆိုင်းနေသည်]`;
 
-            sendTelegramNotification(message);
+            const keyboard = [[
+                {
+                    text: "✅ ဖြည့်ပြီးပါပြီ",
+                    url: `https://t.me/${BOT_TOKEN.split(':')[0]}?start=done_${custId}_${shortPkg}`
+                }
+            ]];
+
+            sendTelegramNotification(message, keyboard);
         }
 
         function sendRechargeReportToAdmin(amount, curr, slipFile) {
+            let custId = currentUser.tgId || "";
             let message = `💳 👛 Wallet ငွေဖြည့်တောင်းဆိုမှု အသစ်!\n\n` +
                           `👤 အမည်: ${currentUser.name}\n` +
                           `💰 ပမာဏ: ${amount} ${curr}\n` +
@@ -946,7 +965,14 @@
                           `⏱️ အချိန်: ${new Date().toLocaleString()}\n\n` +
                           `📌 [Admin မှ စစ်ဆေးပြီး Wallet ထဲသို့ ထည့်ရန် စောင့်ဆိုင်းနေသည်]`;
 
-            sendTelegramNotification(message);
+            const keyboard = [[
+                {
+                    text: "✅ ဖြည့်ပြီးပါပြီ",
+                    url: `https://t.me/${BOT_TOKEN.split(':')[0]}?start=rechargedone_${custId}_${amount}${curr}`
+                }
+            ]];
+
+            sendTelegramNotification(message, keyboard);
         }
 
         function logOrderToSheet(orderDetails) {
@@ -979,11 +1005,22 @@
         }
 
         function submitGameOrder() {
-            tg.HapticFeedback.notificationOccurred('success');
-            let uid = document.getElementById('f-uid').value;
-            let server = document.getElementById('f-server').value;
-            let eventDatetime = document.getElementById('f-event-datetime').value;
-            let gameType = document.getElementById('game-select').value;
+            try {
+                if (tg && tg.HapticFeedback) {
+                    tg.HapticFeedback.notificationOccurred('success');
+                }
+            } catch (e) {}
+
+            let uidEl = document.getElementById('f-uid');
+            let serverEl = document.getElementById('f-server');
+            let eventEl = document.getElementById('f-event-datetime');
+            let gameSelectEl = document.getElementById('game-select');
+            let slipEl = document.getElementById('f-slip');
+
+            let uid = uidEl ? uidEl.value.trim() : '';
+            let server = serverEl ? serverEl.value.trim() : '';
+            let eventDatetime = eventEl ? eventEl.value : '';
+            let gameType = gameSelectEl ? gameSelectEl.value : 'mlbb';
 
             if (!uid) {
                 alert("ကျေးဇူးပြု၍ Game UID ဖြည့်ပါ။");
@@ -1000,29 +1037,35 @@
                 return;
             }
 
-            let curr = selectedPkg.curr;
-            let price = selectedPkg.price;
-            let packageName = selectedPkg.name;
-            let customerName = currentUser.name;
+            let pkg = (typeof selectedPkg === 'object' && selectedPkg !== null) ? selectedPkg : {};
+            let curr = pkg.curr || currentCurrency || 'THB';
+            let price = pkg.price || 0;
+            let packageName = pkg.name || (document.getElementById('form-item-name')?.innerText || '-');
+            let customerName = (currentUser && currentUser.name) ? currentUser.name : 'Guest User';
             let customerUsername = (user && user.username) ? user.username : "N/A";
-            let slip = document.getElementById('f-slip').files[0];
+            let slip = (slipEl && slipEl.files && slipEl.files[0]) ? slipEl.files[0] : null;
 
             let orderDetails = {
                 name: customerName,
                 username: customerUsername,
+                tgId: currentUser ? currentUser.tgId : null,
                 item: packageName,
                 uid: uid,
                 server: server,
-                region: globalRegionCode,
-                inGameName: globalNickname,
+                region: globalRegionCode || 'N/A',
+                inGameName: globalNickname || '-',
                 eventDatetime: eventDatetime ? eventDatetime.replace('T', ' ') : null,
                 price: price,
                 curr: curr,
-                type: activeMainTab.toUpperCase(),
+                type: (activeMainTab || 'manual').toUpperCase(),
                 gameType: gameType
             };
 
-            logOrderToSheet(orderDetails);
+            try {
+                logOrderToSheet(orderDetails);
+            } catch (e) {
+                console.error("Sheet log error:", e);
+            }
 
             if (activeMainTab === 'topup') {
                 if (userWallet[curr] >= price) {
@@ -1045,11 +1088,11 @@
                 sendTransactionReportToAdmin(orderDetails, slip);
 
                 alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။");
-                setTimeout(() => { tg.close(); }, 1200);
+                setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
             } else if (activeMainTab === 'order') {
                 sendTransactionReportToAdmin(orderDetails, null);
                 alert("Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။");
-                setTimeout(() => { tg.close(); }, 1200);
+                setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
             }
         }
 
@@ -1147,7 +1190,7 @@
             alert(`✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`);
             document.getElementById('custom-recharge-amount').value = '';
             document.getElementById('recharge-slip').value = '';
-            setTimeout(() => { tg.close(); }, 1200);
+            setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
         }
 
         function updateProfileData() {
