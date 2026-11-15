@@ -613,7 +613,7 @@
             if(!container) return;
             let html = "";
 
-            rawSheetData.forEach((item, idx) => {
+            rawSheetData.forEach(item => {
                 let cat = item.Category ? item.Category.toUpperCase().trim() : '';
                 let isMatch = false;
 
@@ -857,15 +857,12 @@
         async function processAutoTopUp(orderDetails) {
             const userId = "922531";
             const partnerId = "cec85a9f4e695e6cb368468942bd4e98";
-            const secret = "tH27CikO7E";
             const apiUrl = "https://your-api-endpoint.com/api/v1/topup";
-
-            let timestamp = Math.floor(Date.now() / 1000);
 
             let payload = {
                 user_id: userId,
                 partner_id: partnerId,
-                timestamp: timestamp,
+                timestamp: Math.floor(Date.now() / 1000),
                 game: orderDetails.gameType,
                 player_id: orderDetails.uid,
                 zone_id: orderDetails.server,
@@ -878,23 +875,21 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
-
                 const result = await response.json();
-
                 if (response.ok && result.status === "success") {
                     alert(`✅ Top-up အောင်မြင်ပါသည်။ Bot မှ ${orderDetails.item} ကို Customer ထံသို့ အော်တို ဖြည့်သွင်းပြီးပါပြီ။`);
-                    setTimeout(() => { tg.close(); }, 1500);
+                    setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
                 } else {
                     alert(`⚠️ စိန်ဖြည့်ရာတွင် အမှားအယွင်းရှိပါသည်: ${result.message || 'ဆာဗာချိတ်ဆက်မှု မအောင်မြင်ပါ'}`);
                 }
             } catch (error) {
-                console.error("Auto Top-Up Error:", error);
                 alert("❌ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။");
             }
         }
 
-        const BOT_TOKEN = '7851966567:AAGj_K70D5z3q8LgWv9nZ2xJ8m4P6s1Q2yE';
-        const ADMIN_CHAT_ID = '6432109875';
+        // 🔔 Telegram Bot Notification (BOT_TOKEN & CHAT_ID ထည့်သွင်းပြီး)
+        const BOT_TOKEN = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
+        const ADMIN_CHAT_ID = '8863215122';
 
         async function sendTelegramNotification(messageText, inlineKeyboard = null) {
             const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
@@ -1071,10 +1066,8 @@
                 if (userWallet[curr] >= price) {
                     userWallet[curr] -= price;
                     userSpent[curr] += price;
-                    
                     document.getElementById('thb-balance').innerText = `฿ ${userWallet.THB.toFixed(2)} THB`;
                     document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
-
                     processAutoTopUp(orderDetails);
                 } else {
                     alert(`❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`);
@@ -1086,7 +1079,6 @@
                 }
                 userSpent[curr] += price;
                 sendTransactionReportToAdmin(orderDetails, slip);
-
                 alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။");
                 setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
             } else if (activeMainTab === 'order') {
