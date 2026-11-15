@@ -761,6 +761,52 @@
             checkTimer = setTimeout(runPlayerCheck, 500);
         }
 
+        function extractNicknameAndRegion(payloadData) {
+            if (!payloadData || typeof payloadData !== 'object') {
+                return { nickname: "", region: "N/A" };
+            }
+
+            const candidates = [
+                payloadData,
+                payloadData.data,
+                payloadData.result,
+                payloadData.player,
+                payloadData.info
+            ].filter(Boolean);
+
+            let nickname = "";
+            let region = "N/A";
+
+            for (const obj of candidates) {
+                if (!nickname) {
+                    nickname =
+                        obj.nickname ||
+                        obj.nick_name ||
+                        obj.username ||
+                        obj.user_name ||
+                        obj.PlayerName ||
+                        obj.player_name ||
+                        obj.name ||
+                        obj.ign ||
+                        "";
+                }
+                if (region === "N/A") {
+                    region =
+                        obj.region_code ||
+                        obj.region ||
+                        obj.country ||
+                        obj.zone ||
+                        obj.server ||
+                        "N/A";
+                }
+            }
+
+            return {
+                nickname: String(nickname || "").trim(),
+                region: String(region || "N/A").trim()
+            };
+        }
+
         async function runPlayerCheck() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
@@ -788,58 +834,74 @@
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
             
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
-            const payload = { game: game, player_id: uid };
-            if (game === 'mlbb' || game === 'mcgg') {
-                payload.zone_id = server;
+            const headers = {
+                'Content-Type': 'application/json',
+                'x-rapidapi-host': 'game-id-checker-api.p.rapidapi.com',
+                'x-rapidapi-key': '65d116a2ddmshe0c1954f29997f0p11513cjsne76cf19b7b29'
+            };
+
+            const payloads = [
+                (game === 'mlbb' || game === 'mcgg')
+                    ? { game: game, player_id: uid, zone_id: server }
+                    : { game: game, player_id: uid },
+                (game === 'mlbb' || game === 'mcgg')
+                    ? { game: game, id: uid, zone: server }
+                    : { game: game, id: uid }
+            ];
+
+            for (const payload of payloads) {
+                try {
+                    const response = await fetch(apiUrl, {
+                        method: 'POST',
+                        headers: headers,
+                        body: JSON.stringify(payload)
+                    });
+                    const data = await response.json();
+                    console.log("ID Checker Response:", data);
+
+                    const extracted = extractNicknameAndRegion(data);
+                    if (extracted.nickname) {
+                        globalNickname = extracted.nickname;
+                        globalRegionCode = extracted.region;
+                        break;
+                    }
+                } catch (error) {
+                    console.error("API Error:", error);
+                }
             }
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-rapidapi-host': 'game-id-checker-api.p.rapidapi.com',
-                        'x-rapidapi-key': '65d116a2ddmshe0c1954f29997f0p11513cjsne76cf19b7b29'
-                    },
-                    body: JSON.stringify(payload)
-                });
-                const data = await response.json();
-                const src = (data && typeof data.data === 'object' && data.data !== null) ? data.data : data;
-
-                globalNickname = (src && (src.nickname || src.username || src.PlayerName || src.name)) || "";
-                globalRegionCode = (src && (src.region_code || src.region || src.country)) || "N/A";
-
-                if (globalNickname) {
-                    nameDisp.innerHTML = `
-                        <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
-                            <div class="flex items-center justify-between border-b pb-1.5">
-                                <span class="text-xs font-bold text-emerald-700 flex items-center">
-                                    <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
-                                </span>
-                            </div>
-                            <div class="flex justify-between items-center text-xs">
-                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
-                                <span class="font-extrabold text-purple-700 text-sm">${globalNickname}</span>
-                            </div>
-                            <div class="flex justify-between items-center text-xs border-t pt-1.5">
-                                <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> Region</span>
-                                <span class="font-extrabold text-sky-600">${globalRegionCode}</span>
-                            </div>
+            if (globalNickname) {
+                nameDisp.innerHTML = `
+                    <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between border-b pb-1.5">
+                            <span class="text-xs font-bold text-emerald-700 flex items-center">
+                                <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
+                            </span>
                         </div>
-                    `;
-                } else {
-                    nameDisp.innerHTML = `
-                        <div class="bg-white p-3 rounded-xl border border-red-300 shadow-sm space-y-1">
+                        <div class="flex justify-between items-center text-xs">
+                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
+                            <span class="font-extrabold text-purple-700 text-sm">${globalNickname}</span>
+                        </div>
+                        <div class="flex justify-between items-center text-xs border-t pt-1.5">
+                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> Region</span>
+                            <span class="font-extrabold text-sky-600">${globalRegionCode}</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                nameDisp.innerHTML = `
+                    <div class="bg-white p-3 rounded-xl border border-red-300 shadow-sm space-y-2">
+                        <div class="flex items-center justify-between">
                             <span class="text-xs font-bold text-red-600 flex items-center">
                                 <i class="fa-solid fa-triangle-exclamation mr-1"></i> အချက်အလက် မတွေ့ရှိပါ
                             </span>
-                            <p class="text-[11px] text-gray-600 font-semibold">ID သို့မဟုတ် Zone မှားယွင်းနေပါသည် ။</p>
+                            <button type="button" onclick="runPlayerCheck()" class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-lg font-bold">
+                                ထပ်စစ်မည်
+                            </button>
                         </div>
-                    `;
-                }
-            } catch (error) {
-                console.error("API Error:", error);
-                nameDisp.innerHTML = `<span class="text-red-500 font-bold text-xs">⚠️ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။</span>`;
+                        <p class="text-[11px] text-gray-600 font-semibold">ID သို့မဟုတ် Zone မှားယွင်းနေပါသည် ။</p>
+                    </div>
+                `;
             }
         }
 
