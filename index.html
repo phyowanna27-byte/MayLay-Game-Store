@@ -977,7 +977,7 @@
                     const formData = new FormData();
                     formData.append('chat_id', ADMIN_CHAT_ID);
                     formData.append('photo', photoFile);
-                    formData.append('caption', messageText);
+                    formData.append('caption', messageText.slice(0, 1000));
                     if (inlineKeyboard) {
                         formData.append('reply_markup', JSON.stringify({ inline_keyboard: inlineKeyboard }));
                     }
@@ -985,7 +985,12 @@
                         method: 'POST',
                         body: formData
                     });
-                    return await res.json();
+                    const photoResult = await res.json();
+                    if (!photoResult.ok) {
+                        console.error("sendPhoto error:", photoResult);
+                        alert("စလစ်ပုံပို့ရာတွင် Error တက်သည်: " + (photoResult.description || 'Unknown'));
+                    }
+                    return photoResult;
                 } else {
                     const bodyData = {
                         chat_id: ADMIN_CHAT_ID,
@@ -999,10 +1004,16 @@
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify(bodyData)
                     });
-                    return await res.json();
+                    const msgResult = await res.json();
+                    if (!msgResult.ok) {
+                        console.error("sendMessage error:", msgResult);
+                        alert("အကြောင်းကြားစာပို့ရာတွင် Error တက်သည်: " + (msgResult.description || 'Unknown'));
+                    }
+                    return msgResult;
                 }
             } catch (err) {
                 console.error("Error sending Telegram message:", err);
+                alert("ကွန်ရက်ချိတ်ဆက်မှုကြောင့် အကြောင်းကြားစာ မပို့နိုင်ပါ။");
                 return null;
             }
         }
