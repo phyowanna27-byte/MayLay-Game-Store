@@ -869,7 +869,6 @@
 
             statusEl.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
 
-            // 1) Public MLBB check endpoints (no RapidAPI key limit)
             if (game === 'mlbb' || game === 'mcgg') {
                 const publicEndpoints = [
                     `https://api.isan.eu.org/nickname/ml?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(server)}`,
@@ -895,7 +894,6 @@
                 }
             }
 
-            // 2) RapidAPI fallback
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
             const headers = {
                 'Content-Type': 'application/json',
