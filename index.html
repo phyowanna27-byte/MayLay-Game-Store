@@ -841,11 +841,11 @@
             const uidEl = document.getElementById('f-uid');
             const serverEl = document.getElementById('f-server');
             const nameDisp = document.getElementById('f-ingame-name');
-            
-            if(!uidEl || !nameDisp) return;
 
-            let uid = uidEl.value.trim();
-            let server = serverEl ? serverEl.value.trim() : "";
+            if (!uidEl || !nameDisp) return;
+
+            const uid = uidEl.value.trim();
+            const server = serverEl ? serverEl.value.trim() : "";
 
             globalNickname = "";
             globalRegionCode = "N/A";
@@ -861,7 +861,7 @@
             }
 
             nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
-            
+
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
             const headers = {
                 'Content-Type': 'application/json',
@@ -869,25 +869,27 @@
                 'x-rapidapi-key': '65d116a2ddmshe0c1954f29997f0p11513cjsne76cf19b7b29'
             };
 
-            const payloads = [
-                (game === 'mlbb' || game === 'mcgg')
-                    ? { game: game, player_id: uid, zone_id: server }
-                    : { game: game, player_id: uid },
-                (game === 'mlbb' || game === 'mcgg')
-                    ? { game: game, id: uid, zone: server }
-                    : { game: game, id: uid }
-            ];
+            const payloads = (game === 'mlbb' || game === 'mcgg')
+                ? [
+                    { game, player_id: uid, zone_id: server },
+                    { game, id: uid, zone: server },
+                    { game, uid, server }
+                ]
+                : [
+                    { game, player_id: uid },
+                    { game, id: uid },
+                    { game, uid }
+                ];
 
             for (const payload of payloads) {
                 try {
                     const response = await fetch(apiUrl, {
                         method: 'POST',
-                        headers: headers,
+                        headers,
                         body: JSON.stringify(payload)
                     });
+                    if (!response.ok) continue;
                     const data = await response.json();
-                    console.log("ID Checker Response:", data);
-
                     const extracted = extractNicknameAndRegion(data);
                     if (extracted.nickname) {
                         globalNickname = extracted.nickname;
@@ -895,7 +897,7 @@
                         break;
                     }
                 } catch (error) {
-                    console.error("API Error:", error);
+                    console.error("ID Checker Error:", error);
                 }
             }
 
@@ -919,16 +921,16 @@
                 `;
             } else {
                 nameDisp.innerHTML = `
-                    <div class="bg-white p-3 rounded-xl border border-red-300 shadow-sm space-y-2">
+                    <div class="bg-white p-3 rounded-xl border border-amber-300 shadow-sm space-y-2">
                         <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-red-600 flex items-center">
-                                <i class="fa-solid fa-triangle-exclamation mr-1"></i> အချက်အလက် မတွေ့ရှိပါ
+                            <span class="text-xs font-bold text-amber-700">
+                                ⚠️ အလိုအလျောက် နာမည်ရှာမရပါ (Manual ဆက်တင်နိုင်ပါသည်)
                             </span>
                             <button type="button" onclick="runPlayerCheck()" class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-lg font-bold">
                                 ထပ်စစ်မည်
                             </button>
                         </div>
-                        <p class="text-[11px] text-gray-600 font-semibold">ID သို့မဟုတ် Zone မှားယွင်းနေပါသည် ။</p>
+                        <p class="text-[11px] text-gray-600">UID (${uid}) ဖြင့် Order ဆက်တင်နိုင်ပါသည်။</p>
                     </div>
                 `;
             }
@@ -987,7 +989,6 @@
                     });
                     const photoResult = await res.json();
                     if (!photoResult.ok) {
-                        console.error("sendPhoto error:", photoResult);
                         alert("စလစ်ပုံပို့ရာတွင် Error တက်သည်: " + (photoResult.description || 'Unknown'));
                     }
                     return photoResult;
@@ -1006,7 +1007,6 @@
                     });
                     const msgResult = await res.json();
                     if (!msgResult.ok) {
-                        console.error("sendMessage error:", msgResult);
                         alert("အကြောင်းကြားစာပို့ရာတွင် Error တက်သည်: " + (msgResult.description || 'Unknown'));
                     }
                     return msgResult;
