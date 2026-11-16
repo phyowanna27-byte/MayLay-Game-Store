@@ -996,7 +996,7 @@
                 const msgResult = await msgRes.json();
 
                 if (!msgResult.ok) {
-                    alert("Telegram Error: " + (msgResult.description || 'Unknown'));
+                    alert("Telegram Error: " + (msgResult.description || 'Unknown') + " (Chat ID: " + ADMIN_CHAT_ID + ")");
                     return msgResult;
                 }
 
@@ -1009,13 +1009,16 @@
                         method: 'POST',
                         body: formData
                     });
-                    return await photoRes.json();
+                    const photoResult = await photoRes.json();
+                    if (!photoResult.ok) {
+                        alert("Slip Photo Error: " + (photoResult.description || 'Unknown'));
+                    }
+                    return photoResult;
                 }
 
                 return msgResult;
             } catch (err) {
-                console.error("Error sending Telegram message:", err);
-                alert("ကွန်ရက်ချိတ်ဆက်မှုကြောင့် အကြောင်းကြားစာ မပို့နိုင်ပါ။");
+                alert("Network Error: " + (err && err.message ? err.message : err));
                 return null;
             }
         }
@@ -1183,11 +1186,9 @@
                 userSpent[curr] += price;
                 sendTransactionReportToAdmin(orderDetails, slip);
                 alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။");
-                setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
             } else if (activeMainTab === 'order') {
                 sendTransactionReportToAdmin(orderDetails, null);
                 alert("Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။");
-                setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
             }
         }
 
@@ -1285,7 +1286,6 @@
             alert(`✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`);
             document.getElementById('custom-recharge-amount').value = '';
             document.getElementById('recharge-slip').value = '';
-            setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
         }
 
         function updateProfileData() {
