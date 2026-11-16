@@ -383,6 +383,19 @@
         </div>
     </div>
 
+    <!-- IN-APP STATUS MODAL (OK နှိပ်ရင် Home Page ပြန်ရောက်မည်) -->
+    <div id="status-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-[9998] p-4">
+        <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl text-left space-y-4">
+            <h3 id="status-modal-title" class="font-extrabold text-gray-900 text-base">Ayar-Game-Shop</h3>
+            <p id="status-modal-body" class="text-xs text-gray-700 leading-relaxed whitespace-pre-line"></p>
+            <div class="flex justify-end pt-1">
+                <button id="status-modal-ok-btn" onclick="handleStatusModalOk()" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
+                    OK
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Bottom Navigation -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-pink-200 flex justify-around py-2.5 shadow-lg z-50">
         <button onclick="navClick('home')" id="nav-btn-home" class="flex flex-col items-center text-pink-600 transition">
@@ -417,6 +430,7 @@
         let rechargeCurrency = 'MMK';
         let currentCurrency = 'THB';
         let selectedRechargeAmt = 0;
+        let goHomeAfterStatusOk = false;
 
         let currentUser = {
             name: "Guest User",
@@ -430,6 +444,40 @@
             currentUser.photo = user.photo_url;
             currentUser.tgId = user.id;
             updateUserProfileUI(currentUser.name, currentUser.photo);
+        }
+
+        function showStatusModal(title, message, goHome = false) {
+            goHomeAfterStatusOk = goHome;
+            document.getElementById('status-modal-title').innerText = title || "Ayar-Game-Shop";
+            document.getElementById('status-modal-body').innerText = message || "";
+            document.getElementById('status-modal').classList.remove('hidden');
+        }
+
+        function handleStatusModalOk() {
+            document.getElementById('status-modal').classList.add('hidden');
+            if (goHomeAfterStatusOk) {
+                goHomeAfterStatusOk = false;
+                resetOrderForm();
+                backToHome();
+            }
+        }
+
+        function resetOrderForm() {
+            const uidEl = document.getElementById('f-uid');
+            const serverEl = document.getElementById('f-server');
+            const nameInputEl = document.getElementById('f-ingame-name-input');
+            const statusEl = document.getElementById('f-ingame-status');
+            const slipEl = document.getElementById('f-slip');
+            const orderSection = document.getElementById('game-order-section');
+
+            if (uidEl) uidEl.value = '';
+            if (serverEl) serverEl.value = '';
+            if (nameInputEl) nameInputEl.value = '';
+            if (slipEl) slipEl.value = '';
+            if (statusEl) statusEl.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
+            if (orderSection) orderSection.classList.add('hidden');
+            globalNickname = "";
+            globalRegionCode = "N/A";
         }
 
         function updateUserProfileUI(name, photo) {
@@ -462,10 +510,10 @@
             if (user) {
                 currentUser.tgId = user.id;
                 updateUserProfileUI(user.first_name, user.photo_url);
-                alert("Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။");
+                showStatusModal("Ayar-Game-Shop", "Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
             } else {
                 updateUserProfileUI("Telegram User", null);
-                alert("Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။");
+                showStatusModal("Ayar-Game-Shop", "Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
             }
             closeLoginModal();
         }
@@ -475,7 +523,7 @@
             let email = prompt("ကျေးဇူးပြု၍ သင့် Gmail ထည့်ပါ -", "user@gmail.com");
             if (email) {
                 updateUserProfileUI(email.split('@')[0], null);
-                alert("Gmail (" + email + ") ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။");
+                showStatusModal("Ayar-Game-Shop", "Gmail (" + email + ") ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
             }
             closeLoginModal();
         }
@@ -544,8 +592,12 @@
         function backToHome() {
             tg.HapticFeedback.impactOccurred('light');
             document.getElementById('game-page-view').classList.add('hidden');
+            document.getElementById('contact-view').classList.add('hidden');
+            document.getElementById('recharge-view').classList.add('hidden');
+            document.getElementById('profile-view').classList.add('hidden');
             document.getElementById('home-view').classList.remove('hidden');
             setActiveNav('home');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
         function switchCurrency(curr) {
@@ -778,9 +830,9 @@
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 tg.HapticFeedback.notificationOccurred('success');
-                alert("📋 Copied: " + text);
+                showStatusModal("Ayar-Game-Shop", "📋 Copied: " + text, false);
             }).catch(() => {
-                alert("Copy လုပ်၍ မရပါ။");
+                showStatusModal("Ayar-Game-Shop", "Copy လုပ်၍ မရပါ။", false);
             });
         }
 
@@ -964,13 +1016,12 @@
                 });
                 const result = await response.json();
                 if (response.ok && result.status === "success") {
-                    alert(`✅ Top-up အောင်မြင်ပါသည်။ Bot မှ ${orderDetails.item} ကို Customer ထံသို့ အော်တို ဖြည့်သွင်းပြီးပါပြီ။`);
-                    setTimeout(() => { try { tg.close(); } catch (e) {} }, 1500);
+                    showStatusModal("Ayar-Game-Shop", `✅ Top-up အောင်မြင်ပါသည်။ Bot မှ ${orderDetails.item} ကို Customer ထံသို့ အော်တို ဖြည့်သွင်းပြီးပါပြီ။`, true);
                 } else {
-                    alert(`⚠️ စိန်ဖြည့်ရာတွင် အမှားအယွင်းရှိပါသည်: ${result.message || 'ဆာဗာချိတ်ဆက်မှု မအောင်မြင်ပါ'}`);
+                    showStatusModal("Ayar-Game-Shop", `⚠️ စိန်ဖြည့်ရာတွင် အမှားအယွင်းရှိပါသည်: ${result.message || 'ဆာဗာချိတ်ဆက်မှု မအောင်မြင်ပါ'}`, false);
                 }
             } catch (error) {
-                alert("❌ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။");
+                showStatusModal("Ayar-Game-Shop", "❌ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။", false);
             }
         }
 
@@ -996,7 +1047,7 @@
                 const msgResult = await msgRes.json();
 
                 if (!msgResult.ok) {
-                    alert("Telegram Error: " + (msgResult.description || 'Unknown') + " (Chat ID: " + ADMIN_CHAT_ID + ")");
+                    showStatusModal("Telegram Error", (msgResult.description || 'Unknown') + " (Chat ID: " + ADMIN_CHAT_ID + ")", false);
                     return msgResult;
                 }
 
@@ -1011,14 +1062,14 @@
                     });
                     const photoResult = await photoRes.json();
                     if (!photoResult.ok) {
-                        alert("Slip Photo Error: " + (photoResult.description || 'Unknown'));
+                        showStatusModal("Slip Photo Error", (photoResult.description || 'Unknown'), false);
                     }
                     return photoResult;
                 }
 
                 return msgResult;
             } catch (err) {
-                alert("Network Error: " + (err && err.message ? err.message : err));
+                showStatusModal("Network Error", (err && err.message ? err.message : String(err)), false);
                 return null;
             }
         }
@@ -1124,17 +1175,17 @@
             let gameType = gameSelectEl ? gameSelectEl.value : 'mlbb';
 
             if (!uid) {
-                alert("ကျေးဇူးပြု၍ Game UID ဖြည့်ပါ။");
+                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ Game UID ဖြည့်ပါ။", false);
                 return;
             }
 
             if ((gameType === 'mlbb' || gameType === 'mcgg') && !server) {
-                alert("ကျေးဇူးပြု၍ Server / Zone ID ဖြည့်ပါ။");
+                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ Server / Zone ID ဖြည့်ပါ။", false);
                 return;
             }
 
             if (activeMainTab === 'order' && !eventDatetime) {
-                alert("ကျေးဇူးပြု၍ Event ကျင်းပမည့် ရက်စွဲနှင့် အချိန်ကို ရွေးချယ်ပေးပါ။");
+                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ Event ကျင်းပမည့် ရက်စွဲနှင့် အချိန်ကို ရွေးချယ်ပေးပါ။", false);
                 return;
             }
 
@@ -1176,19 +1227,19 @@
                     document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
                     processAutoTopUp(orderDetails);
                 } else {
-                    alert(`❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`);
+                    showStatusModal("Ayar-Game-Shop", `❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`, false);
                 }
             } else if (activeMainTab === 'manual') {
                 if (!slip) {
-                    alert("ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။");
+                    showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
                     return;
                 }
                 userSpent[curr] += price;
                 sendTransactionReportToAdmin(orderDetails, slip);
-                alert("Order တင်ခြင်း အောင်မြင်ပါသည်။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။");
+                showStatusModal("Ayar-Game-Shop", "Order တင်ခြင်း အောင်မြင်ပါသည်။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။", true);
             } else if (activeMainTab === 'order') {
                 sendTransactionReportToAdmin(orderDetails, null);
-                alert("Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။");
+                showStatusModal("Ayar-Game-Shop", "Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။", true);
             }
         }
 
@@ -1273,19 +1324,19 @@
             let slip = document.getElementById('recharge-slip').files[0];
 
             if(!finalAmt || finalAmt <= 0) {
-                alert("ကျေးဇူးပြု၍ ငွေဖြည့်မည့်ပမာဏ ရွေးချယ်ပါ သို့မဟုတ် ထည့်သွင်းပါ။");
+                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေဖြည့်မည့်ပမာဏ ရွေးချယ်ပါ သို့မဟုတ် ထည့်သွင်းပါ။", false);
                 return;
             }
             if(!slip) {
-                alert("ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။");
+                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
                 return;
             }
 
             sendRechargeReportToAdmin(finalAmt, rechargeCurrency, slip);
 
-            alert(`✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။ Admin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`);
             document.getElementById('custom-recharge-amount').value = '';
             document.getElementById('recharge-slip').value = '';
+            showStatusModal("Ayar-Game-Shop", `✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`, true);
         }
 
         function updateProfileData() {
