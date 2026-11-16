@@ -239,10 +239,14 @@
             </div>
 
             <div>
-                <label class="font-bold text-gray-700 block mb-1">In-game Name</label>
-                <div id="f-ingame-name" class="p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-gray-600 font-semibold">
-                    🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...
+                <div class="flex items-center justify-between mb-1">
+                    <label class="font-bold text-gray-700">In-game Name</label>
+                    <button type="button" onclick="runPlayerCheck()" class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-lg font-bold">
+                        ထပ်စစ်မည်
+                    </button>
                 </div>
+                <input type="text" id="f-ingame-name-input" oninput="globalNickname = this.value.trim()" placeholder="ဂိမ်းနာမည် ရိုက်ထည့်ပါ (သို့မဟုတ် လွတ်ထားနိုင်သည်)" class="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-gray-800 font-semibold focus:outline-none focus:border-pink-500">
+                <p id="f-ingame-status" class="text-[10px] text-gray-500 mt-1">🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...</p>
             </div>
 
             <div id="manual-payment-container" class="space-y-3">
@@ -840,27 +844,30 @@
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
             const serverEl = document.getElementById('f-server');
-            const nameDisp = document.getElementById('f-ingame-name');
+            const nameInput = document.getElementById('f-ingame-name-input');
+            const statusEl = document.getElementById('f-ingame-status');
 
-            if (!uidEl || !nameDisp) return;
+            if (!uidEl || !nameInput || !statusEl) return;
 
-            const uid = uidEl.value.trim();
-            const server = serverEl ? serverEl.value.trim() : "";
+            const uid = uidEl.value.replace(/[^0-9]/g, '').trim();
+            const server = serverEl ? serverEl.value.replace(/[^0-9]/g, '').trim() : "";
 
-            globalNickname = "";
+            if (uidEl.value !== uid) uidEl.value = uid;
+            if (serverEl && serverEl.value !== server) serverEl.value = server;
+
             globalRegionCode = "N/A";
 
             if (!uid) {
-                nameDisp.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
+                statusEl.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
                 return;
             }
 
             if ((game === 'mlbb' || game === 'mcgg') && !server) {
-                nameDisp.innerHTML = `<span class="text-red-500 font-bold">⚠️ Server / Zone ID ထည့်ရန် လိုအပ်ပါသည်။</span>`;
+                statusEl.innerHTML = `<span class="text-red-500 font-bold">⚠️ Server / Zone ID ထည့်ရန် လိုအပ်ပါသည်။</span>`;
                 return;
             }
 
-            nameDisp.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
+            statusEl.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
 
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
             const headers = {
@@ -902,37 +909,10 @@
             }
 
             if (globalNickname) {
-                nameDisp.innerHTML = `
-                    <div class="bg-white p-3 rounded-xl border border-emerald-300 shadow-sm space-y-2">
-                        <div class="flex items-center justify-between border-b pb-1.5">
-                            <span class="text-xs font-bold text-emerald-700 flex items-center">
-                                <i class="fa-solid fa-circle-check mr-1 text-emerald-500"></i> Account Found
-                            </span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs">
-                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-user text-pink-500 mr-1.5 w-4"></i> နာမည်</span>
-                            <span class="font-extrabold text-purple-700 text-sm">${globalNickname}</span>
-                        </div>
-                        <div class="flex justify-between items-center text-xs border-t pt-1.5">
-                            <span class="text-gray-500 flex items-center"><i class="fa-solid fa-globe text-sky-500 mr-1.5 w-4"></i> Region</span>
-                            <span class="font-extrabold text-sky-600">${globalRegionCode}</span>
-                        </div>
-                    </div>
-                `;
+                nameInput.value = globalNickname;
+                statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
             } else {
-                nameDisp.innerHTML = `
-                    <div class="bg-white p-3 rounded-xl border border-amber-300 shadow-sm space-y-2">
-                        <div class="flex items-center justify-between">
-                            <span class="text-xs font-bold text-amber-700">
-                                ⚠️ အလိုအလျောက် နာမည်ရှာမရပါ (Manual ဆက်တင်နိုင်ပါသည်)
-                            </span>
-                            <button type="button" onclick="runPlayerCheck()" class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-lg font-bold">
-                                ထပ်စစ်မည်
-                            </button>
-                        </div>
-                        <p class="text-[11px] text-gray-600">UID (${uid}) ဖြင့် Order ဆက်တင်နိုင်ပါသည်။</p>
-                    </div>
-                `;
+                statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ အလိုအလျောက် မပေါ်ပါ — အပေါ် Box မှာ နာမည်ရိုက်ထည့်ပြီး Order တန်းတင်နိုင်ပါသည်။</span>`;
             }
         }
 
@@ -1104,12 +1084,14 @@
 
             let uidEl = document.getElementById('f-uid');
             let serverEl = document.getElementById('f-server');
+            let nameInputEl = document.getElementById('f-ingame-name-input');
             let eventEl = document.getElementById('f-event-datetime');
             let gameSelectEl = document.getElementById('game-select');
             let slipEl = document.getElementById('f-slip');
 
-            let uid = uidEl ? uidEl.value.trim() : '';
-            let server = serverEl ? serverEl.value.trim() : '';
+            let uid = uidEl ? uidEl.value.replace(/[^0-9]/g, '').trim() : '';
+            let server = serverEl ? serverEl.value.replace(/[^0-9]/g, '').trim() : '';
+            let typedName = nameInputEl ? nameInputEl.value.trim() : '';
             let eventDatetime = eventEl ? eventEl.value : '';
             let gameType = gameSelectEl ? gameSelectEl.value : 'mlbb';
 
@@ -1144,7 +1126,7 @@
                 uid: uid,
                 server: server,
                 region: globalRegionCode || 'N/A',
-                inGameName: globalNickname || '-',
+                inGameName: typedName || globalNickname || '-',
                 eventDatetime: eventDatetime ? eventDatetime.replace('T', ' ') : null,
                 price: price,
                 curr: curr,
