@@ -257,7 +257,7 @@
                 </div>
             </div>
 
-            <button onclick="submitGameOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition">
+            <button id="submit-order-btn" onclick="submitGameOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition">
                 🚀 Order တင်မည် / ဝယ်ယူမည်
             </button>
         </div>
@@ -322,7 +322,7 @@
                 <input type="file" id="recharge-slip" accept="image/*" class="w-full p-2 border border-gray-200 rounded-xl bg-gray-50">
             </div>
 
-            <button onclick="submitRecharge()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md text-xs hover:opacity-90 transition">
+            <button id="submit-recharge-btn" onclick="submitRecharge()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md text-xs hover:opacity-90 transition">
                 💳 ငွေဖြည့်မည် (Admin ထံ စစ်ဆေးရန် ပို့မည်)
             </button>
         </div>
@@ -1025,56 +1025,82 @@
             }
         }
 
-        // 🔔 Telegram Bot Notification
+        // 🔔 Telegram Bot Notification (Sends to Admin Chat ID + Current User if different)
         const BOT_TOKEN = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
         const ADMIN_CHAT_ID = '8863215122';
 
-        async function sendTelegramNotification(messageText, inlineKeyboard = null, photoFile = null) {
-            try {
-                const bodyData = {
-                    chat_id: ADMIN_CHAT_ID,
-                    text: messageText
-                };
-                if (inlineKeyboard) {
-                    bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
-                }
+        async function sendToSingleChat(chatId, messageText, inlineKeyboard = null, photoFile = null) {
+            const bodyData = {
+                chat_id: chatId,
+                text: messageText
+            };
+            if (inlineKeyboard) {
+                bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
+            }
 
-                const msgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(bodyData)
-                });
-                const msgResult = await msgRes.json();
+            const msgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(bodyData)
+            });
+            const msgResult = await msgRes.json();
 
-                if (!msgResult.ok) {
-                    showStatusModal("Telegram Error", (msgResult.description || 'Unknown') + " (Chat ID: " + ADMIN_CHAT_ID + ")", false);
-                    return msgResult;
-                }
+            if (!msgResult.ok) {
+                return msgResult;
+            }
 
-                if (photoFile) {
-                    const formData = new FormData();
-                    formData.append('chat_id', ADMIN_CHAT_ID);
-                    formData.append('photo', photoFile);
-                    formData.append('caption', '📎 Slip ပုံ');
-                    const photoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+            if (photoFile) {
+                const formData = new FormData();
+                formData.append('chat_id', chatId);
+                formData.append('photo', photoFile);
+                formData.append('caption', '📎 Slip ပုံ');
+                try {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
                         method: 'POST',
                         body: formData
                     });
-                    const photoResult = await photoRes.json();
-                    if (!photoResult.ok) {
-                        showStatusModal("Slip Photo Error", (photoResult.description || 'Unknown'), false);
-                    }
-                    return photoResult;
+                } catch (e) {
+                    console.warn("Photo upload error:", e);
+                }
+            }
+
+            return msgResult;
+        }
+
+        async function sendTelegramNotification(messageText, inlineKeyboard = null, photoFile = null) {
+            try {
+                // Target Chat IDs: Always try ADMIN_CHAT_ID, plus current Telegram user ID if available
+                const targetChatIds = [String(ADMIN_CHAT_ID)];
+                const activeTgId = (user && user.id) ? String(user.id) : (currentUser && currentUser.tgId ? String(currentUser.tgId) : null);
+                if (activeTgId && !targetChatIds.includes(activeTgId)) {
+                    targetChatIds.push(activeTgId);
                 }
 
-                return msgResult;
+                let anySuccess = false;
+                let lastErrorDesc = "Unknown";
+
+                for (const chatId of targetChatIds) {
+                    const res = await sendToSingleChat(chatId, messageText, inlineKeyboard, photoFile);
+                    if (res && res.ok) {
+                        anySuccess = true;
+                    } else if (res && res.description) {
+                        lastErrorDesc = `${res.description} (ID: ${chatId})`;
+                    }
+                }
+
+                if (!anySuccess) {
+                    showStatusModal("Telegram Error", `အကြောင်းကြားစာ ပို့မရပါ:\n${lastErrorDesc}\n\n📌 Bot (@Ayar_Game_Shop_bot) ကို Start နှိပ်ထားရန် လိုအပ်ပါသည်။`, false);
+                    return { ok: false, description: lastErrorDesc };
+                }
+
+                return { ok: true };
             } catch (err) {
-                showStatusModal("Network Error", (err && err.message ? err.message : String(err)), false);
-                return null;
+                showStatusModal("Network Error", "အင်တာနက် သို့မဟုတ် Bot API ချိတ်ဆက်မှု အမှား: " + (err && err.message ? err.message : String(err)), false);
+                return { ok: false };
             }
         }
 
-        function sendTransactionReportToAdmin(orderDetails, slipFile) {
+        async function sendTransactionReportToAdmin(orderDetails, slipFile) {
             let userDisplay = orderDetails.username !== "N/A" ? `${orderDetails.name} (@${orderDetails.username})` : orderDetails.name;
             let custId = orderDetails.tgId || (user && user.id) || "0";
             let shortPkg = (orderDetails.item || 'Order').replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 18).trim();
@@ -1102,10 +1128,10 @@
                 }
             ]];
 
-            sendTelegramNotification(message, keyboard, slipFile);
+            return await sendTelegramNotification(message, keyboard, slipFile);
         }
 
-        function sendRechargeReportToAdmin(amount, curr, slipFile) {
+        async function sendRechargeReportToAdmin(amount, curr, slipFile) {
             let custId = currentUser.tgId || (user && user.id) || "0";
             let message = `💳 👛 Wallet ငွေဖြည့်တောင်းဆိုမှု အသစ်!\n\n` +
                           `👤 အမည်: ${currentUser.name}\n` +
@@ -1122,7 +1148,7 @@
                 }
             ]];
 
-            sendTelegramNotification(message, keyboard, slipFile);
+            return await sendTelegramNotification(message, keyboard, slipFile);
         }
 
         function logOrderToSheet(orderDetails) {
@@ -1154,7 +1180,7 @@
             }).catch(error => console.error("Error logging to sheet:", error));
         }
 
-        function submitGameOrder() {
+        async function submitGameOrder() {
             try {
                 if (tg && tg.HapticFeedback) {
                     tg.HapticFeedback.notificationOccurred('success');
@@ -1167,6 +1193,7 @@
             let eventEl = document.getElementById('f-event-datetime');
             let gameSelectEl = document.getElementById('game-select');
             let slipEl = document.getElementById('f-slip');
+            let submitBtn = document.getElementById('submit-order-btn');
 
             let uid = uidEl ? uidEl.value.replace(/[^0-9]/g, '').trim() : '';
             let server = serverEl ? serverEl.value.replace(/[^0-9]/g, '').trim() : '';
@@ -1197,6 +1224,11 @@
             let customerUsername = (user && user.username) ? user.username : "N/A";
             let slip = (slipEl && slipEl.files && slipEl.files[0]) ? slipEl.files[0] : null;
 
+            if (activeMainTab === 'manual' && !slip) {
+                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
+                return;
+            }
+
             let orderDetails = {
                 name: customerName,
                 username: customerUsername,
@@ -1225,21 +1257,37 @@
                     userSpent[curr] += price;
                     document.getElementById('thb-balance').innerText = `฿ ${userWallet.THB.toFixed(2)} THB`;
                     document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
-                    processAutoTopUp(orderDetails);
+                    await processAutoTopUp(orderDetails);
                 } else {
                     showStatusModal("Ayar-Game-Shop", `❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`, false);
                 }
             } else if (activeMainTab === 'manual') {
-                if (!slip) {
-                    showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
-                    return;
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = "⏳ Order ပို့နေပါပြီ...";
                 }
-                userSpent[curr] += price;
-                sendTransactionReportToAdmin(orderDetails, slip);
-                showStatusModal("Ayar-Game-Shop", "Order တင်ခြင်း အောင်မြင်ပါသည်။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။", true);
+                const tgRes = await sendTransactionReportToAdmin(orderDetails, slip);
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "🚀 Order တင်မည် / ဝယ်ယူမည်";
+                }
+                if (tgRes && tgRes.ok) {
+                    userSpent[curr] += price;
+                    showStatusModal("Ayar-Game-Shop", "Order တင်ခြင်း အောင်မြင်ပါသည်။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။", true);
+                }
             } else if (activeMainTab === 'order') {
-                sendTransactionReportToAdmin(orderDetails, null);
-                showStatusModal("Ayar-Game-Shop", "Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။", true);
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = "⏳ Order ပို့နေပါပြီ...";
+                }
+                const tgRes = await sendTransactionReportToAdmin(orderDetails, null);
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "🚀 Order တင်မည် / ဝယ်ယူမည်";
+                }
+                if (tgRes && tgRes.ok) {
+                    showStatusModal("Ayar-Game-Shop", "Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။", true);
+                }
             }
         }
 
@@ -1317,11 +1365,12 @@
             document.getElementById('custom-recharge-amount').value = amount;
         }
 
-        function submitRecharge() {
+        async function submitRecharge() {
             tg.HapticFeedback.notificationOccurred('success');
             let customVal = document.getElementById('custom-recharge-amount').value;
             let finalAmt = customVal ? parseFloat(customVal) : selectedRechargeAmt;
             let slip = document.getElementById('recharge-slip').files[0];
+            let rechargeBtn = document.getElementById('submit-recharge-btn');
 
             if(!finalAmt || finalAmt <= 0) {
                 showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေဖြည့်မည့်ပမာဏ ရွေးချယ်ပါ သို့မဟုတ် ထည့်သွင်းပါ။", false);
@@ -1332,11 +1381,21 @@
                 return;
             }
 
-            sendRechargeReportToAdmin(finalAmt, rechargeCurrency, slip);
+            if (rechargeBtn) {
+                rechargeBtn.disabled = true;
+                rechargeBtn.innerText = "⏳ ပို့နေပါပြီ...";
+            }
+            const tgRes = await sendRechargeReportToAdmin(finalAmt, rechargeCurrency, slip);
+            if (rechargeBtn) {
+                rechargeBtn.disabled = false;
+                rechargeBtn.innerText = "💳 ငွေဖြည့်မည် (Admin ထံ စစ်ဆေးရန် ပို့မည်)";
+            }
 
-            document.getElementById('custom-recharge-amount').value = '';
-            document.getElementById('recharge-slip').value = '';
-            showStatusModal("Ayar-Game-Shop", `✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`, true);
+            if (tgRes && tgRes.ok) {
+                document.getElementById('custom-recharge-amount').value = '';
+                document.getElementById('recharge-slip').value = '';
+                showStatusModal("Ayar-Game-Shop", `✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`, true);
+            }
         }
 
         function updateProfileData() {
