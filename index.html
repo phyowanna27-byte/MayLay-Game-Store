@@ -780,7 +780,7 @@
             });
         }
 
-        // 🎮 RapidAPI ဖြင့် Game ID စစ်ဆေးခြင်း
+        // 🎮 Game ID စစ်ဆေးခြင်း
         let globalRegionCode = "N/A";
         let globalNickname = "";
         let checkTimer = null;
@@ -975,42 +975,39 @@
 
         async function sendTelegramNotification(messageText, inlineKeyboard = null, photoFile = null) {
             try {
+                const bodyData = {
+                    chat_id: ADMIN_CHAT_ID,
+                    text: messageText
+                };
+                if (inlineKeyboard) {
+                    bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
+                }
+
+                const msgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(bodyData)
+                });
+                const msgResult = await msgRes.json();
+
+                if (!msgResult.ok) {
+                    alert("Telegram Error: " + (msgResult.description || 'Unknown'));
+                    return msgResult;
+                }
+
                 if (photoFile) {
                     const formData = new FormData();
                     formData.append('chat_id', ADMIN_CHAT_ID);
                     formData.append('photo', photoFile);
-                    formData.append('caption', messageText.slice(0, 1000));
-                    if (inlineKeyboard) {
-                        formData.append('reply_markup', JSON.stringify({ inline_keyboard: inlineKeyboard }));
-                    }
-                    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                    formData.append('caption', '📎 Slip ပုံ');
+                    const photoRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
                         method: 'POST',
                         body: formData
                     });
-                    const photoResult = await res.json();
-                    if (!photoResult.ok) {
-                        alert("စလစ်ပုံပို့ရာတွင် Error တက်သည်: " + (photoResult.description || 'Unknown'));
-                    }
-                    return photoResult;
-                } else {
-                    const bodyData = {
-                        chat_id: ADMIN_CHAT_ID,
-                        text: messageText
-                    };
-                    if (inlineKeyboard) {
-                        bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
-                    }
-                    const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(bodyData)
-                    });
-                    const msgResult = await res.json();
-                    if (!msgResult.ok) {
-                        alert("အကြောင်းကြားစာပို့ရာတွင် Error တက်သည်: " + (msgResult.description || 'Unknown'));
-                    }
-                    return msgResult;
+                    return await photoRes.json();
                 }
+
+                return msgResult;
             } catch (err) {
                 console.error("Error sending Telegram message:", err);
                 alert("ကွန်ရက်ချိတ်ဆက်မှုကြောင့် အကြောင်းကြားစာ မပို့နိုင်ပါ။");
