@@ -784,7 +784,7 @@
             });
         }
 
-        // 🎮 Game ID စစ်ဆေးခြင်း
+        // 🎮 Game ID စစ်ဆေးခြင်း (Multi-Endpoint Fallback)
         let globalRegionCode = "N/A";
         let globalNickname = "";
         let checkTimer = null;
@@ -869,6 +869,33 @@
 
             statusEl.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
 
+            // 1) Public MLBB check endpoints (no RapidAPI key limit)
+            if (game === 'mlbb' || game === 'mcgg') {
+                const publicEndpoints = [
+                    `https://api.isan.eu.org/nickname/ml?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(server)}`,
+                    `https://mlbb-stats.ridwaanhall.com/api/player/?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(server)}`
+                ];
+
+                for (const url of publicEndpoints) {
+                    try {
+                        const res = await fetch(url);
+                        if (!res.ok) continue;
+                        const data = await res.json();
+                        const extracted = extractNicknameAndRegion(data);
+                        if (extracted.nickname) {
+                            globalNickname = extracted.nickname;
+                            globalRegionCode = extracted.region;
+                            nameInput.value = globalNickname;
+                            statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn("Public check failed:", url, e);
+                    }
+                }
+            }
+
+            // 2) RapidAPI fallback
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
             const headers = {
                 'Content-Type': 'application/json',
