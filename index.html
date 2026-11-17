@@ -233,7 +233,7 @@
 
             <div>
                 <label class="font-bold text-gray-700 block mb-1">Game UID / ID</label>
-                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 5124390279" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
+                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 52536450321" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
             </div>
 
             <div id="zone-id-wrapper">
@@ -243,12 +243,12 @@
 
             <div>
                 <div class="flex items-center justify-between mb-1">
-                    <label class="font-bold text-gray-700">In-game Name (Auto-Check)</label>
+                    <label class="font-bold text-gray-700">In-game Name</label>
                     <button type="button" onclick="runPlayerCheck()" class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-lg font-bold">
                         ထပ်စစ်မည်
                     </button>
                 </div>
-                <input type="text" id="f-ingame-name-input" readonly placeholder="UID ထည့်ပြီး အလိုအလျောက် စစ်ပေးမည်..." class="w-full p-2.5 bg-gray-100 border border-gray-200 rounded-xl text-gray-800 font-bold focus:outline-none">
+                <input type="text" id="f-ingame-name-input" oninput="globalNickname = this.value.trim()" placeholder="ဂိမ်းနာမည် (အလိုအလျောက်မပေါ်ပါက ရိုက်ထည့်ပါ)" class="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-gray-800 font-bold focus:outline-none focus:border-pink-500">
                 <p id="f-ingame-status" class="text-[10px] text-gray-500 mt-1">🔍 Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...</p>
             </div>
 
@@ -843,7 +843,7 @@
             });
         }
 
-        // 🎮 Game ID Auto-Checker (MLBB / MCGG / PUBG Mobile)
+        // 🎮 Game ID Auto-Checker (MLBB / MCGG / PUBG Mobile + Proxy Fallback)
         let globalRegionCode = "N/A";
         let globalNickname = "";
         let checkTimer = null;
@@ -909,6 +909,26 @@
             };
         }
 
+        async function fetchJsonWithProxyFallback(targetUrl, options = {}) {
+            try {
+                const res = await fetch(targetUrl, options);
+                if (res.ok) {
+                    return await res.json();
+                }
+            } catch (e) {}
+
+            if (!options.method || options.method === 'GET') {
+                try {
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
+                    const proxyRes = await fetch(proxyUrl);
+                    if (proxyRes.ok) {
+                        return await proxyRes.json();
+                    }
+                } catch (e2) {}
+            }
+            return null;
+        }
+
         async function runPlayerCheck() {
             const game = document.getElementById('game-select').value;
             const uidEl = document.getElementById('f-uid');
@@ -948,20 +968,15 @@
                 ];
 
                 for (const url of publicEndpoints) {
-                    try {
-                        const res = await fetch(url);
-                        if (!res.ok) continue;
-                        const data = await res.json();
-                        const extracted = extractNicknameAndRegion(data);
-                        if (extracted.nickname) {
-                            globalNickname = extracted.nickname;
-                            globalRegionCode = extracted.region;
-                            nameInput.value = globalNickname;
-                            statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
-                            return;
-                        }
-                    } catch (e) {
-                        console.warn("Public MLBB check failed:", url, e);
+                    const data = await fetchJsonWithProxyFallback(url);
+                    if (!data) continue;
+                    const extracted = extractNicknameAndRegion(data);
+                    if (extracted.nickname) {
+                        globalNickname = extracted.nickname;
+                        globalRegionCode = extracted.region;
+                        nameInput.value = globalNickname;
+                        statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
+                        return;
                     }
                 }
             }
@@ -974,20 +989,15 @@
                 ];
 
                 for (const url of pubgEndpoints) {
-                    try {
-                        const res = await fetch(url);
-                        if (!res.ok) continue;
-                        const data = await res.json();
-                        const extracted = extractNicknameAndRegion(data);
-                        if (extracted.nickname) {
-                            globalNickname = extracted.nickname;
-                            globalRegionCode = extracted.region;
-                            nameInput.value = globalNickname;
-                            statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
-                            return;
-                        }
-                    } catch (e) {
-                        console.warn("Public PUBG check failed:", url, e);
+                    const data = await fetchJsonWithProxyFallback(url);
+                    if (!data) continue;
+                    const extracted = extractNicknameAndRegion(data);
+                    if (extracted.nickname) {
+                        globalNickname = extracted.nickname;
+                        globalRegionCode = extracted.region;
+                        nameInput.value = globalNickname;
+                        statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
+                        return;
                     }
                 }
             }
@@ -1026,7 +1036,7 @@
                 nameInput.value = globalNickname;
                 statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
             } else {
-                statusEl.innerHTML = `<span class="text-red-500 font-bold">⚠️ UID ကို စစ်ဆေး၍ မရပါ — UID မှန်/မမှန် စစ်ပြီး 'ထပ်စစ်မည်' နှိပ်ပါ။</span>`;
+                statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ အလိုအလျောက် မပေါ်ပါ — အပေါ် Box မှာ နာမည်ရိုက်ထည့်ပြီး Order တင်နိုင်ပါသည်။</span>`;
             }
         }
 
@@ -1228,7 +1238,7 @@
 
             let uid = uidEl ? uidEl.value.replace(/[^0-9]/g, '').trim() : '';
             let server = serverEl ? serverEl.value.replace(/[^0-9]/g, '').trim() : '';
-            let checkedName = nameInputEl ? nameInputEl.value.trim() : '';
+            let typedName = nameInputEl ? nameInputEl.value.trim() : '';
             let eventDatetime = eventEl ? eventEl.value : '';
             let gameType = gameSelectEl ? gameSelectEl.value : 'mlbb';
 
@@ -1239,11 +1249,6 @@
 
             if ((gameType === 'mlbb' || gameType === 'mcgg') && !server) {
                 showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ Server / Zone ID ဖြည့်ပါ။", false);
-                return;
-            }
-
-            if (!checkedName && !globalNickname) {
-                showStatusModal("May Lay Game Store", "In-game Name စစ်ဆေး၍ မရသေးပါ။ 'ထပ်စစ်မည်' နှိပ်ပြီး စစ်ဆေးပါ။", false);
                 return;
             }
 
@@ -1273,7 +1278,7 @@
                 uid: uid,
                 server: server,
                 region: globalRegionCode || 'N/A',
-                inGameName: checkedName || globalNickname,
+                inGameName: typedName || globalNickname || '-',
                 eventDatetime: eventDatetime ? eventDatetime.replace('T', ' ') : null,
                 price: price,
                 curr: curr,
