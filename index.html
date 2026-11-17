@@ -843,7 +843,7 @@
             });
         }
 
-        // 🎮 Game ID Auto-Checker (MLBB / MCGG / PUBG Mobile + Proxy Fallback)
+        // 🎮 Game ID Auto-Checker (RapidAPI POST /check + Public Fallback)
         let globalRegionCode = "N/A";
         let globalNickname = "";
         let checkTimer = null;
@@ -855,17 +855,27 @@
 
         function extractNicknameAndRegion(payloadData) {
             if (!payloadData || typeof payloadData !== 'object') {
-                return { nickname: "", region: "N/A" };
+                return { nickname: "", region: "N/A", valid: false };
+            }
+
+            // RapidAPI Game ID Checker API format: { success: true, data: { valid: true, nickname: "...", region_code: "..." } }
+            const dataObj = payloadData.data && typeof payloadData.data === 'object' ? payloadData.data : null;
+            if (dataObj) {
+                if (dataObj.valid === false || dataObj.nickname === null || dataObj.nickname === undefined) {
+                    return { nickname: "", region: dataObj.region_code || "N/A", valid: false };
+                }
+                const nick = String(dataObj.nickname || "").trim();
+                const reg = String(dataObj.region_code || dataObj.region || "N/A").trim();
+                if (nick) {
+                    return { nickname: nick, region: reg || "N/A", valid: true };
+                }
             }
 
             const candidates = [
                 payloadData,
-                payloadData.data,
                 payloadData.result,
                 payloadData.player,
-                payloadData.info,
-                payloadData.player_info,
-                payloadData.account
+                payloadData.info
             ].filter(Boolean);
 
             let nickname = "";
@@ -875,18 +885,11 @@
                 if (!nickname) {
                     nickname =
                         obj.nickname ||
-                        obj.nickName ||
                         obj.nick_name ||
                         obj.username ||
-                        obj.userName ||
                         obj.user_name ||
                         obj.PlayerName ||
                         obj.player_name ||
-                        obj.playerName ||
-                        obj.charName ||
-                        obj.char_name ||
-                        obj.roleName ||
-                        obj.role_name ||
                         obj.name ||
                         obj.ign ||
                         "";
@@ -894,7 +897,6 @@
                 if (region === "N/A") {
                     region =
                         obj.region_code ||
-                        obj.regionCode ||
                         obj.region ||
                         obj.country ||
                         obj.zone ||
@@ -903,30 +905,12 @@
                 }
             }
 
+            const cleanNick = String(nickname || "").trim();
             return {
-                nickname: String(nickname || "").trim(),
-                region: String(region || "N/A").trim()
+                nickname: cleanNick,
+                region: String(region || "N/A").trim(),
+                valid: Boolean(cleanNick)
             };
-        }
-
-        async function fetchJsonWithProxyFallback(targetUrl, options = {}) {
-            try {
-                const res = await fetch(targetUrl, options);
-                if (res.ok) {
-                    return await res.json();
-                }
-            } catch (e) {}
-
-            if (!options.method || options.method === 'GET') {
-                try {
-                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`;
-                    const proxyRes = await fetch(proxyUrl);
-                    if (proxyRes.ok) {
-                        return await proxyRes.json();
-                    }
-                } catch (e2) {}
-            }
-            return null;
         }
 
         async function runPlayerCheck() {
@@ -958,7 +942,7 @@
                 return;
             }
 
-            statusEl.innerHTML = `🔍 In-game Name အလိုအလျောက် စစ်ဆေးနေပါပြီ...`;
+            statusEl.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
 
             // 1) MLBB / MCGG Public Endpoints
             if (game === 'mlbb' || game === 'mcgg') {
@@ -968,41 +952,25 @@
                 ];
 
                 for (const url of publicEndpoints) {
-                    const data = await fetchJsonWithProxyFallback(url);
-                    if (!data) continue;
-                    const extracted = extractNicknameAndRegion(data);
-                    if (extracted.nickname) {
-                        globalNickname = extracted.nickname;
-                        globalRegionCode = extracted.region;
-                        nameInput.value = globalNickname;
-                        statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
-                        return;
+                    try {
+                        const res = await fetch(url);
+                        if (!res.ok) continue;
+                        const data = await res.json();
+                        const extracted = extractNicknameAndRegion(data);
+                        if (extracted.nickname) {
+                            globalNickname = extracted.nickname;
+                            globalRegionCode = extracted.region;
+                            nameInput.value = globalNickname;
+                            statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn("Public check failed:", url, e);
                     }
                 }
             }
 
-            // 2) PUBG Mobile Public Endpoints
-            if (game === 'pubgm') {
-                const pubgEndpoints = [
-                    `https://api.isan.eu.org/nickname/pubg?id=${encodeURIComponent(uid)}`,
-                    `https://pubg-api.ridwaanhall.com/api/player/?id=${encodeURIComponent(uid)}`
-                ];
-
-                for (const url of pubgEndpoints) {
-                    const data = await fetchJsonWithProxyFallback(url);
-                    if (!data) continue;
-                    const extracted = extractNicknameAndRegion(data);
-                    if (extracted.nickname) {
-                        globalNickname = extracted.nickname;
-                        globalRegionCode = extracted.region;
-                        nameInput.value = globalNickname;
-                        statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
-                        return;
-                    }
-                }
-            }
-
-            // 3) RapidAPI POST checkPlayer (Omit zone_id for non-MLBB/MCGG games)
+            // 2) RapidAPI POST /check (game, player_id, and zone_id only for mlbb/mcgg)
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
             const headers = {
                 'Content-Type': 'application/json',
@@ -1011,8 +979,8 @@
             };
 
             const payload = (game === 'mlbb' || game === 'mcgg')
-                ? { game: game, player_id: uid, zone_id: server }
-                : { game: game, player_id: uid };
+                ? { game: String(game), player_id: String(uid), zone_id: String(server) }
+                : { game: String(game), player_id: String(uid) };
 
             try {
                 const response = await fetch(apiUrl, {
