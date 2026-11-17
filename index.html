@@ -233,7 +233,7 @@
 
             <div>
                 <label class="font-bold text-gray-700 block mb-1">Game UID / ID</label>
-                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 1472575847" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
+                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 5124390279" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
             </div>
 
             <div id="zone-id-wrapper">
@@ -243,13 +243,13 @@
 
             <div>
                 <div class="flex items-center justify-between mb-1">
-                    <label class="font-bold text-gray-700">In-game Name</label>
+                    <label class="font-bold text-gray-700">In-game Name (Auto-Check)</label>
                     <button type="button" onclick="runPlayerCheck()" class="text-[10px] bg-pink-100 text-pink-700 px-2 py-0.5 rounded-lg font-bold">
                         ထပ်စစ်မည်
                     </button>
                 </div>
-                <input type="text" id="f-ingame-name-input" oninput="globalNickname = this.value.trim()" placeholder="ဂိမ်းနာမည် ရိုက်ထည့်ပါ (သို့မဟုတ် လွတ်ထားနိုင်သည်)" class="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-gray-800 font-semibold focus:outline-none focus:border-pink-500">
-                <p id="f-ingame-status" class="text-[10px] text-gray-500 mt-1">🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...</p>
+                <input type="text" id="f-ingame-name-input" readonly placeholder="UID ထည့်ပြီး အလိုအလျောက် စစ်ပေးမည်..." class="w-full p-2.5 bg-gray-100 border border-gray-200 rounded-xl text-gray-800 font-bold focus:outline-none">
+                <p id="f-ingame-status" class="text-[10px] text-gray-500 mt-1">🔍 Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...</p>
             </div>
 
             <div id="manual-payment-container" class="space-y-3">
@@ -481,7 +481,7 @@
             if (serverEl) serverEl.value = '';
             if (nameInputEl) nameInputEl.value = '';
             if (slipEl) slipEl.value = '';
-            if (statusEl) statusEl.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
+            if (statusEl) statusEl.innerHTML = `🔍 Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...`;
             if (orderSection) orderSection.classList.add('hidden');
             globalNickname = "";
             globalRegionCode = "N/A";
@@ -843,7 +843,7 @@
             });
         }
 
-        // 🎮 Game ID စစ်ဆေးခြင်း (Multi-Endpoint Fallback)
+        // 🎮 Game ID Auto-Checker (MLBB / MCGG / PUBG Mobile)
         let globalRegionCode = "N/A";
         let globalNickname = "";
         let checkTimer = null;
@@ -863,7 +863,9 @@
                 payloadData.data,
                 payloadData.result,
                 payloadData.player,
-                payloadData.info
+                payloadData.info,
+                payloadData.player_info,
+                payloadData.account
             ].filter(Boolean);
 
             let nickname = "";
@@ -873,11 +875,18 @@
                 if (!nickname) {
                     nickname =
                         obj.nickname ||
+                        obj.nickName ||
                         obj.nick_name ||
                         obj.username ||
+                        obj.userName ||
                         obj.user_name ||
                         obj.PlayerName ||
                         obj.player_name ||
+                        obj.playerName ||
+                        obj.charName ||
+                        obj.char_name ||
+                        obj.roleName ||
+                        obj.role_name ||
                         obj.name ||
                         obj.ign ||
                         "";
@@ -885,6 +894,7 @@
                 if (region === "N/A") {
                     region =
                         obj.region_code ||
+                        obj.regionCode ||
                         obj.region ||
                         obj.country ||
                         obj.zone ||
@@ -915,9 +925,11 @@
             if (serverEl && serverEl.value !== server) serverEl.value = server;
 
             globalRegionCode = "N/A";
+            globalNickname = "";
+            nameInput.value = "";
 
             if (!uid) {
-                statusEl.innerHTML = `🔍 Game UID နှင့် Server (Zone) ထည့်ပါ...`;
+                statusEl.innerHTML = `🔍 Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...`;
                 return;
             }
 
@@ -926,8 +938,9 @@
                 return;
             }
 
-            statusEl.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
+            statusEl.innerHTML = `🔍 In-game Name အလိုအလျောက် စစ်ဆေးနေပါပြီ...`;
 
+            // 1) MLBB / MCGG Public Endpoints
             if (game === 'mlbb' || game === 'mcgg') {
                 const publicEndpoints = [
                     `https://api.isan.eu.org/nickname/ml?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(server)}`,
@@ -948,11 +961,38 @@
                             return;
                         }
                     } catch (e) {
-                        console.warn("Public check failed:", url, e);
+                        console.warn("Public MLBB check failed:", url, e);
                     }
                 }
             }
 
+            // 2) PUBG Mobile Public Endpoints
+            if (game === 'pubgm') {
+                const pubgEndpoints = [
+                    `https://api.isan.eu.org/nickname/pubg?id=${encodeURIComponent(uid)}`,
+                    `https://pubg-api.ridwaanhall.com/api/player/?id=${encodeURIComponent(uid)}`
+                ];
+
+                for (const url of pubgEndpoints) {
+                    try {
+                        const res = await fetch(url);
+                        if (!res.ok) continue;
+                        const data = await res.json();
+                        const extracted = extractNicknameAndRegion(data);
+                        if (extracted.nickname) {
+                            globalNickname = extracted.nickname;
+                            globalRegionCode = extracted.region;
+                            nameInput.value = globalNickname;
+                            statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
+                            return;
+                        }
+                    } catch (e) {
+                        console.warn("Public PUBG check failed:", url, e);
+                    }
+                }
+            }
+
+            // 3) RapidAPI POST checkPlayer (Omit zone_id for non-MLBB/MCGG games)
             const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
             const headers = {
                 'Content-Type': 'application/json',
@@ -960,43 +1000,33 @@
                 'x-rapidapi-key': '65d116a2ddmshe0c1954f29997f0p11513cjsne76cf19b7b29'
             };
 
-            const payloads = (game === 'mlbb' || game === 'mcgg')
-                ? [
-                    { game, player_id: uid, zone_id: server },
-                    { game, id: uid, zone: server },
-                    { game, uid, server }
-                ]
-                : [
-                    { game, player_id: uid },
-                    { game, id: uid },
-                    { game, uid }
-                ];
+            const payload = (game === 'mlbb' || game === 'mcgg')
+                ? { game: game, player_id: uid, zone_id: server }
+                : { game: game, player_id: uid };
 
-            for (const payload of payloads) {
-                try {
-                    const response = await fetch(apiUrl, {
-                        method: 'POST',
-                        headers,
-                        body: JSON.stringify(payload)
-                    });
-                    if (!response.ok) continue;
+            try {
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers,
+                    body: JSON.stringify(payload)
+                });
+                if (response.ok) {
                     const data = await response.json();
                     const extracted = extractNicknameAndRegion(data);
                     if (extracted.nickname) {
                         globalNickname = extracted.nickname;
                         globalRegionCode = extracted.region;
-                        break;
                     }
-                } catch (error) {
-                    console.error("ID Checker Error:", error);
                 }
+            } catch (error) {
+                console.error("RapidAPI ID Checker Error:", error);
             }
 
             if (globalNickname) {
                 nameInput.value = globalNickname;
                 statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
             } else {
-                statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ အလိုအလျောက် မပေါ်ပါ — အပေါ် Box မှာ နာမည်ရိုက်ထည့်ပြီး Order တန်းတင်နိုင်ပါသည်။</span>`;
+                statusEl.innerHTML = `<span class="text-red-500 font-bold">⚠️ UID ကို စစ်ဆေး၍ မရပါ — UID မှန်/မမှန် စစ်ပြီး 'ထပ်စစ်မည်' နှိပ်ပါ။</span>`;
             }
         }
 
@@ -1039,7 +1069,6 @@
         async function sendToSingleChat(chatId, messageText, inlineKeyboard = null, photoFile = null) {
             let msgResult = null;
 
-            // Method 1: FormData POST
             try {
                 const msgForm = new FormData();
                 msgForm.append('chat_id', String(chatId));
@@ -1053,7 +1082,6 @@
                 });
                 msgResult = await msgRes.json();
             } catch (err1) {
-                // Method 2: Simple GET Fallback
                 try {
                     const getUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(chatId)}&text=${encodeURIComponent(messageText)}`;
                     const getRes = await fetch(getUrl);
@@ -1067,7 +1095,6 @@
                 return msgResult || { ok: false, description: "Empty response" };
             }
 
-            // Send Slip Photo to Admin only
             if (photoFile) {
                 try {
                     const photoForm = new FormData();
@@ -1201,7 +1228,7 @@
 
             let uid = uidEl ? uidEl.value.replace(/[^0-9]/g, '').trim() : '';
             let server = serverEl ? serverEl.value.replace(/[^0-9]/g, '').trim() : '';
-            let typedName = nameInputEl ? nameInputEl.value.trim() : '';
+            let checkedName = nameInputEl ? nameInputEl.value.trim() : '';
             let eventDatetime = eventEl ? eventEl.value : '';
             let gameType = gameSelectEl ? gameSelectEl.value : 'mlbb';
 
@@ -1212,6 +1239,11 @@
 
             if ((gameType === 'mlbb' || gameType === 'mcgg') && !server) {
                 showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ Server / Zone ID ဖြည့်ပါ။", false);
+                return;
+            }
+
+            if (!checkedName && !globalNickname) {
+                showStatusModal("May Lay Game Store", "In-game Name စစ်ဆေး၍ မရသေးပါ။ 'ထပ်စစ်မည်' နှိပ်ပြီး စစ်ဆေးပါ။", false);
                 return;
             }
 
@@ -1241,7 +1273,7 @@
                 uid: uid,
                 server: server,
                 region: globalRegionCode || 'N/A',
-                inGameName: typedName || globalNickname || '-',
+                inGameName: checkedName || globalNickname,
                 eventDatetime: eventDatetime ? eventDatetime.replace('T', ' ') : null,
                 price: price,
                 curr: curr,
