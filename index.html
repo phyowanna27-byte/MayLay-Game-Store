@@ -9,6 +9,9 @@
     <title>May Lay Game Store</title>
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Game ID Auto-Checkers (Separated Files) -->
+    <script src="mlbb-mcgg-checker.js"></script>
+    <script src="pubg-hok-checker.js"></script>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -233,7 +236,7 @@
 
             <div>
                 <label class="font-bold text-gray-700 block mb-1">Game UID / ID</label>
-                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 52536450321" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
+                <input type="text" id="f-uid" oninput="checkPlayerName()" placeholder="ဥပမာ - 1472575847" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
             </div>
 
             <div id="zone-id-wrapper">
@@ -248,7 +251,7 @@
                         ထပ်စစ်မည်
                     </button>
                 </div>
-                <input type="text" id="f-ingame-name-input" oninput="globalNickname = this.value.trim()" placeholder="ဂိမ်းနာမည် (အလိုအလျောက်မပေါ်ပါက ရိုက်ထည့်ပါ)" class="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-gray-800 font-bold focus:outline-none focus:border-pink-500">
+                <input type="text" id="f-ingame-name-input" oninput="globalNickname = this.value.trim()" placeholder="ဂိမ်းနာမည် ရိုက်ထည့်ပါ (သို့မဟုတ် လွတ်ထားနိုင်သည်)" class="w-full p-2.5 bg-white border border-gray-200 rounded-xl text-gray-800 font-bold focus:outline-none focus:border-pink-500">
                 <p id="f-ingame-status" class="text-[10px] text-gray-500 mt-1">🔍 Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...</p>
             </div>
 
@@ -483,8 +486,8 @@
             if (slipEl) slipEl.value = '';
             if (statusEl) statusEl.innerHTML = `🔍 Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...`;
             if (orderSection) orderSection.classList.add('hidden');
-            globalNickname = "";
-            globalRegionCode = "N/A";
+            if (typeof globalNickname !== 'undefined') globalNickname = "";
+            if (typeof globalRegionCode !== 'undefined') globalRegionCode = "N/A";
         }
 
         function updateUserProfileUI(name, photo) {
@@ -763,7 +766,7 @@
             }
 
             document.getElementById('game-order-section').classList.remove('hidden');
-            checkPlayerName();
+            if (typeof checkPlayerName === 'function') checkPlayerName();
             window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
         }
 
@@ -841,171 +844,6 @@
             }).catch(() => {
                 showStatusModal("May Lay Game Store", "Copy လုပ်၍ မရပါ။", false);
             });
-        }
-
-        // 🎮 Game ID Auto-Checker (RapidAPI POST /check + Public Fallback)
-        let globalRegionCode = "N/A";
-        let globalNickname = "";
-        let checkTimer = null;
-
-        function checkPlayerName() {
-            clearTimeout(checkTimer);
-            checkTimer = setTimeout(runPlayerCheck, 500);
-        }
-
-        function extractNicknameAndRegion(payloadData) {
-            if (!payloadData || typeof payloadData !== 'object') {
-                return { nickname: "", region: "N/A", valid: false };
-            }
-
-            // RapidAPI Game ID Checker API format: { success: true, data: { valid: true, nickname: "...", region_code: "..." } }
-            const dataObj = payloadData.data && typeof payloadData.data === 'object' ? payloadData.data : null;
-            if (dataObj) {
-                if (dataObj.valid === false || dataObj.nickname === null || dataObj.nickname === undefined) {
-                    return { nickname: "", region: dataObj.region_code || "N/A", valid: false };
-                }
-                const nick = String(dataObj.nickname || "").trim();
-                const reg = String(dataObj.region_code || dataObj.region || "N/A").trim();
-                if (nick) {
-                    return { nickname: nick, region: reg || "N/A", valid: true };
-                }
-            }
-
-            const candidates = [
-                payloadData,
-                payloadData.result,
-                payloadData.player,
-                payloadData.info
-            ].filter(Boolean);
-
-            let nickname = "";
-            let region = "N/A";
-
-            for (const obj of candidates) {
-                if (!nickname) {
-                    nickname =
-                        obj.nickname ||
-                        obj.nick_name ||
-                        obj.username ||
-                        obj.user_name ||
-                        obj.PlayerName ||
-                        obj.player_name ||
-                        obj.name ||
-                        obj.ign ||
-                        "";
-                }
-                if (region === "N/A") {
-                    region =
-                        obj.region_code ||
-                        obj.region ||
-                        obj.country ||
-                        obj.zone ||
-                        obj.server ||
-                        "N/A";
-                }
-            }
-
-            const cleanNick = String(nickname || "").trim();
-            return {
-                nickname: cleanNick,
-                region: String(region || "N/A").trim(),
-                valid: Boolean(cleanNick)
-            };
-        }
-
-        async function runPlayerCheck() {
-            const game = document.getElementById('game-select').value;
-            const uidEl = document.getElementById('f-uid');
-            const serverEl = document.getElementById('f-server');
-            const nameInput = document.getElementById('f-ingame-name-input');
-            const statusEl = document.getElementById('f-ingame-status');
-
-            if (!uidEl || !nameInput || !statusEl) return;
-
-            const uid = uidEl.value.replace(/[^0-9]/g, '').trim();
-            const server = serverEl ? serverEl.value.replace(/[^0-9]/g, '').trim() : "";
-
-            if (uidEl.value !== uid) uidEl.value = uid;
-            if (serverEl && serverEl.value !== server) serverEl.value = server;
-
-            globalRegionCode = "N/A";
-            globalNickname = "";
-            nameInput.value = "";
-
-            if (!uid) {
-                statusEl.innerHTML = `🔍 Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...`;
-                return;
-            }
-
-            if ((game === 'mlbb' || game === 'mcgg') && !server) {
-                statusEl.innerHTML = `<span class="text-red-500 font-bold">⚠️ Server / Zone ID ထည့်ရန် လိုအပ်ပါသည်။</span>`;
-                return;
-            }
-
-            statusEl.innerHTML = `🔍 In-game Name စစ်ဆေးနေပါပြီ...`;
-
-            // 1) MLBB / MCGG Public Endpoints
-            if (game === 'mlbb' || game === 'mcgg') {
-                const publicEndpoints = [
-                    `https://api.isan.eu.org/nickname/ml?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(server)}`,
-                    `https://mlbb-stats.ridwaanhall.com/api/player/?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(server)}`
-                ];
-
-                for (const url of publicEndpoints) {
-                    try {
-                        const res = await fetch(url);
-                        if (!res.ok) continue;
-                        const data = await res.json();
-                        const extracted = extractNicknameAndRegion(data);
-                        if (extracted.nickname) {
-                            globalNickname = extracted.nickname;
-                            globalRegionCode = extracted.region;
-                            nameInput.value = globalNickname;
-                            statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
-                            return;
-                        }
-                    } catch (e) {
-                        console.warn("Public check failed:", url, e);
-                    }
-                }
-            }
-
-            // 2) RapidAPI POST /check (game, player_id, and zone_id only for mlbb/mcgg)
-            const apiUrl = `https://game-id-checker-api.p.rapidapi.com/check`;
-            const headers = {
-                'Content-Type': 'application/json',
-                'x-rapidapi-host': 'game-id-checker-api.p.rapidapi.com',
-                'x-rapidapi-key': '65d116a2ddmshe0c1954f29997f0p11513cjsne76cf19b7b29'
-            };
-
-            const payload = (game === 'mlbb' || game === 'mcgg')
-                ? { game: String(game), player_id: String(uid), zone_id: String(server) }
-                : { game: String(game), player_id: String(uid) };
-
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers,
-                    body: JSON.stringify(payload)
-                });
-                if (response.ok) {
-                    const data = await response.json();
-                    const extracted = extractNicknameAndRegion(data);
-                    if (extracted.nickname) {
-                        globalNickname = extracted.nickname;
-                        globalRegionCode = extracted.region;
-                    }
-                }
-            } catch (error) {
-                console.error("RapidAPI ID Checker Error:", error);
-            }
-
-            if (globalNickname) {
-                nameInput.value = globalNickname;
-                statusEl.innerHTML = `<span class="text-emerald-600 font-bold">✅ Account Found (${globalNickname}) | Region: ${globalRegionCode}</span>`;
-            } else {
-                statusEl.innerHTML = `<span class="text-amber-600 font-semibold">⚠️ အလိုအလျောက် မပေါ်ပါ — အပေါ် Box မှာ နာမည်ရိုက်ထည့်ပြီး Order တင်နိုင်ပါသည်။</span>`;
-            }
         }
 
         async function processAutoTopUp(orderDetails) {
@@ -1160,35 +998,6 @@
             return await sendTelegramNotification(message, keyboard, slipFile);
         }
 
-        function logOrderToSheet(orderDetails) {
-            let baseURL = "https://api.sheetbest.com/sheets/f8e8ace5-e07b-4077-a959-06451c9769f0";
-            let targetTab = "";
-
-            if (orderDetails.type === "ORDER") targetTab = "/tabs/Event_Orders_2026-Oct";
-            else if (orderDetails.type === "MANUAL") targetTab = "/tabs/Manual_Orders_2026-Oct";
-            else if (orderDetails.type === "TOPUP") targetTab = "/tabs/Pre_Funded_2026-Oct";
-
-            let apiEndpoint = baseURL + targetTab;
-            let payload = {
-                "Timestamp": new Date().toLocaleString(),
-                "Type": orderDetails.type,
-                "Name": orderDetails.name,
-                "Username": orderDetails.username,
-                "Package": orderDetails.item,
-                "Game ID": `${orderDetails.uid} (${orderDetails.server || '-'}) [${orderDetails.region}]`,
-                "Event Datetime": orderDetails.eventDatetime || "-",
-                "Price": orderDetails.price,
-                "Currency": orderDetails.curr
-            };
-
-            fetch(apiEndpoint, {
-                method: "POST",
-                mode: "no-cors",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            }).catch(error => console.error("Error logging to sheet:", error));
-        }
-
         async function submitGameOrder() {
             try {
                 if (tg && tg.HapticFeedback) {
@@ -1245,20 +1054,14 @@
                 item: packageName,
                 uid: uid,
                 server: server,
-                region: globalRegionCode || 'N/A',
-                inGameName: typedName || globalNickname || '-',
+                region: (typeof globalRegionCode !== 'undefined' && globalRegionCode) ? globalRegionCode : 'N/A',
+                inGameName: typedName || ((typeof globalNickname !== 'undefined' && globalNickname) ? globalNickname : '-'),
                 eventDatetime: eventDatetime ? eventDatetime.replace('T', ' ') : null,
                 price: price,
                 curr: curr,
                 type: (activeMainTab || 'manual').toUpperCase(),
                 gameType: gameType
             };
-
-            try {
-                logOrderToSheet(orderDetails);
-            } catch (e) {
-                console.error("Sheet log error:", e);
-            }
 
             if (activeMainTab === 'topup') {
                 if (userWallet[curr] >= price) {
