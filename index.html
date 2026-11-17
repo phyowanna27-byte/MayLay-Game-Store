@@ -2,8 +2,11 @@
 <html lang="my">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>May Lay Game Store</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>May Lay Game Store v3.0</title>
     <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <!-- Tailwind CSS -->
@@ -54,6 +57,14 @@
             <h1 class="text-pink-700 font-extrabold text-2xl tracking-wide animate-store-title">
                 ✨ May Lay Game Store ✨
             </h1>
+            <div class="flex items-center justify-center space-x-2 mt-1">
+                <span class="inline-block bg-emerald-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
+                    ✅ v3.0 (Auto-Notify Ready)
+                </span>
+                <button onclick="testTelegramBot()" class="bg-sky-500 hover:bg-sky-600 text-white text-[10px] font-bold px-2.5 py-0.5 rounded-full shadow">
+                    🔔 Bot စာပို့ စမ်းသပ်ရန်
+                </button>
+            </div>
         </div>
 
         <div class="flex justify-between items-center bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-sm mb-4">
@@ -384,13 +395,16 @@
     </div>
 
     <!-- IN-APP STATUS MODAL (OK နှိပ်ရင် Home Page ပြန်ရောက်မည်) -->
-    <div id="status-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm hidden flex items-center justify-center z-[9998] p-4">
-        <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl text-left space-y-4">
-            <h3 id="status-modal-title" class="font-extrabold text-gray-900 text-base">Ayar-Game-Shop</h3>
-            <p id="status-modal-body" class="text-xs text-gray-700 leading-relaxed whitespace-pre-line"></p>
-            <div class="flex justify-end pt-1">
-                <button id="status-modal-ok-btn" onclick="handleStatusModalOk()" class="bg-pink-600 hover:bg-pink-700 text-white px-5 py-2 rounded-xl text-xs font-bold shadow">
-                    OK
+    <div id="status-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center z-[9998] p-4">
+        <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl text-left space-y-4 border-2 border-pink-400">
+            <div class="flex items-center space-x-2">
+                <span class="text-xl">✨</span>
+                <h3 id="status-modal-title" class="font-extrabold text-pink-700 text-base">May Lay Game Store</h3>
+            </div>
+            <p id="status-modal-body" class="text-xs text-gray-700 leading-relaxed whitespace-pre-line font-semibold"></p>
+            <div class="flex justify-end pt-2">
+                <button id="status-modal-ok-btn" onclick="handleStatusModalOk()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 hover:opacity-95 text-white py-2.5 rounded-xl text-xs font-bold shadow-md">
+                    OK (Home သို့ ပြန်သွားမည်)
                 </button>
             </div>
         </div>
@@ -448,8 +462,9 @@
 
         function showStatusModal(title, message, goHome = false) {
             goHomeAfterStatusOk = goHome;
-            document.getElementById('status-modal-title').innerText = title || "Ayar-Game-Shop";
+            document.getElementById('status-modal-title').innerText = title || "May Lay Game Store";
             document.getElementById('status-modal-body').innerText = message || "";
+            document.getElementById('status-modal-ok-btn').innerText = goHome ? "OK (Home သို့ ပြန်သွားမည်)" : "OK";
             document.getElementById('status-modal').classList.remove('hidden');
         }
 
@@ -510,10 +525,10 @@
             if (user) {
                 currentUser.tgId = user.id;
                 updateUserProfileUI(user.first_name, user.photo_url);
-                showStatusModal("Ayar-Game-Shop", "Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
+                showStatusModal("May Lay Game Store", "Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
             } else {
                 updateUserProfileUI("Telegram User", null);
-                showStatusModal("Ayar-Game-Shop", "Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
+                showStatusModal("May Lay Game Store", "Telegram ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
             }
             closeLoginModal();
         }
@@ -523,7 +538,7 @@
             let email = prompt("ကျေးဇူးပြု၍ သင့် Gmail ထည့်ပါ -", "user@gmail.com");
             if (email) {
                 updateUserProfileUI(email.split('@')[0], null);
-                showStatusModal("Ayar-Game-Shop", "Gmail (" + email + ") ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
+                showStatusModal("May Lay Game Store", "Gmail (" + email + ") ဖြင့် အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ။", false);
             }
             closeLoginModal();
         }
@@ -830,9 +845,9 @@
         function copyText(text) {
             navigator.clipboard.writeText(text).then(() => {
                 tg.HapticFeedback.notificationOccurred('success');
-                showStatusModal("Ayar-Game-Shop", "📋 Copied: " + text, false);
+                showStatusModal("May Lay Game Store", "📋 Copied: " + text, false);
             }).catch(() => {
-                showStatusModal("Ayar-Game-Shop", "Copy လုပ်၍ မရပါ။", false);
+                showStatusModal("May Lay Game Store", "Copy လုပ်၍ မရပါ။", false);
             });
         }
 
@@ -1016,51 +1031,63 @@
                 });
                 const result = await response.json();
                 if (response.ok && result.status === "success") {
-                    showStatusModal("Ayar-Game-Shop", `✅ Top-up အောင်မြင်ပါသည်။ Bot မှ ${orderDetails.item} ကို Customer ထံသို့ အော်တို ဖြည့်သွင်းပြီးပါပြီ။`, true);
+                    showStatusModal("May Lay Game Store", `✅ Top-up အောင်မြင်ပါသည်။ Bot မှ ${orderDetails.item} ကို Customer ထံသို့ အော်တို ဖြည့်သွင်းပြီးပါပြီ။`, true);
                 } else {
-                    showStatusModal("Ayar-Game-Shop", `⚠️ စိန်ဖြည့်ရာတွင် အမှားအယွင်းရှိပါသည်: ${result.message || 'ဆာဗာချိတ်ဆက်မှု မအောင်မြင်ပါ'}`, false);
+                    showStatusModal("May Lay Game Store", `⚠️ စိန်ဖြည့်ရာတွင် အမှားအယွင်းရှိပါသည်: ${result.message || 'ဆာဗာချိတ်ဆက်မှု မအောင်မြင်ပါ'}`, false);
                 }
             } catch (error) {
-                showStatusModal("Ayar-Game-Shop", "❌ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။", false);
+                showStatusModal("May Lay Game Store", "❌ ဆာဗာချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။", false);
             }
         }
 
-        // 🔔 Telegram Bot Notification (Sends to Admin Chat ID + Current User if different)
+        // 🔔 Telegram Bot Notification (Multi-Method: FormData POST + URL GET Fallback)
         const BOT_TOKEN = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
         const ADMIN_CHAT_ID = '8863215122';
 
         async function sendToSingleChat(chatId, messageText, inlineKeyboard = null, photoFile = null) {
-            const bodyData = {
-                chat_id: chatId,
-                text: messageText
-            };
-            if (inlineKeyboard) {
-                bodyData.reply_markup = { inline_keyboard: inlineKeyboard };
-            }
+            let msgResult = null;
 
-            const msgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(bodyData)
-            });
-            const msgResult = await msgRes.json();
-
-            if (!msgResult.ok) {
-                return msgResult;
-            }
-
-            if (photoFile) {
-                const formData = new FormData();
-                formData.append('chat_id', chatId);
-                formData.append('photo', photoFile);
-                formData.append('caption', '📎 Slip ပုံ');
+            // Method 1: FormData POST (Bypasses CORS preflight issues on mobile WebViews)
+            try {
+                const msgForm = new FormData();
+                msgForm.append('chat_id', String(chatId));
+                msgForm.append('text', messageText);
+                if (inlineKeyboard) {
+                    msgForm.append('reply_markup', JSON.stringify({ inline_keyboard: inlineKeyboard }));
+                }
+                const msgRes = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    body: msgForm
+                });
+                msgResult = await msgRes.json();
+            } catch (err1) {
+                // Method 2: Simple GET Fallback
                 try {
+                    const getUrl = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(chatId)}&text=${encodeURIComponent(messageText)}`;
+                    const getRes = await fetch(getUrl);
+                    msgResult = await getRes.json();
+                } catch (err2) {
+                    return { ok: false, description: err2.message || "Network Error" };
+                }
+            }
+
+            if (!msgResult || !msgResult.ok) {
+                return msgResult || { ok: false, description: "Empty response" };
+            }
+
+            // Send Slip Photo if attached
+            if (photoFile) {
+                try {
+                    const photoForm = new FormData();
+                    photoForm.append('chat_id', String(chatId));
+                    photoForm.append('photo', photoFile);
+                    photoForm.append('caption', `📎 ငွေလွှဲစလစ်ပုံ`);
                     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
                         method: 'POST',
-                        body: formData
+                        body: photoForm
                     });
-                } catch (e) {
-                    console.warn("Photo upload error:", e);
+                } catch (photoErr) {
+                    console.warn("Slip photo upload warning:", photoErr);
                 }
             }
 
@@ -1069,34 +1096,56 @@
 
         async function sendTelegramNotification(messageText, inlineKeyboard = null, photoFile = null) {
             try {
-                // Target Chat IDs: Always try ADMIN_CHAT_ID, plus current Telegram user ID if available
-                const targetChatIds = [String(ADMIN_CHAT_ID)];
+                const targetChatIds = [];
                 const activeTgId = (user && user.id) ? String(user.id) : (currentUser && currentUser.tgId ? String(currentUser.tgId) : null);
-                if (activeTgId && !targetChatIds.includes(activeTgId)) {
+                
+                // Priority 1: Current user who opened the Mini App
+                if (activeTgId) {
                     targetChatIds.push(activeTgId);
+                }
+                // Priority 2: Configured ADMIN_CHAT_ID
+                if (ADMIN_CHAT_ID && !targetChatIds.includes(String(ADMIN_CHAT_ID))) {
+                    targetChatIds.push(String(ADMIN_CHAT_ID));
                 }
 
                 let anySuccess = false;
-                let lastErrorDesc = "Unknown";
+                let errorLogs = [];
 
                 for (const chatId of targetChatIds) {
                     const res = await sendToSingleChat(chatId, messageText, inlineKeyboard, photoFile);
                     if (res && res.ok) {
                         anySuccess = true;
-                    } else if (res && res.description) {
-                        lastErrorDesc = `${res.description} (ID: ${chatId})`;
+                    } else {
+                        errorLogs.push(`ID ${chatId}: ${res ? res.description : 'Failed'}`);
                     }
                 }
 
                 if (!anySuccess) {
-                    showStatusModal("Telegram Error", `အကြောင်းကြားစာ ပို့မရပါ:\n${lastErrorDesc}\n\n📌 Bot (@Ayar_Game_Shop_bot) ကို Start နှိပ်ထားရန် လိုအပ်ပါသည်။`, false);
-                    return { ok: false, description: lastErrorDesc };
+                    showStatusModal(
+                        "⚠️ Telegram စာပို့မရပါ",
+                        `အကြောင်းရင်း:\n${errorLogs.join('\n')}\n\n📌 Bot ကို Start နှိပ်ထားရန် လိုအပ်ပါသည်။`,
+                        false
+                    );
+                    return { ok: false, description: errorLogs.join('; ') };
                 }
 
                 return { ok: true };
             } catch (err) {
-                showStatusModal("Network Error", "အင်တာနက် သို့မဟုတ် Bot API ချိတ်ဆက်မှု အမှား: " + (err && err.message ? err.message : String(err)), false);
+                showStatusModal("Network Error", "ချိတ်ဆက်မှု အမှား: " + (err && err.message ? err.message : String(err)), false);
                 return { ok: false };
+            }
+        }
+
+        async function testTelegramBot() {
+            const activeTgId = (user && user.id) ? String(user.id) : "Unknown";
+            const testMsg = `🔔 [v3.0 စမ်းသပ်မှု အောင်မြင်ပါသည်]\nMay Lay Game Store Mini App မှ Telegram အကြောင်းကြားစာ စနစ် အလုပ်လုပ်နေပါပြီ!\n👤 လက်ရှိ သုံးစွဲသူ ID: ${activeTgId}\n⏱️ အချိန်: ${new Date().toLocaleTimeString()}`;
+            const res = await sendTelegramNotification(testMsg, null, null);
+            if (res && res.ok) {
+                showStatusModal(
+                    "✅ စမ်းသပ်မှု အောင်မြင်ပါသည်",
+                    `Bot ဆီမှ အကြောင်းကြားစာ ပို့ပြီးပါပြီ!\nသင့် Telegram Chat ထဲတွင် စာဝင်လာခြင်း ရှိ/မရှိ ကြည့်ပါ။\n(သင့် Telegram ID: ${activeTgId})`,
+                    false
+                );
             }
         }
 
@@ -1105,7 +1154,7 @@
             let custId = orderDetails.tgId || (user && user.id) || "0";
             let shortPkg = (orderDetails.item || 'Order').replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 18).trim();
 
-            let message = `==== Transaction Report (Pending Admin Approval) ====\n\n` +
+            let message = `✅ May Lay Game Store မှ Order အသစ်!\n\n` +
                           `UID : ${orderDetails.uid}\n` +
                           `(${orderDetails.server || 'N/A'})\n` +
                           `Name : ${orderDetails.inGameName || '-'}\n` +
@@ -1202,17 +1251,17 @@
             let gameType = gameSelectEl ? gameSelectEl.value : 'mlbb';
 
             if (!uid) {
-                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ Game UID ဖြည့်ပါ။", false);
+                showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ Game UID ဖြည့်ပါ။", false);
                 return;
             }
 
             if ((gameType === 'mlbb' || gameType === 'mcgg') && !server) {
-                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ Server / Zone ID ဖြည့်ပါ။", false);
+                showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ Server / Zone ID ဖြည့်ပါ။", false);
                 return;
             }
 
             if (activeMainTab === 'order' && !eventDatetime) {
-                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ Event ကျင်းပမည့် ရက်စွဲနှင့် အချိန်ကို ရွေးချယ်ပေးပါ။", false);
+                showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ Event ကျင်းပမည့် ရက်စွဲနှင့် အချိန်ကို ရွေးချယ်ပေးပါ။", false);
                 return;
             }
 
@@ -1225,7 +1274,7 @@
             let slip = (slipEl && slipEl.files && slipEl.files[0]) ? slipEl.files[0] : null;
 
             if (activeMainTab === 'manual' && !slip) {
-                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
+                showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
                 return;
             }
 
@@ -1259,12 +1308,12 @@
                     document.getElementById('mmk-balance').innerText = `Ks ${userWallet.MMK.toLocaleString()} MMK`;
                     await processAutoTopUp(orderDetails);
                 } else {
-                    showStatusModal("Ayar-Game-Shop", `❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`, false);
+                    showStatusModal("May Lay Game Store", `❌ Wallet ထဲတွင် လက်ကျန်ငွေ မလုံလောက်ပါ။ လက်ကျန်: ${curr === 'THB' ? '฿' : 'Ks '}${userWallet[curr]}`, false);
                 }
             } else if (activeMainTab === 'manual') {
                 if (submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.innerText = "⏳ Order ပို့နေပါပြီ...";
+                    submitBtn.innerText = "⏳ Telegram သို့ ပို့နေပါပြီ...";
                 }
                 const tgRes = await sendTransactionReportToAdmin(orderDetails, slip);
                 if (submitBtn) {
@@ -1273,12 +1322,16 @@
                 }
                 if (tgRes && tgRes.ok) {
                     userSpent[curr] += price;
-                    showStatusModal("Ayar-Game-Shop", "Order တင်ခြင်း အောင်မြင်ပါသည်။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက ဆောင်ရွက်ပေးပါမည်။", true);
+                    showStatusModal(
+                        "✅ Order တင်ခြင်း အောင်မြင်ပါသည်",
+                        `ပက်ကေ့ဂျ်: ${packageName}\nGame ID: ${uid} (${server})\nနာမည်: ${orderDetails.inGameName}\n\nAdmin ထံ အကြောင်းကြားစာ ပို့ပြီးပါပြီ။ OK နှိပ်ပါက Home သို့ ပြန်ရောက်ပါမည်။`,
+                        true
+                    );
                 }
             } else if (activeMainTab === 'order') {
                 if (submitBtn) {
                     submitBtn.disabled = true;
-                    submitBtn.innerText = "⏳ Order ပို့နေပါပြီ...";
+                    submitBtn.innerText = "⏳ Telegram သို့ ပို့နေပါပြီ...";
                 }
                 const tgRes = await sendTransactionReportToAdmin(orderDetails, null);
                 if (submitBtn) {
@@ -1286,7 +1339,11 @@
                     submitBtn.innerText = "🚀 Order တင်မည် / ဝယ်ယူမည်";
                 }
                 if (tgRes && tgRes.ok) {
-                    showStatusModal("Ayar-Game-Shop", "Event Order ကြိုတင်စာရင်းပေးသွင်းခြင်း အောင်မြင်ပါသည်။", true);
+                    showStatusModal(
+                        "✅ Event Order အောင်မြင်ပါသည်",
+                        `ပက်ကေ့ဂျ်: ${packageName}\nGame ID: ${uid} (${server})\n\nAdmin ထံ ကြိုတင်စာရင်း ပို့ပြီးပါပြီ။ OK နှိပ်ပါက Home သို့ ပြန်ရောက်ပါမည်။`,
+                        true
+                    );
                 }
             }
         }
@@ -1373,11 +1430,11 @@
             let rechargeBtn = document.getElementById('submit-recharge-btn');
 
             if(!finalAmt || finalAmt <= 0) {
-                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေဖြည့်မည့်ပမာဏ ရွေးချယ်ပါ သို့မဟုတ် ထည့်သွင်းပါ။", false);
+                showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ ငွေဖြည့်မည့်ပမာဏ ရွေးချယ်ပါ သို့မဟုတ် ထည့်သွင်းပါ။", false);
                 return;
             }
             if(!slip) {
-                showStatusModal("Ayar-Game-Shop", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
+                showStatusModal("May Lay Game Store", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။", false);
                 return;
             }
 
@@ -1394,7 +1451,7 @@
             if (tgRes && tgRes.ok) {
                 document.getElementById('custom-recharge-amount').value = '';
                 document.getElementById('recharge-slip').value = '';
-                showStatusModal("Ayar-Game-Shop", `✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`, true);
+                showStatusModal("May Lay Game Store", `✅ ငွေဖြည့်တောင်းဆိုမှု (${finalAmt} ${rechargeCurrency}) ကို Admin ထံ ပို့ပြီးပါပြီ။\nAdmin မှ စစ်ဆေးအတည်ပြုပြီးပါက သင့် Wallet ထဲသို့ ထည့်သွင်းပေးပါမည်။`, true);
             }
         }
 
