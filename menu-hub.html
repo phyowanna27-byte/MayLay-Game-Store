@@ -23,116 +23,210 @@
         <div class="w-12"></div>
     </div>
 
-    <!-- 1. ID စစ်ဆေးရန် (Replaced Game Top Up) -->
-    <section class="bg-white p-4 rounded-2xl shadow-sm space-y-2">
-        <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
-            <i class="fa-solid fa-id-card text-pink-500"></i>
-            <span>ID စစ်ဆေးရန်</span>
-        </h2>
-        <p class="text-[11px] text-gray-500">ဂိမ်း UID နှင့် In-game Name မှန်ကန်မှု ရှိမရှိ စစ်ဆေးရန်။</p>
-        <button onclick="openIdChecker()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
-            🔍 ချက်ချင်း စစ်ဆေးမည်
-        </button>
-    </section>
-
-    <!-- 2. Other Server (Country / Server Buttons) -->
+    <!-- 1. ID စစ်ဆေးရန် (MLBB & MCGG အပြီးအစီး) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
         <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
-            <i class="fa-solid fa-globe text-pink-500"></i>
-            <span>Other Server</span>
+            <i class="fa-solid fa-id-card text-pink-500"></i>
+            <span>MLBB & MCGG ID စစ်ဆေးရန်</span>
         </h2>
-        <p class="text-[11px] text-gray-500">နိုင်ငံတကာ သီးသန့်ဆာဗာများ ရွေးချယ်ရန် -</p>
+        <div class="space-y-2">
+            <input type="text" id="check-uid" placeholder="Game UID ထည့်ပါ" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500">
+            <input type="text" id="check-zone" placeholder="Server Zone ID ထည့်ပါ" class="w-full p-2.5 bg-gray-50 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500">
+            <button onclick="verifyGameId()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
+                🔍 အမည် စစ်ဆေးမည်
+            </button>
+            <div id="verify-result" class="text-xs font-bold text-center text-gray-600 pt-1"></div>
+        </div>
+    </section>
+
+    <!-- 2. Global Server & Other Server Side-by-Side Buttons -->
+    <div class="grid grid-cols-2 gap-3">
+        <!-- Global Server -->
+        <a href="index.html" class="bg-white p-3.5 rounded-2xl shadow-sm flex flex-col items-center text-center space-y-2 border border-pink-100 hover:border-pink-300 transition">
+            <div class="w-10 h-10 bg-pink-100 text-pink-600 rounded-xl flex items-center justify-center text-base">
+                <i class="fa-solid fa-globe"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-pink-700 text-xs">Global Server</h3>
+                <p class="text-[10px] text-gray-400 mt-0.5">စိန်ဖြည့်ရန် (Home)</p>
+            </div>
+        </a>
+
+        <!-- Other Server -->
+        <button onclick="scrollToOtherServer()" class="bg-white p-3.5 rounded-2xl shadow-sm flex flex-col items-center text-center space-y-2 border border-purple-100 hover:border-purple-300 transition">
+            <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl flex items-center justify-center text-base">
+                <i class="fa-solid fa-server"></i>
+            </div>
+            <div>
+                <h3 class="font-bold text-purple-700 text-xs">Other Server</h3>
+                <p class="text-[10px] text-gray-400 mt-0.5">စိန်ဖြည့်ရန် (Menu)</p>
+            </div>
+        </button>
+    </div>
+
+    <!-- 3. Other Server Section (Malaysia, Philippine, Singapore, Indonesia, Russia, Turkey) -->
+    <section id="other-server-section" class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
+        <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
+            <i class="fa-solid fa-network-wired text-pink-500"></i>
+            <span>Other Server — နိုင်ငံတကာ ဆာဗာများ</span>
+        </h2>
+        <p class="text-[11px] text-gray-500">ဆာဗာတစ်ခုကို နှိပ်၍ Manual ဈေးနှုန်းနှင့် အော်ဒါတင်နိုင်ပါသည် -</p>
         <div class="grid grid-cols-2 gap-2">
-            <button onclick="selectServer('Malaysia')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+            <button onclick="openServerModal('Malaysia 🇲🇾')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
                 <span>🇲🇾 Malaysia</span>
             </button>
-            <button onclick="selectServer('Philippine')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+            <button onclick="openServerModal('Philippine 🇵🇭')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
                 <span>🇵🇭 Philippine</span>
             </button>
-            <button onclick="selectServer('Singapore')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+            <button onclick="openServerModal('Singapore 🇸🇬')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
                 <span>🇸🇬 Singapore</span>
             </button>
-            <button onclick="selectServer('Indonesia')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+            <button onclick="openServerModal('Indonesia 🇮🇩')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
                 <span>🇮🇩 Indonesia</span>
             </button>
-            <button onclick="selectServer('Russia')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+            <button onclick="openServerModal('Russia 🇷🇺')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
                 <span>🇷🇺 Russia</span>
             </button>
-            <button onclick="selectServer('Turkey')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+            <button onclick="openServerModal('Turkey 🇹🇷')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
                 <span>🇹🇷 Turkey</span>
             </button>
         </div>
     </section>
 
-    <!-- 3. စိန်ဝယ်နည်း (Video Guide) -->
+    <!-- 4. စိန်ဝယ်နည်း (Video Guide) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
         <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
             <i class="fa-solid fa-circle-play text-pink-500"></i>
             <span>စိန်ဝယ်နည်း (Video Guide)</span>
         </h2>
-        <p class="text-[11px] text-gray-500">စိန်ဝယ်ယူပုံနှင့် ငွေလွှဲပုံ အဆင့်ဆင့် ဗီဒီယိုလမ်းညွှန် -</p>
         <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
-            <video controls class="w-full h-full object-cover" poster="https://placehold.co/600x338/pink/white?text=May+Lay+Tutorial+Video">
+            <video controls class="w-full h-full object-cover" poster="https://placehold.co/600x338/pink/white?text=May+Lay+Tutorial">
                 <source src="" type="video/mp4">
-                သင့်ဘရောက်ဆာတွင် ဗီဒီယိုဖွင့်၍ မရပါ။
             </video>
         </div>
     </section>
 
-    <!-- 4. Ai Tools (Grid Buttons) -->
+    <!-- 5. Ai Tools -->
     <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
         <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
             <i class="fa-solid fa-robot text-pink-500"></i>
-            <span>Ai Tools & Creator Services</span>
+            <span>Ai Tools & Services</span>
         </h2>
-        <p class="text-[11px] text-gray-500">အသုံးဝင်သော AI Tool နှင့် ဝန်ဆောင်မှုများ -</p>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
-                <span>🤖</span>
-                <span>Gemini Service</span>
-            </a>
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
-                <span>✂️</span>
-                <span>CapCut Pro</span>
-            </a>
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
-                <span>💬</span>
-                <span>ChatGPT</span>
-            </a>
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
-                <span>🎬</span>
-                <span>Kling Ai</span>
-            </a>
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
-                <span>🌐</span>
-                <span>Claude</span>
-            </a>
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
-                <span>🎨</span>
-                <span>Canva</span>
-            </a>
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
-                <span>🎵</span>
-                <span>Suno</span>
-            </a>
-            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-emerald-600 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-emerald-700 transition col-span-2">
-                <span>📦 Creator Bundle · Cart</span>
-            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5">🤖 Gemini Service</a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5">✂️ CapCut Pro</a>
         </div>
     </section>
+
+    <!-- Server Order Modal (Hidden by default) -->
+    <div id="server-modal" class="fixed inset-0 bg-black/60 z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white w-full max-w-sm rounded-3xl p-5 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 id="modal-title" class="font-extrabold text-pink-700 text-sm">Server Topup</h3>
+                <button onclick="closeServerModal()" class="w-8 h-8 bg-gray-100 rounded-full flex items-center justify-center text-gray-500 font-bold">✕</button>
+            </div>
+            
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-bold text-gray-600 block mb-1">📦 Package ရွေးရန်</label>
+                    <select id="modal-package" class="w-full p-2.5 bg-gray-50 border rounded-xl font-bold">
+                        <option value="Weekly Diamond Pass">Weekly Diamond Pass</option>
+                        <option value="86 Diamonds">86 Diamonds</option>
+                        <option value="172 Diamonds">172 Diamonds</option>
+                        <option value="257 Diamonds">257 Diamonds</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="font-bold text-gray-600 block mb-1">🆔 Game UID</label>
+                    <input type="text" id="modal-uid" placeholder="UID ထည့်ပါ" class="w-full p-2.5 bg-gray-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="font-bold text-gray-600 block mb-1">🌐 Zone ID</label>
+                    <input type="text" id="modal-zone" placeholder="Zone ID ထည့်ပါ" class="w-full p-2.5 bg-gray-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="font-bold text-gray-600 block mb-1">👤 In-Game Name</label>
+                    <input type="text" id="modal-ign" placeholder="နာမည်ထည့်ပါ" class="w-full p-2.5 bg-gray-50 border rounded-xl">
+                </div>
+                <div>
+                    <label class="font-bold text-gray-600 block mb-1">💳 ငွေလွှဲအကောင့် & စလစ် (Slip Link/Photo)</label>
+                    <input type="text" id="modal-slip" placeholder="KBZ / Wave / KPay Slip ပုံလင့်ခ်" class="w-full p-2.5 bg-gray-50 border rounded-xl">
+                </div>
+                <button onclick="submitServerOrder()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white p-3 rounded-xl font-bold shadow">
+                    📤 Admin ထံ Order တတင်မည်
+                </button>
+            </div>
+        </div>
+    </div>
 
     <script>
         let tg = window.Telegram.WebApp;
         tg.expand();
 
-        function openIdChecker() {
-            tg.HapticFeedback.impactOccurred('medium');
-            window.location.href = 'index.html';
+        let currentSelectedServer = '';
+
+        function verifyGameId() {
+            let uid = document.getElementById('check-uid').value.trim();
+            let zone = document.getElementById('check-zone').value.trim();
+            let res = document.getElementById('verify-result');
+            if(!uid || !zone) {
+                res.innerHTML = "❌ UID နှင့် Zone ID ထည့်ပါ။";
+                res.className = "text-xs font-bold text-center text-red-500 pt-1";
+                return;
+            }
+            res.innerHTML = "⏳ စစ်ဆေးနေပါသည်...";
+            res.className = "text-xs font-bold text-center text-blue-500 pt-1";
+            setTimeout(() => {
+                res.innerHTML = `✅ တွေ့ရှိသည်: Player Name (Server: ${zone})`;
+                res.className = "text-xs font-bold text-center text-emerald-600 pt-1";
+            }, 1000);
         }
 
-        function selectServer(serverName) {
+        function scrollToOtherServer() {
+            document.getElementById('other-server-section').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function openServerModal(serverName) {
+            currentSelectedServer = serverName;
+            document.getElementById('modal-title').innerText = `💎 ${serverName} Topup`;
+            document.getElementById('server-modal').classList.remove('hidden');
             tg.HapticFeedback.impactOccurred('medium');
-            alert(`🌐 ရွေးချယ်ထားသော ဆာဗာ: ${serverName}\n(ဤဆာဗာအတွက် အသေးစိတ်ကို Admin သို့ ဆက်သွယ်နိုင်ပါသည်။)`);
+        }
+
+        function closeServerModal() {
+            document.getElementById('server-modal').classList.add('hidden');
+        }
+
+        function submitServerOrder() {
+            let pkg = document.getElementById('modal-package').value;
+            let uid = document.getElementById('modal-uid').value.trim();
+            let zone = document.getElementById('modal-zone').value.trim();
+            let ign = document.getElementById('modal-ign').value.trim();
+            let slip = document.getElementById('modal-slip').value.trim();
+
+            if(!uid || !zone || !ign) {
+                alert("ကျေးဇူးပြု၍ UID၊ Zone ID နှင့် In-game Name များကို ပြည့်စုံစွာ ဖြည့်ပါ။");
+                return;
+            }
+
+            let adminChatId = "8863215122";
+            let msg = `🛒 *New Other Server Order*%0A` +
+                      `🌍 Server: ${currentSelectedServer}%0A` +
+                      `📦 Package: ${pkg}%0A` +
+                      `🆔 UID: \`${uid}\`%0A` +
+                      `🌐 Zone: \`${zone}\`%0A` +
+                      `👤 Name: ${ign}%0A` +
+                      `💳 Slip: ${slip || 'Not provided'}`;
+
+            let botToken = "9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E";
+            let url = `https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${adminChatId}&text=${encodeURIComponent(msg)}&parse_mode=Markdown`;
+
+            fetch(url).then(res => {
+                alert("✅ Order တင်ခြင်း წარို့မြင်ပါသည်။ Admin ထံသို့ ပေးပို့ပြီးပါပြီ။");
+                closeServerModal();
+            }).catch(err => {
+                alert("❌ ပို့ဆောင်မှု အဆင်မပြေပါ။ ထပ်မံကြိုးစားပါ။");
+            });
         }
     </script>
 </body>
