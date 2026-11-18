@@ -1,1 +1,136 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>May Lay Game Store — Menu Hub</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #fbcfe8; font-family: sans-serif; }
+    </style>
+</head>
+<body class="p-4 max-w-md mx-auto pb-16 space-y-4">
+
+    <!-- Top Header -->
+    <div class="flex items-center justify-between bg-white p-3 rounded-2xl shadow-sm">
+        <a href="index.html" class="bg-pink-100 text-pink-700 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1">
+            <i class="fa-solid fa-arrow-left"></i>
+            <span>Home</span>
+        </a>
+        <h1 class="font-extrabold text-pink-700 text-sm">✨ May Lay Menu Hub</h1>
+        <div class="w-12"></div>
+    </div>
+
+    <!-- 1. Game Top Up (Links to Home) -->
+    <section class="bg-white p-4 rounded-2xl shadow-sm space-y-2">
+        <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
+            <i class="fa-solid fa-gamepad text-pink-500"></i>
+            <span>Game Top Up</span>
+        </h2>
+        <p class="text-[11px] text-gray-500">ဂိမ်းစိန်နှင့် ပက်ကေ့ဂျ်များ ဝယ်ယူရန် ပင်မစာမျက်နှာသို့ သွားမည်။</p>
+        <a href="index.html" class="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
+            🚀 Game Top Up သို့ သွားမည်
+        </a>
+    </section>
+
+    <!-- 2. Other Server (Country / Server Buttons) -->
+    <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
+        <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
+            <i class="fa-solid fa-globe text-pink-500"></i>
+            <span>Other Server</span>
+        </h2>
+        <p class="text-[11px] text-gray-500">နိုင်ငံတကာ သီးသန့်ဆာဗာများ ရွေးချယ်ရန် -</p>
+        <div class="grid grid-cols-2 gap-2">
+            <button onclick="selectServer('Malaysia')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+                <span>🇲🇾 Malaysia</span>
+            </button>
+            <button onclick="selectServer('Philippine')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+                <span>🇵🇭 Philippine</span>
+            </button>
+            <button onclick="selectServer('Singapore')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+                <span>🇸🇬 Singapore</span>
+            </button>
+            <button onclick="selectServer('Indonesia')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+                <span>🇮🇩 Indonesia</span>
+            </button>
+            <button onclick="selectServer('Russia')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+                <span>🇷🇺 Russia</span>
+            </button>
+            <button onclick="selectServer('Turkey')" class="p-2.5 bg-slate-800 text-white rounded-xl text-xs font-bold flex items-center justify-center space-x-2 shadow hover:bg-slate-700 transition">
+                <span>🇹🇷 Turkey</span>
+            </button>
+        </div>
+    </section>
+
+    <!-- 3. စိန်ဝယ်နည်း (Video Tutorial) -->
+    <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
+        <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
+            <i class="fa-solid fa-circle-play text-pink-500"></i>
+            <span>စိန်ဝယ်နည်း (Video Guide)</span>
+        </h2>
+        <p class="text-[11px] text-gray-500">စိန်ဝယ်ယူပုံနှင့် ငွေလွှဲပုံ အဆင့်ဆင့် ဗီဒီယိုလမ်းညွှန် -</p>
+        <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
+            <!-- Replace src with your tutorial video link or embed -->
+            <video controls class="w-full h-full object-cover" poster="https://placehold.co/600x338/pink/white?text=May+Lay+Tutorial+Video">
+                <source src="" type="video/mp4">
+                သင့်ဘရောက်ဆာတွင် ဗီဒီယိုဖွင့်၍ မရပါ။
+            </video>
+        </div>
+    </section>
+
+    <!-- 4. Ai tool (Grid Buttons) -->
+    <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
+        <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
+            <i class="fa-solid fa-robot text-pink-500"></i>
+            <span>Ai tool & Creator Services</span>
+        </h2>
+        <p class="text-[11px] text-gray-500">အသုံးဝင်သော AI Tool နှင့် ဝန်ဆောင်မှုများ -</p>
+        <div class="grid grid-cols-2 gap-2 text-xs font-bold">
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
+                <span>🤖</span>
+                <span>Gemini Service</span>
+            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
+                <span>✂️</span>
+                <span>CapCut Pro</span>
+            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
+                <span>💬</span>
+                <span>ChatGPT</span>
+            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
+                <span>🎬</span>
+                <span>Kling Ai</span>
+            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
+                <span>🌐</span>
+                <span>Claude</span>
+            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
+                <span>🎨</span>
+                <span>Canva</span>
+            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-sky-500 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-sky-600 transition">
+                <span>🎵</span>
+                <span>Suno</span>
+            </a>
+            <a href="https://t.me/MayLayGameStore" target="_blank" class="p-2.5 bg-emerald-600 text-white rounded-xl shadow flex items-center justify-center space-x-1.5 hover:bg-emerald-700 transition col-span-2">
+                <span>📦 Creator Bundle · Cart</span>
+            </a>
+        </div>
+    </section>
+
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+
+        function selectServer(serverName) {
+            tg.HapticFeedback.impactOccurred('medium');
+            alert(`🌐 ရွေးချယ်ထားသော ဆာဗာ: ${serverName}\n(ဤဆာဗာအတွက် အသေးစိတ်ကို Admin သို့ ဆက်သွယ်နိုင်ပါသည်။)`);
+        }
+    </script>
+</body>
+</html>
 
