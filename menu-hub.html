@@ -23,16 +23,16 @@
         <div class="w-12"></div>
     </div>
 
-    <!-- 1. Game Top Up (Links to Home) -->
+    <!-- 1. ID စစ်ဆေးရန် (Replaced Game Top Up) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm space-y-2">
         <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
-            <i class="fa-solid fa-gamepad text-pink-500"></i>
-            <span>Game Top Up</span>
+            <i class="fa-solid fa-id-card text-pink-500"></i>
+            <span>ID စစ်ဆေးရန်</span>
         </h2>
-        <p class="text-[11px] text-gray-500">ဂိမ်းစိန်နှင့် ပက်ကေ့ဂျ်များ ဝယ်ယူရန် ပင်မစာမျက်နှာသို့ သွားမည်။</p>
-        <a href="index.html" class="inline-block bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
-            🚀 Game Top Up သို့ သွားမည်
-        </a>
+        <p class="text-[11px] text-gray-500">ဂိမ်း UID နှင့် In-game Name မှန်ကန်မှု ရှိမရှိ စစ်ဆေးရန်။</p>
+        <button onclick="openIdChecker()" class="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-2 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
+            🔍 ချက်ချင်း စစ်ဆေးမည်
+        </button>
     </section>
 
     <!-- 2. Other Server (Country / Server Buttons) -->
@@ -64,7 +64,7 @@
         </div>
     </section>
 
-    <!-- 3. စိန်ဝယ်နည်း (Video Tutorial) -->
+    <!-- 3. စိန်ဝယ်နည်း (Video Guide) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
         <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
             <i class="fa-solid fa-circle-play text-pink-500"></i>
@@ -72,7 +72,6 @@
         </h2>
         <p class="text-[11px] text-gray-500">စိန်ဝယ်ယူပုံနှင့် ငွေလွှဲပုံ အဆင့်ဆင့် ဗီဒီယိုလမ်းညွှန် -</p>
         <div class="relative w-full aspect-video bg-black rounded-xl overflow-hidden shadow-inner flex items-center justify-center">
-            <!-- Replace src with your tutorial video link or embed -->
             <video controls class="w-full h-full object-cover" poster="https://placehold.co/600x338/pink/white?text=May+Lay+Tutorial+Video">
                 <source src="" type="video/mp4">
                 သင့်ဘရောက်ဆာတွင် ဗီဒီယိုဖွင့်၍ မရပါ။
@@ -80,11 +79,11 @@
         </div>
     </section>
 
-    <!-- 4. Ai tool (Grid Buttons) -->
+    <!-- 4. Ai Tools (Grid Buttons) -->
     <section class="bg-white p-4 rounded-2xl shadow-sm space-y-3">
         <h2 class="font-bold text-pink-700 text-xs flex items-center space-x-1.5">
             <i class="fa-solid fa-robot text-pink-500"></i>
-            <span>Ai tool & Creator Services</span>
+            <span>Ai Tools & Creator Services</span>
         </h2>
         <p class="text-[11px] text-gray-500">အသုံးဝင်သော AI Tool နှင့် ဝန်ဆောင်မှုများ -</p>
         <div class="grid grid-cols-2 gap-2 text-xs font-bold">
@@ -126,6 +125,11 @@
         let tg = window.Telegram.WebApp;
         tg.expand();
 
+        function openIdChecker() {
+            tg.HapticFeedback.impactOccurred('medium');
+            window.location.href = 'index.html';
+        }
+
         function selectServer(serverName) {
             tg.HapticFeedback.impactOccurred('medium');
             alert(`🌐 ရွေးချယ်ထားသော ဆာဗာ: ${serverName}\n(ဤဆာဗာအတွက် အသေးစိတ်ကို Admin သို့ ဆက်သွယ်နိုင်ပါသည်။)`);
@@ -133,4 +137,3 @@
     </script>
 </body>
 </html>
-
