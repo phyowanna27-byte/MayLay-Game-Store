@@ -2,667 +2,400 @@
 <html lang="my">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>May Lay Menu Hub</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script src="mlbb-mcgg-checker.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #ffdde8;
-            font-family: 'Pyidaungsu', sans-serif;
-            padding-bottom: 80px;
-        }
-        .hub-container {
-            max-width: 480px;
-            margin: 0 auto;
-            padding: 15px 12px;
-        }
-        .white-card {
-            background: #ffffff;
-            border-radius: 22px;
-            padding: 18px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-            border: none;
-        }
-        .section-title {
-            color: #b01e56;
-            font-weight: bold;
-            font-size: 16px;
-            margin-bottom: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .home-badge-btn {
-            background: #fce4ec;
-            color: #b01e56;
-            border: none;
-            border-radius: 50px;
-            padding: 6px 16px;
-            font-weight: bold;
-            font-size: 14px;
-            text-decoration: none;
-        }
-        .custom-input {
-            background: #f8f9fa;
-            border: 1px solid #e2e8f0;
-            border-radius: 14px;
-            padding: 12px 15px;
-            font-size: 15px;
-        }
-        .gradient-pink-btn {
-            background: linear-gradient(90deg, #ec38bc, #a21caf);
-            color: #fff;
-            border: none;
-            border-radius: 14px;
-            padding: 12px;
-            font-weight: bold;
-            font-size: 15px;
-            width: 100%;
-            box-shadow: 0 4px 12px rgba(214, 51, 132, 0.25);
-        }
-        .nav-card {
-            background: #ffffff;
-            border-radius: 20px;
-            padding: 16px 10px;
-            text-align: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-            transition: transform 0.15s;
-            height: 100%;
-        }
-        .nav-card:active {
-            transform: scale(0.97);
-        }
-        .icon-circle-pink {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: #fce4ec;
-            color: #b01e56;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 22px;
-        }
-        .icon-circle-purple {
-            width: 48px;
-            height: 48px;
-            border-radius: 14px;
-            background: #f3e8ff;
-            color: #7e22ce;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 10px;
-            font-size: 22px;
-        }
-        .server-btn {
-            background: #1a2332;
-            color: #ffffff;
-            border: none;
-            border-radius: 14px;
-            padding: 12px 10px;
-            font-weight: bold;
-            font-size: 14px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        .server-btn:active {
-            opacity: 0.85;
-        }
-        .ai-btn-blue {
-            background: #2b95d6;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            padding: 11px 8px;
-            font-weight: 600;
-            font-size: 13.5px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            box-shadow: 0 2px 6px rgba(43, 149, 214, 0.25);
-        }
-        .ai-btn-green {
-            background: #4caf50;
-            color: #ffffff;
-            border: none;
-            border-radius: 12px;
-            padding: 11px 8px;
-            font-weight: 600;
-            font-size: 13.5px;
-            width: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            box-shadow: 0 2px 6px rgba(76, 175, 80, 0.25);
-        }
-        .currency-bar {
-            background: #ffffff;
-            border-radius: 50px;
-            padding: 5px;
-            display: flex;
-            gap: 5px;
-            margin-bottom: 16px;
-        }
-        .curr-tab {
-            flex: 1;
-            border: none;
-            border-radius: 50px;
-            padding: 9px;
-            font-weight: bold;
-            font-size: 14px;
-            background: transparent;
-            color: #333;
-        }
-        .curr-tab.active {
-            background: #1d64d8;
-            color: #fff;
-        }
-        .pkg-item-card {
-            background: #fdf2f7;
-            border: 1px solid #f9d8e6;
-            border-radius: 16px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .buy-pill-btn {
-            background: linear-gradient(90deg, #d63384, #9c27b0);
-            color: #fff;
-            border: none;
-            border-radius: 50px;
-            padding: 6px 18px;
-            font-weight: bold;
-            font-size: 14px;
-        }
-        .price-text {
-            color: #1d64d8;
-            font-weight: bold;
-            font-size: 15px;
-            margin-right: 12px;
-        }
+        body { background-color: #fbcfe8; font-family: sans-serif; }
     </style>
 </head>
-<body>
+<body class="pb-24">
 
-<div class="hub-container">
+    <!-- Top-Left Home/Back Button -->
+    <a href="index.html" class="fixed top-12 left-3 z-40 w-12 h-12 bg-blue-600 text-white rounded-2xl shadow-lg border-2 border-blue-400 flex items-center justify-center active:scale-95 transition">
+        <i class="fa-solid fa-arrow-left text-lg"></i>
+    </a>
 
-    <!-- ================= 1. MAIN MENU HUB VIEW ================= -->
-    <div id="mainHubView">
-        <div class="white-card d-flex align-items-center justify-content-between py-3 px-3">
-            <a href="index.html" class="home-badge-btn">← Home</a>
-            <span class="fw-bold" style="color: #b01e56; font-size: 16px;">✨ May Lay Menu Hub</span>
-            <div style="width: 40px;"></div>
+    <!-- MENU HUB MAIN VIEW -->
+    <div id="hub-main-view" class="p-4 max-w-md mx-auto space-y-4">
+        <div class="text-center my-3">
+            <h1 class="text-pink-700 font-extrabold text-2xl tracking-wide">
+                ✨ May Lay Menu Hub ✨
+            </h1>
         </div>
 
-        <div class="white-card">
-            <div class="section-title">
-                <i class="fas fa-id-badge"></i> MLBB & MCGG ID စစ်ဆေးရန်
+        <!-- ID Checker Card -->
+        <div class="bg-white p-4 rounded-2xl shadow-md space-y-3">
+            <h3 class="font-bold text-pink-700 text-xs flex items-center space-x-1">
+                <i class="fa-solid fa-id-badge"></i>
+                <span>MLBB & MCGG ID စစ်ဆေးရန်</span>
+            </h3>
+            <div>
+                <input type="text" id="hub-uid" placeholder="Game UID ထည့်ပါ" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500">
             </div>
-            <div class="mb-2">
-                <input type="number" id="hubUid" class="form-control custom-input" placeholder="Game UID ထည့်ပါ">
+            <div>
+                <input type="text" id="hub-server" placeholder="Server Zone ID ထည့်ပါ" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500">
             </div>
-            <div class="mb-3">
-                <input type="number" id="hubZone" class="form-control custom-input" placeholder="Server Zone ID ထည့်ပါ">
-            </div>
-            <button class="gradient-pink-btn" onclick="verifyId('hubUid', 'hubZone', 'hubIdResult')">
+            <button onclick="runHubIdCheck()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-2.5 rounded-xl shadow text-xs">
                 🔍 အမည် စစ်ဆေးမည်
             </button>
-            <div id="hubIdResult" class="d-none mt-3 text-center fw-bold" style="color: #198754; font-size: 15px;"></div>
+            <p id="hub-id-result" class="text-xs text-gray-600 font-bold text-center mt-1"></p>
         </div>
 
-        <div class="row g-3 mb-3">
-            <div class="col-6">
-                <div class="nav-card" onclick="window.location.href='index.html'">
-                    <div class="icon-circle-pink"><i class="fas fa-globe"></i></div>
-                    <div class="fw-bold" style="color: #b01e56; font-size: 14px;">Global Server</div>
-                    <div class="text-muted small">စိန်ဖြည့်ရန် (Home)</div>
-                </div>
-            </div>
-            <div class="col-6">
-                <div class="nav-card" onclick="document.getElementById('otherServerSection').scrollIntoView({behavior: 'smooth'})">
-                    <div class="icon-circle-purple"><i class="fas fa-server"></i></div>
-                    <div class="fw-bold" style="color: #6b21a8; font-size: 14px;">Other Server</div>
-                    <div class="text-muted small">စိန်ဖြည့်ရန် (Menu)</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="white-card" id="otherServerSection">
-            <div class="section-title">
-                <i class="fas fa-network-wired"></i> Other Server – နိုင်ငံတကာ ဆာဗာများ
-            </div>
-            <p class="text-muted small mb-3">ဆာဗာတစ်ခုကို နှိပ်၍ Manual ဈေးနှုန်းနှင့် အော်ဒါတင်နိုင်ပါသည် -</p>
-            <div class="row g-2">
-                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇲🇾 Malaysia Server', 'mlbb-malaysia')">🇲🇾 Malaysia</button></div>
-                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇵🇭 Philippine Server', 'mlbb-philippine')">🇵🇭 Philippine</button></div>
-                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇸🇬 Singapore Server', 'mlbb-singapore')">🇸🇬 Singapore</button></div>
-                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇮🇩 Indonesia Server', 'mlbb-indonesia')">🇮🇩 Indonesia</button></div>
-                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇷🇺 Russia Server', 'mlbb-russia')">🇷🇺 Russia</button></div>
-                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇹🇷 Turkey Server', 'mlbb-turkey')">🇹🇷 Turkey</button></div>
+        <!-- Server & AI Tools Navigation Sections -->
+        <div class="bg-white p-4 rounded-2xl shadow-md space-y-3">
+            <h3 class="font-bold text-pink-700 text-xs flex items-center space-x-1">
+                <i class="fa-solid fa-network-wired"></i>
+                <span>Other Server – နိုင်ငံတကာ ဆာဗာများ</span>
+            </h3>
+            <p class="text-[10px] text-gray-500">ဆာဗာတစ်ခုကို နှိပ်၍ Manual ဈေးနှုန်းဖြင့် အော်ဒါတင်နိုင်ပါသည် -</p>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="openStoreCategory('🇲🇾 Malaysia Server', 'mlbb-malaysia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇲🇾 Malaysia</button>
+                <button onclick="openStoreCategory('🇵🇭 Philippine Server', 'mlbb-philippine')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇵🇭 Philippine</button>
+                <button onclick="openStoreCategory('🇸🇬 Singapore Server', 'mlbb-singapore')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇸🇬 Singapore</button>
+                <button onclick="openStoreCategory('🇮🇩 Indonesia Server', 'mlbb-indonesia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇮🇩 Indonesia</button>
+                <button onclick="openStoreCategory('🇷🇺 Russia Server', 'mlbb-russia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇷🇺 Russia</button>
+                <button onclick="openStoreCategory('🇹🇷 Turkey Server', 'mlbb-turkey')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇹🇷 Turkey</button>
             </div>
         </div>
 
-        <div class="white-card">
-            <div class="section-title"><i class="fas fa-play-circle"></i> စိန်ဝယ်နည်း (Video Guide)</div>
-            <div style="border-radius: 16px; overflow: hidden; background: #fce4ec;">
-                <video controls width="100%" style="display: block; max-height: 220px;">
-                    <source src="tutorial.mp4" type="video/mp4">
-                    သင့်ဖုန်းတွင် ဗီဒီယို ကြည့်ရှု၍ မရပါ။
-                </video>
-            </div>
-        </div>
-
-        <div class="white-card">
-            <div class="section-title"><i class="fas fa-robot"></i> Ai Tools & Services</div>
-            <div class="row g-2">
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🤖 Gemini Service', 'ai-gemini-service')">🇬 Gemini Service</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('✂️ CapCut Pro', 'ai-capcut')">✂️ CapCut Pro</button></div>
-                <div class="col-6"><button class="ai-btn-green" onclick="openManualStore('🇬 Gemini Acc', 'ai-gemini-acc')">🇬 Gemini Acc</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('💬 ChatGPT Plus', 'ai-chatgpt')">💬 ChatGPT</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🍎 iTune Gift Card', 'ai-itune')">🍎 I Tune Gift Card</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎬 Kling Ai', 'ai-kling')">🎬 Kling Ai</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎵 Tiktok Japan', 'ai-tiktok-jp')">🎵 Tiktok Japan</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🚀 Grok AI', 'ai-grok')">🚀 Grok</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎨 Canva Pro', 'ai-canva')">🎨 Canva</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('✴️ Claude AI', 'ai-claude')">✴️ Claude</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🛡️ VPN Service', 'ai-vpn')">🛡️ VPN</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('☁️ Adobe Creative Cloud', 'ai-adobe')">☁️ Adobe Creative Clc</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🪟 Microsoft 365', 'ai-ms365')">🪟 Microsoft 365</button></div>
-                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎶 Muse Ai', 'ai-muse')">🎶 Muse Ai</button></div>
-                <div class="col-12"><button class="ai-btn-blue" onclick="openManualStore('🎵 Suno AI', 'ai-suno')">🎵 Suno</button></div>
-                <div class="col-12"><button class="ai-btn-green" onclick="openManualStore('🛒 Creator Bundle · Cart', 'ai-bundle-cart')">🛒 Creator Bundle · Cart</button></div>
-                <div class="col-12"><button class="ai-btn-green" onclick="openManualStore('🎁 Basic Creator Bundle · 20% OFF', 'ai-basic-bundle')">🎁 Basic Creator Bundle · 20% OFF</button></div>
+        <!-- AI Tools & Services -->
+        <div class="bg-white p-4 rounded-2xl shadow-md space-y-3">
+            <h3 class="font-bold text-pink-700 text-xs flex items-center space-x-1">
+                <i class="fa-solid fa-robot"></i>
+                <span>Ai Tools & Services</span>
+            </h3>
+            <div class="grid grid-cols-2 gap-2">
+                <button onclick="openStoreCategory('🤖 Gemini Service', 'ai-gemini')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🇬 Gemini Service</button>
+                <button onclick="openStoreCategory('✂️ CapCut Pro', 'ai-capcut')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">✂️ CapCut Pro</button>
+                <button onclick="openStoreCategory('🇬 Gemini Acc', 'ai-gemini-acc')" class="bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs">🇬 Gemini Acc</button>
+                <button onclick="openStoreCategory('💬 ChatGPT Plus', 'ai-chatgpt')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">💬 ChatGPT</button>
+                <button onclick="openStoreCategory('🍎 iTune Gift Card', 'ai-itune')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🍎 I Tune Gift Card</button>
+                <button onclick="openStoreCategory('🎬 Kling Ai', 'ai-kling')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎬 Kling Ai</button>
+                <button onclick="openStoreCategory('🎵 Tiktok Japan', 'ai-tiktok')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎵 Tiktok Japan</button>
+                <button onclick="openStoreCategory('🚀 Grok AI', 'ai-grok')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🚀 Grok</button>
+                <button onclick="openStoreCategory('🎨 Canva Pro', 'ai-canva')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎨 Canva</button>
+                <button onclick="openStoreCategory('✴️ Claude AI', 'ai-claude')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">✴️ Claude</button>
+                <button onclick="openStoreCategory('🛡️ VPN Service', 'ai-vpn')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🛡️ VPN</button>
+                <button onclick="openStoreCategory('☁️ Adobe Creative Cloud', 'ai-adobe')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">☁️ Adobe Creative Clc</button>
+                <button onclick="openStoreCategory('🪟 Microsoft 365', 'ai-ms365')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🪟 Microsoft 365</button>
+                <button onclick="openStoreCategory('🎶 Muse Ai', 'ai-muse')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎶 Muse Ai</button>
+                <button onclick="openStoreCategory('🎵 Suno AI', 'ai-suno')" class="col-span-2 bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎵 Suno</button>
+                <button onclick="openStoreCategory('🛒 Creator Bundle · Cart', 'ai-bundle')" class="col-span-2 bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs">🛒 Creator Bundle · Cart</button>
+                <button onclick="openStoreCategory('🎁 Basic Creator Bundle · 20% OFF', 'ai-basic')" class="col-span-2 bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs">🎁 Basic Creator Bundle · 20% OFF</button>
             </div>
         </div>
     </div>
 
-    <!-- ================= 2. PACKAGE LIST VIEW ================= -->
-    <div id="storePackageView" class="d-none">
-        <div class="white-card d-flex align-items-center justify-content-between py-3 px-3">
-            <button class="home-badge-btn" onclick="backToHub()">← နောက်သို့</button>
-            <span class="fw-bold" id="storeCategoryTitle" style="color: #b01e56; font-size: 16px;">MLBB Store</span>
-            <div style="width: 40px;"></div>
+    <!-- STORE & CHECKOUT VIEW (Hidden Initially) -->
+    <div id="store-checkout-view" class="hidden p-4 max-w-md mx-auto space-y-4">
+        <div class="flex items-center justify-between mb-2 bg-white p-3 rounded-2xl shadow-sm">
+            <button onclick="backToHubMain()" class="bg-pink-100 text-pink-700 px-3 py-1.5 rounded-xl text-xs font-bold flex items-center space-x-1">
+                <i class="fa-solid fa-arrow-left"></i>
+                <span>နောက်သို့</span>
+            </button>
+            <h2 id="hub-store-title" class="font-extrabold text-pink-700 text-sm">Store</h2>
+            <div class="w-12"></div>
         </div>
 
-        <div class="currency-bar shadow-sm">
-            <button id="btnCurrTHB" class="curr-tab active" onclick="changeCurrency('THB')">🇹🇭 ထိုင်းဘတ် (THB)</button>
-            <button id="btnCurrMMK" class="curr-tab" onclick="changeCurrency('MMK')">🇲🇲 မြန်မာကျပ် (MMK)</button>
+        <div class="flex bg-white p-1 rounded-2xl shadow-sm justify-between font-bold text-xs">
+            <button onclick="switchHubCurrency('THB')" id="hub-curr-thb" class="flex-1 py-2 rounded-xl bg-blue-600 text-white text-center transition">🇹🇭 ထိုင်းဘတ် (THB)</button>
+            <button onclick="switchHubCurrency('MMK')" id="hub-curr-mmk" class="flex-1 py-2 rounded-xl text-gray-600 text-center transition">🇲🇲 မြန်မာကျပ် (MMK)</button>
         </div>
 
-        <div class="white-card">
-            <div class="section-title">💎 ရွေးချယ်နိုင်သော ပက်ကေ့ဂျ်များ</div>
-            <div id="dynamicPackageList"></div>
-        </div>
-    </div>
-
-    <!-- ================= 3. CHECKOUT & ORDER VIEW (Index.html Payment Match) ================= -->
-    <div id="checkoutOrderView" class="d-none">
-        <div class="white-card d-flex align-items-center justify-content-between py-3 px-3">
-            <button class="home-badge-btn" onclick="backToPackages()">← နောက်သို့</button>
-            <span class="fw-bold" style="color: #b01e56; font-size: 16px;">အော်ဒါတင်ရန်</span>
-            <div style="width: 40px;"></div>
+        <div class="bg-white p-4 rounded-2xl shadow-md space-y-3">
+            <h3 class="font-bold text-pink-700 text-xs">💎 ရွေးချယ်နိုင်သော ပက်ကေ့ဂျ်များ</h3>
+            <div id="hub-price-list" class="space-y-2"></div>
         </div>
 
-        <div class="white-card">
-            <div class="p-3 mb-3" style="background: #fdf2f7; border-radius: 16px; border: 1px solid #f9d8e6;">
-                <div class="text-muted small">ရွေးချယ်ထားသည် -</div>
-                <div class="fw-bold fs-5 text-dark" id="summaryPkgName">Weekly Pass</div>
-                <div class="fw-bold" style="color: #1d64d8;" id="summaryPkgPrice">ဈေးနှုန်း: ฿53 (THB)</div>
+        <div id="hub-order-section" class="hidden bg-white p-4 rounded-2xl shadow-md space-y-3 text-xs">
+            <h3 class="font-bold text-pink-700 text-sm mb-2">🛒 ဝယ်ယူရန် အချက်အလက်ဖြည့်ပါ</h3>
+            
+            <div class="bg-pink-50 p-2.5 rounded-xl border border-pink-100">
+                <p class="text-gray-500">ရွေးချယ်ထားသည် -</p>
+                <p id="hub-form-item-name" class="font-bold text-gray-800 text-sm">-</p>
+                <p id="hub-form-item-price" class="font-bold text-blue-600 mt-1">-</p>
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold small text-dark">ဂိမ်း / ဝန်ဆောင်မှု အမျိုးအစား</label>
-                <input type="text" id="orderGameType" class="form-control custom-input" readonly>
-            </div>
-
-            <div id="gameAccountFields">
-                <div class="mb-3">
-                    <label class="form-label fw-bold small text-dark">Game UID / ID</label>
-                    <input type="number" id="orderUid" class="form-control custom-input" placeholder="ဥပမာ - 1472575847" onblur="autoCheckOrderId()">
+            <div id="hub-game-fields">
+                <div>
+                    <label class="font-bold text-gray-700 block mb-1">Game UID / ID</label>
+                    <input type="text" id="hub-f-uid" placeholder="ဥပမာ - 1472575847" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
                 </div>
-                <div class="mb-3">
-                    <label class="form-label fw-bold small text-dark">Server / Zone</label>
-                    <input type="number" id="orderZone" class="form-control custom-input" placeholder="ဥပမာ - 16142" onblur="autoCheckOrderId()">
+                <div class="mt-2">
+                    <label class="font-bold text-gray-700 block mb-1">Server / Zone</label>
+                    <input type="text" id="hub-f-server" placeholder="ဥပမာ - 16142" class="w-full p-2.5 border border-gray-200 rounded-xl focus:outline-none focus:border-pink-500">
                 </div>
-                <div class="mb-3">
-                    <div class="d-flex justify-content-between align-items-center mb-1">
-                        <label class="form-label fw-bold small text-dark mb-0">In-game Name</label>
-                        <button type="button" class="btn btn-sm py-0 px-2" style="background: #fce4ec; color: #b01e56; border-radius: 50px; font-size: 12px; font-weight: bold;" onclick="autoCheckOrderId()">ထပ်စစ်မည်</button>
-                    </div>
-                    <input type="text" id="orderPlayerName" class="form-control custom-input" placeholder="Game UID ထည့်ပြီး အလိုအလျောက် စစ်ဆေးပါမည်...">
+                <div class="mt-2">
+                    <label class="font-bold text-gray-700 block mb-1">In-game Name</label>
+                    <input type="text" id="hub-f-name" placeholder="ဂိမ်းနာမည် (သို့မဟုတ် အလိုအလျောက်ပေါ်မည်)" class="w-full p-2.5 bg-white border border-gray-200 rounded-xl font-bold text-gray-800 focus:outline-none">
                 </div>
             </div>
 
-            <!-- Payment Information Box (Index.html style matching exact THB & MMK QR/Acc) -->
-            <div class="p-3 border rounded-4 mb-3">
-                <div class="fw-bold mb-2" style="color: #333; font-size: 14.5px;" id="paymentTitle">
-                    🇹🇭 ထိုင်းဘတ်ငွေလွှဲရန် အကောင့်နှင့် QR:
-                </div>
+            <div id="hub-payment-box" class="space-y-3"></div>
 
-                <!-- THB Payment Box (Bangkok Bank with QR & Save button) -->
-                <div id="thbPaymentBox">
-                    <div class="p-3 border rounded-3 mb-3 d-flex justify-content-between align-items-center bg-light">
-                        <div>
-                            <div class="fw-bold text-primary">Bangkok Bank</div>
-                            <div class="fw-bold fs-6 text-dark">0408228211 📋</div>
-                            <div class="text-muted small">Mr. Phyo Wanna Linn</div>
-                        </div>
-                        <button class="btn btn-sm btn-outline-primary rounded-3 px-3 fw-bold" onclick="copyText('0408228211')">Copy</button>
-                    </div>
-                    <div class="text-center mb-2">
-                        <!-- ထိုင်းဘဏ် QR ပုံ (index.html တွင်သုံးသော နည်းအတိုင်း) -->
-                        <img src="qr-thb.jpg" alt="Thai QR Payment" class="img-fluid rounded-3 border mb-2" style="max-width: 210px;" id="thbQrImage">
-                        <div>
-                            <a href="qr-thb.jpg" download="Bangkok_Bank_QR.jpg" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
-                                ⬇️ 📥 QR ပုံ Save ရန် ဖွင့်မည်
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- MMK Payment Box (KBZPay / WavePay with correct number, name & QR) -->
-                <div id="mmkPaymentBox" class="d-none">
-                    <div class="p-3 border rounded-3 mb-3 d-flex justify-content-between align-items-center bg-light">
-                        <div>
-                            <div class="fw-bold text-primary">KBZPay / WavePay</div>
-                            <div class="fw-bold fs-6 text-dark" id="mmkAccNumber">09xxxxxxxx</div>
-                            <div class="text-muted small">Phyo Wanna Linn</div>
-                        </div>
-                        <button class="btn btn-sm btn-outline-primary rounded-3 px-3 fw-bold" onclick="copyText(document.getElementById('mmkAccNumber').innerText)">Copy</button>
-                    </div>
-                    <div class="text-center mb-2">
-                        <!-- မြန်မာဘဏ် QR ပုံ (index.html တွင်သုံးသော နည်းအတိုင်း) -->
-                        <img src="qr-mmk.jpg" alt="Myanmar QR Payment" class="img-fluid rounded-3 border mb-2" style="max-width: 210px;" id="mmkQrImage">
-                        <div>
-                            <a href="qr-mmk.jpg" download="MM_Bank_QR.jpg" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
-                                ⬇️ 📥 QR ပုံ Save ရန် ဖွင့်မည်
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="small fw-bold mt-2" style="color: #b45309;">
-                    📌 Note / Memo တွင် (Payment) ဟုသာ ရေးပါ။ စိန်ဝယ်ခြင်း၊ ဂိမ်းနာမည်များ လုံးဝမရေးရပါ။
-                </div>
+            <div>
+                <label class="font-bold text-gray-700 block mb-1">ငွေလွှဲစလစ် (Slip) တင်ရန်</label>
+                <input type="file" id="hub-f-slip" accept="image/*" class="w-full p-2 border border-gray-200 rounded-xl text-xs bg-gray-50">
             </div>
 
-            <div class="mb-3">
-                <label class="form-label fw-bold small text-dark">ငွေလွှဲစလစ် (Slip) တင်ရန်</label>
-                <input type="file" id="orderSlipFile" class="form-control custom-input" accept="image/*">
-            </div>
-
-            <button id="finalSubmitBtn" class="gradient-pink-btn py-3" onclick="submitOrderToTelegram()">
+            <button onclick="submitHubOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md">
                 🚀 Order တင်မည် / ဝယ်ယူမည်
             </button>
         </div>
     </div>
 
-</div>
+    <!-- Status Modal -->
+    <div id="hub-status-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center z-[9998] p-4">
+        <div class="bg-white w-full max-w-xs rounded-3xl p-5 shadow-2xl text-left space-y-4 border-2 border-pink-400">
+            <h3 id="hub-status-title" class="font-extrabold text-pink-700 text-base">May Lay Game Store</h3>
+            <p id="hub-status-body" class="text-xs text-gray-700 leading-relaxed font-semibold"></p>
+            <button onclick="closeHubStatusModal()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white py-2.5 rounded-xl text-xs font-bold">OK</button>
+        </div>
+    </div>
 
-<script>
-    const ADMIN_CHAT_ID = "8863215122";
-    const TELEGRAM_BOT_TOKEN = ""; 
+    <script>
+        let tg = window.Telegram.WebApp;
+        tg.expand();
 
-    let currentCurrency = "THB";
-    let activeCategoryKey = "";
-    let activeCategoryLabel = "";
-    let chosenPkg = null;
+        let activeCategoryKey = '';
+        let activeCategoryName = '';
+        let hubCurrency = 'THB';
+        let selectedHubPkg = {};
 
-    const PACKAGE_DATABASE = {
-        "mlbb-malaysia": [
-            { name: "Weekly Pass", thb: 53, mmk: 7500, sub: "မစောင့်ရပါ" },
-            { name: "Twilight Pass", thb: 280, mmk: 39000, sub: "မစောင့်ရပါ" },
-            { name: "86 Diamonds", thb: 45, mmk: 6300, sub: "မစောင့်ရပါ" },
-            { name: "172 Diamonds", thb: 90, mmk: 12600, sub: "မစောင့်ရပါ" },
-            { name: "257 Diamonds", thb: 135, mmk: 18900, sub: "မစောင့်ရပါ" },
-            { name: "706 Diamonds", thb: 360, mmk: 50000, sub: "မစောင့်ရပါ" }
-        ],
-        "default-server": [
-            { name: "Weekly Pass", thb: 53, mmk: 7500, sub: "မစောင့်ရပါ" },
-            { name: "86 Diamonds", thb: 45, mmk: 6300, sub: "မစောင့်ရပါ" },
-            { name: "172 Diamonds", thb: 90, mmk: 12600, sub: "မစောင့်ရပါ" },
-            { name: "257 Diamonds", thb: 135, mmk: 18900, sub: "မစောင့်ရပါ" },
-            { name: "706 Diamonds", thb: 360, mmk: 50000, sub: "မစောင့်ရပါ" }
-        ],
-        "default-ai": [
-            { name: "1 Month Plan", thb: 150, mmk: 21000, sub: "အာမခံအပြည့်ပါသည်" },
-            { name: "3 Months Plan", thb: 400, mmk: 56000, sub: "အာမခံအပြည့်ပါသည်" },
-            { name: "1 Year Plan", thb: 1200, mmk: 168000, sub: "အာမခံအပြည့်ပါသည်" }
-        ]
-    };
+        const BOT_TOKEN = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
+        const ADMIN_CHAT_ID = '8863215122';
 
-    async function verifyId(uidInputId, zoneInputId, resultElemId, isInputTarget = false) {
-        const uid = document.getElementById(uidInputId).value.trim();
-        const zone = document.getElementById(zoneInputId).value.trim();
-        const target = document.getElementById(resultElemId);
-
-        if (!uid || !zone) {
-            if (!isInputTarget) alert("Game UID နှင့် Server Zone ID ပြည့်စုံစွာ ထည့်ပါ။");
-            return;
+        function showHubModal(title, text) {
+            document.getElementById('hub-status-title').innerText = title;
+            document.getElementById('hub-status-body').innerText = text;
+            document.getElementById('hub-status-modal').classList.remove('hidden');
         }
 
-        if (isInputTarget) {
-            target.value = "စစ်ဆေးနေသည်...";
-        } else {
-            target.classList.remove("d-none");
-            target.style.color = "#6c757d";
-            target.innerHTML = "⏳ အမည် စစ်ဆေးနေသည်...";
+        function closeHubStatusModal() {
+            document.getElementById('hub-status-modal').classList.add('hidden');
         }
 
-        try {
-            const res = await fetch(`https://api.isan.eu.org/nickname/ml?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(zone)}`);
-            const data = await res.json();
+        async function runHubIdCheck() {
+            let uid = document.getElementById('hub-uid').value.trim();
+            let server = document.getElementById('hub-server').value.trim();
+            let resultEl = document.getElementById('hub-id-result');
 
-            if (data && data.success && data.name) {
-                const decodedName = decodeURIComponent(data.name);
-                if (isInputTarget) {
-                    target.value = decodedName;
-                } else {
-                    target.style.color = "#198754";
-                    target.innerHTML = `✅ တွေ့ရှိသည်: ${decodedName} (Server: ${zone})`;
-                }
-            } else {
-                if (isInputTarget) {
-                    target.value = "အမည်မတွေ့ပါ";
-                } else {
-                    target.style.color = "#dc3545";
-                    target.innerHTML = `❌ အကောင့်မတွေ့ရှိပါ။`;
-                }
+            if (!uid || !server) {
+                showHubModal("May Lay Game Store", "UID နှင့် Server ID နှစ်ခုစလုံး ဖြည့်ပါ။");
+                return;
             }
-        } catch (err) {
-            if (isInputTarget) {
-                target.value = "";
-                target.placeholder = "In-game Name ရိုက်ထည့်ပါ";
-            } else {
-                target.style.color = "#dc3545";
-                target.innerHTML = `⚠️ Connection အခက်အခဲရှိပါသည်။`;
+
+            resultEl.innerText = "⏳ စစ်ဆေးနေပါပြီ...";
+            try {
+                let res = await checkMLBBPlayer(uid, server);
+                if (res && res.success) {
+                    resultEl.innerText = `✅ တွေ့ရှိသည်: ${res.name} (Server: ${server})`;
+                } else {
+                    resultEl.innerText = `❌ အကောင့်မတွေ့ပါ။ ID ပြန်စစ်ပါ။`;
+                }
+            } catch (e) {
+                resultEl.innerText = `⚠️ စစ်ဆေး၍ မရပါ။`;
             }
         }
-    }
 
-    function autoCheckOrderId() {
-        const uid = document.getElementById("orderUid").value.trim();
-        const zone = document.getElementById("orderZone").value.trim();
-        if (uid && zone) {
-            verifyId("orderUid", "orderZone", "orderPlayerName", true);
-        }
-    }
+        function openStoreCategory(name, key) {
+            activeCategoryName = name;
+            activeCategoryKey = key;
 
-    function openManualStore(title, categoryKey) {
-        activeCategoryLabel = title;
-        activeCategoryKey = categoryKey;
+            document.getElementById('hub-store-title').innerText = name;
+            document.getElementById('hub-main-view').classList.add('hidden');
+            document.getElementById('store-checkout-view').classList.remove('hidden');
 
-        document.getElementById("storeCategoryTitle").innerText = title;
-        document.getElementById("mainHubView").classList.add("d-none");
-        document.getElementById("checkoutOrderView").classList.add("d-none");
-        document.getElementById("storePackageView").classList.remove("d-none");
-
-        renderPackages();
-        window.scrollTo(0, 0);
-    }
-
-    function backToHub() {
-        document.getElementById("storePackageView").classList.add("d-none");
-        document.getElementById("checkoutOrderView").classList.add("d-none");
-        document.getElementById("mainHubView").classList.remove("d-none");
-    }
-
-    function backToPackages() {
-        document.getElementById("checkoutOrderView").classList.add("d-none");
-        document.getElementById("storePackageView").classList.remove("d-none");
-    }
-
-    function changeCurrency(curr) {
-        currentCurrency = curr;
-        document.getElementById("btnCurrTHB").classList.toggle("active", curr === "THB");
-        document.getElementById("btnCurrMMK").classList.toggle("active", curr === "MMK");
-        renderPackages();
-    }
-
-    function getPackagesForCategory(key) {
-        if (PACKAGE_DATABASE[key]) return PACKAGE_DATABASE[key];
-        if (key.startsWith("ai-")) return PACKAGE_DATABASE["default-ai"];
-        return PACKAGE_DATABASE["default-server"];
-    }
-
-    function renderPackages() {
-        const container = document.getElementById("dynamicPackageList");
-        const list = getPackagesForCategory(activeCategoryKey);
-        container.innerHTML = "";
-
-        list.forEach((pkg, idx) => {
-            const displayPrice = currentCurrency === "THB" ? `฿${pkg.thb}` : `${pkg.mmk.toLocaleString()} Ks`;
-            const card = document.createElement("div");
-            card.className = "pkg-item-card";
-            card.innerHTML = `
-                <div>
-                    <div class="fw-bold text-dark" style="font-size: 15px;">${pkg.name}</div>
-                    <div class="text-muted" style="font-size: 12.5px;">${pkg.sub || 'မစောင့်ရပါ'}</div>
-                </div>
-                <div class="d-flex align-items-center">
-                    <span class="price-text">${displayPrice}</span>
-                    <button class="buy-pill-btn" onclick="openCheckout(${idx})">ဝယ်ယူမည်</button>
-                </div>
-            `;
-            container.appendChild(card);
-        });
-    }
-
-    function openCheckout(pkgIndex) {
-        const list = getPackagesForCategory(activeCategoryKey);
-        chosenPkg = list[pkgIndex];
-
-        const priceStr = currentCurrency === "THB" ? `฿${chosenPkg.thb} (THB)` : `${chosenPkg.mmk.toLocaleString()} Ks (MMK)`;
-        document.getElementById("summaryPkgName").innerText = chosenPkg.name;
-        document.getElementById("summaryPkgPrice").innerText = `ဈေးနှုန်း: ${priceStr}`;
-        document.getElementById("orderGameType").value = activeCategoryLabel;
-
-        const hubUidVal = document.getElementById("hubUid").value.trim();
-        const hubZoneVal = document.getElementById("hubZone").value.trim();
-        if (hubUidVal && !document.getElementById("orderUid").value) {
-            document.getElementById("orderUid").value = hubUidVal;
-        }
-        if (hubZoneVal && !document.getElementById("orderZone").value) {
-            document.getElementById("orderZone").value = hubZoneVal;
+            renderHubPackages();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        const isAiService = activeCategoryKey.startsWith("ai-");
-        document.getElementById("gameAccountFields").style.display = isAiService ? "none" : "block";
-
-        if (currentCurrency === "THB") {
-            document.getElementById("paymentTitle").innerText = "🇹🇭 ထိုင်းဘတ်ငွေလွှဲရန် အကောင့်နှင့် QR:";
-            document.getElementById("thbPaymentBox").classList.remove("d-none");
-            document.getElementById("mmkPaymentBox").classList.add("d-none");
-        } else {
-            document.getElementById("paymentTitle").innerText = "🇲🇲 မြန်မာကျပ်ငွေလွှဲရန် အကောင့်နှင့် QR:";
-            document.getElementById("thbPaymentBox").classList.add("d-none");
-            document.getElementById("mmkPaymentBox").classList.remove("d-none");
+        function backToHubMain() {
+            document.getElementById('store-checkout-view').classList.add('hidden');
+            document.getElementById('hub-main-view').classList.remove('hidden');
+            document.getElementById('hub-order-section').classList.add('hidden');
         }
 
-        document.getElementById("storePackageView").classList.add("d-none");
-        document.getElementById("checkoutOrderView").classList.remove("d-none");
-        window.scrollTo(0, 0);
-
-        if (!isAiService) autoCheckOrderId();
-    }
-
-    function copyText(txt) {
-        navigator.clipboard.writeText(txt);
-        alert(`Copied: ${txt}`);
-    }
-
-    async function submitOrderToTelegram() {
-        const isAiService = activeCategoryKey.startsWith("ai-");
-        const uid = document.getElementById("orderUid").value.trim();
-        const zone = document.getElementById("orderZone").value.trim();
-        const playerName = document.getElementById("orderPlayerName").value.trim();
-        const slipFile = document.getElementById("orderSlipFile").files[0];
-
-        if (!isAiService && (!uid || !zone)) {
-            alert("ကျေးဇူးပြု၍ Game UID နှင့် Server / Zone ID ထည့်သွင်းပါ။");
-            return;
-        }
-        if (!slipFile) {
-            alert("ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) ပုံ ရွေးချယ်တင်ပေးပါ။");
-            return;
+        function switchHubCurrency(curr) {
+            hubCurrency = curr;
+            if(curr === 'THB') {
+                document.getElementById('hub-curr-thb').className = "flex-1 py-2 rounded-xl bg-blue-600 text-white text-center transition";
+                document.getElementById('hub-curr-mmk').className = "flex-1 py-2 rounded-xl text-gray-600 text-center transition";
+            } else {
+                document.getElementById('hub-curr-mmk').className = "flex-1 py-2 rounded-xl bg-emerald-600 text-white text-center transition";
+                document.getElementById('hub-curr-thb').className = "flex-1 py-2 rounded-xl text-gray-600 text-center transition";
+            }
+            renderHubPackages();
+            updateHubPaymentBox(curr);
         }
 
-        const priceDisplay = currentCurrency === "THB" ? `฿${chosenPkg.thb} (THB)` : `${chosenPkg.mmk.toLocaleString()} Ks (MMK)`;
-        const captionText = `🛒 *New Manual Order!*\n\n` +
-            `📂 *အမျိုးအစား:* ${activeCategoryLabel}\n` +
-            `💎 *ပက်ကေ့ဂျ်:* ${chosenPkg.name}\n` +
-            `💰 *ဈေးနှုန်း:* ${priceDisplay}\n` +
-            (!isAiService ? `🆔 *Game UID:* \`${uid}\`\n🌐 *Zone ID:* \`${zone}\`\n👤 *In-Game Name:* ${playerName || 'N/A'}\n` : ``) +
-            `⏰ *အချိန်:* ${new Date().toLocaleString()}`;
+        function renderHubPackages() {
+            let container = document.getElementById('hub-price-list');
+            let samplePackages = [
+                { name: "Weekly Diamond Pass", thb: 53, mmk: 7500 },
+                { name: "86 Diamonds", thb: 45, mmk: 6300 },
+                { name: "172 Diamonds", thb: 90, mmk: 12600 },
+                { name: "257 Diamonds", thb: 135, mmk: 18900 },
+                { name: "706 Diamonds", thb: 360, mmk: 50000 }
+            ];
 
-        const submitBtn = document.getElementById("finalSubmitBtn");
-        submitBtn.disabled = true;
-        submitBtn.innerText = "⏳ Order ပေးပို့နေပါသည်...";
+            if (activeCategoryKey.startsWith('ai-')) {
+                samplePackages = [
+                    { name: "1 Month Plan", thb: 150, mmk: 21000 },
+                    { name: "3 Months Plan", thb: 400, mmk: 56000 },
+                    { name: "1 Year Plan", thb: 1200, mmk: 168000 }
+                ];
+            }
 
-        try {
-            if (TELEGRAM_BOT_TOKEN) {
-                const formData = new FormData();
-                formData.append("chat_id", ADMIN_CHAT_ID);
-                formData.append("photo", slipFile);
-                formData.append("caption", captionText);
-                formData.append("parse_mode", "Markdown");
+            let html = "";
+            samplePackages.forEach(pkg => {
+                let price = hubCurrency === 'THB' ? pkg.thb : pkg.mmk;
+                let symbol = hubCurrency === 'THB' ? '฿' : 'Ks ';
+                let safeName = pkg.name.replace(/'/g, "\\'");
+                html += `
+                    <div class="flex justify-between items-center p-2.5 bg-pink-50 rounded-xl border border-pink-100">
+                        <div>
+                            <p class="font-bold text-xs text-gray-800">${pkg.name}</p>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <p class="text-xs font-bold ${hubCurrency === 'THB' ? 'text-blue-600' : 'text-emerald-600'}">${symbol}${price.toLocaleString()}</p>
+                            <button onclick="selectHubPackage('${safeName}', ${price}, '${hubCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
+                                ဝယ်ယူမည်
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
 
-                const res = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-                    method: "POST",
-                    body: formData
-                });
-                const result = await res.json();
+        function selectHubPackage(name, price, curr) {
+            selectedHubPkg = { name, price, curr };
+            document.getElementById('hub-form-item-name').innerText = name;
+            document.getElementById('hub-form-item-price').innerText = `ဈေးနှုန်း: ${curr === 'THB' ? '฿' : 'Ks '}${price.toLocaleString()} (${curr})`;
+
+            let isAi = activeCategoryKey.startsWith('ai-');
+            document.getElementById('hub-game-fields').style.display = isAi ? 'none' : 'block';
+
+            updateHubPaymentBox(curr);
+            document.getElementById('hub-order-section').classList.remove('hidden');
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+
+        function openQRImage(filename) {
+            if (tg.openLink) {
+                let fullUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1) + filename;
+                tg.openLink(fullUrl);
+            } else {
+                window.open(filename, '_blank');
+            }
+        }
+
+        function updateHubPaymentBox(curr) {
+            let box = document.getElementById('hub-payment-box');
+            if (curr === 'THB') {
+                box.innerHTML = `
+                    <div class="bg-gray-50 p-3 rounded-xl border space-y-2 text-center">
+                        <div class="flex justify-between items-center text-left">
+                            <div>
+                                <span class="font-semibold text-blue-600">Bangkok Bank</span>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('0408228211')" style="cursor:pointer;">0408228211 📋</p>
+                                <p class="text-[10px] text-gray-500">Mr. Phyo Wanna Linn</p>
+                            </div>
+                            <button onclick="copyText('0408228211')" class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
+                        </div>
+                        <div class="my-2 border-t pt-2 space-y-2">
+                            <img src="7659.jpeg" alt="Thai QR" class="w-36 h-36 mx-auto rounded-lg shadow border object-contain">
+                            <button onclick="openQRImage('7659.jpeg')" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow">📥 QR ပုံ Save ရန် ဖွင့်မည်</button>
+                        </div>
+                        <p class="text-[10px] text-red-500 font-semibold text-left">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။</p>
+                    </div>
+                `;
+            } else {
+                box.innerHTML = `
+                    <div class="bg-gray-50 p-3 rounded-xl border space-y-2">
+                        <div class="flex justify-between items-center border-b pb-1">
+                            <div>
+                                <span class="font-semibold text-emerald-600">KBZPay / WavePay</span>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('09779091686')" style="cursor:pointer;">09779091686 📋</p>
+                                <p class="text-[10px] text-gray-500">Ei Ei Phyu</p>
+                            </div>
+                            <button onclick="copyText('09779091686')" class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 my-2 border-t pt-2 text-center">
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold text-gray-600">KBZPay QR</p>
+                                <img src="7655.jpg" alt="KBZPay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
+                                <button onclick="openQRImage('7655.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold">Save KBZ</button>
+                            </div>
+                            <div class="space-y-1">
+                                <p class="text-[10px] font-bold text-gray-600">WavePay QR</p>
+                                <img src="7656.jpg" alt="WavePay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
+                                <button onclick="openQRImage('7656.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold">Save Wave</button>
+                            </div>
+                        </div>
+                        <p class="text-[10px] text-red-500 font-semibold">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။</p>
+                    </div>
+                `;
+            }
+        }
+
+        function copyText(txt) {
+            navigator.clipboard.writeText(txt);
+            showHubModal("May Lay Game Store", "Copied: " + txt);
+        }
+
+        async function submitHubOrder() {
+            let isAi = activeCategoryKey.startsWith('ai-');
+            let uid = isAi ? 'N/A' : document.getElementById('hub-f-uid').value.trim();
+            let server = isAi ? 'N/A' : document.getElementById('hub-f-server').value.trim();
+            let name = isAi ? 'N/A' : document.getElementById('hub-f-name').value.trim();
+            let slipFile = document.getElementById('hub-f-slip').files[0];
+
+            if (!isAi && (!uid || !server)) {
+                showHubModal("May Lay Game Store", "Game UID နှင့် Server ID ဖြည့်ပါ။");
+                return;
+            }
+            if (!slipFile) {
+                showHubModal("May Lay Game Store", "ကျေးဇူးပြု၍ ငွေလွှဲစလစ် (Slip) တင်ပေးပါ။");
+                return;
+            }
+
+            let msg = `==== New Manual Order (From Hub) ====\n\n` +
+                      `Category: ${activeCategoryName}\n` +
+                      `Package: ${selectedHubPkg.name}\n` +
+                      `UID: ${uid} (${server})\n` +
+                      `Name: ${name || '-'}\n` +
+                      `Price: ${selectedHubPkg.price} ${selectedHubPkg.curr}\n\n` +
+                      `📌 [Admin မှ စစ်ဆေးရန် စောင့်ဆိုင်းနေသည်]`;
+
+            try {
+                let form = new FormData();
+                form.append('chat_id', ADMIN_CHAT_ID);
+                form.append('text', msg);
+                let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', body: form });
+                let result = await res.json();
+
                 if (result.ok) {
-                    alert("✅ Order တင်ခြင်း အောင်မြင်ပါသည်။ Admin မှ မကြာမီ စစ်ဆေးဖြည့်သွင်းပေးပါမည်။");
-                    backToHub();
-                } else {
-                    alert("Telegram ပေးပို့မှု အဆင်မပြေပါ: " + result.description);
-                }
-            } else {
-                alert("✅ Order အချက်အလက် အသင့်ဖြစ်ပါပြီ!\n(Bot Token ထည့်သွင်းပြီးပါက Admin Chat ID: " + ADMIN_CHAT_ID + " သို့ စလစ်ပုံနှင့်တကွ တိုက်ရိုက်ရောက်ရှိပါမည်)");
-                backToHub();
-            }
-        } catch (e) {
-            alert("အော်ဒါတင်ရာတွင် အမှားအယွင်းရှိနေပါသည်။");
-        } finally {
-            submitBtn.disabled = false;
-            submitBtn.innerText = "🚀 Order တင်မည် / ဝယ်ယူမည်";
-        }
-    }
-</script>
+                    let photoForm = new FormData();
+                    photoForm.append('chat_id', ADMIN_CHAT_ID);
+                    photoForm.append('photo', slipFile);
+                    photoForm.append('caption', `📎 Slip for UID: ${uid}`);
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: photoForm });
 
+                    showHubModal("✅ အောင်မြင်သည်", "Order တင်ပြီးပါပြီ။ Admin မှ စစ်ဆေးဆောင်ရွက်ပေးပါမည်။");
+                    backToHubMain();
+                } else {
+                    showHubModal("Error", "Telegram သို့ ပို့၍ မရပါ။");
+                }
+            } catch (err) {
+                showHubModal("Error", "ချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။");
+            }
+        }
+    </script>
 </body>
 </html>
