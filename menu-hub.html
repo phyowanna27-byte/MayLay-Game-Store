@@ -116,7 +116,6 @@
         .server-btn:active {
             opacity: 0.85;
         }
-        /* AI Tools Buttons matching 9056.jpg */
         .ai-btn-blue {
             background: #2b95d6;
             color: #ffffff;
@@ -147,7 +146,6 @@
             gap: 6px;
             box-shadow: 0 2px 6px rgba(76, 175, 80, 0.25);
         }
-        /* Store & Package View Styles */
         .currency-bar {
             background: #ffffff;
             border-radius: 50px;
@@ -203,14 +201,12 @@
 
     <!-- ================= 1. MAIN MENU HUB VIEW ================= -->
     <div id="mainHubView">
-        <!-- Top Bar -->
         <div class="white-card d-flex align-items-center justify-content-between py-3 px-3">
             <a href="index.html" class="home-badge-btn">← Home</a>
             <span class="fw-bold" style="color: #b01e56; font-size: 16px;">✨ May Lay Menu Hub</span>
             <div style="width: 40px;"></div>
         </div>
 
-        <!-- Section 1: MLBB & MCGG ID စစ်ဆေးရန် -->
         <div class="white-card">
             <div class="section-title">
                 <i class="fas fa-id-badge"></i> MLBB & MCGG ID စစ်ဆေးရန်
@@ -227,7 +223,6 @@
             <div id="hubIdResult" class="d-none mt-3 text-center fw-bold" style="color: #198754; font-size: 15px;"></div>
         </div>
 
-        <!-- Section 2: Global Server / Other Server Quick Cards -->
         <div class="row g-3 mb-3">
             <div class="col-6">
                 <div class="nav-card" onclick="window.location.href='index.html'">
@@ -245,109 +240,56 @@
             </div>
         </div>
 
-        <!-- Section 3: Other Server – နိုင်ငံတကာ ဆာဗာများ -->
         <div class="white-card" id="otherServerSection">
             <div class="section-title">
                 <i class="fas fa-network-wired"></i> Other Server – နိုင်ငံတကာ ဆာဗာများ
             </div>
             <p class="text-muted small mb-3">ဆာဗာတစ်ခုကို နှိပ်၍ Manual ဈေးနှုန်းနှင့် အော်ဒါတင်နိုင်ပါသည် -</p>
             <div class="row g-2">
-                <div class="col-6">
-                    <button class="server-btn" onclick="openManualStore('🇲🇾 Malaysia Server', 'mlbb-malaysia')">🇲🇾 Malaysia</button>
-                </div>
-                <div class="col-6">
-                    <button class="server-btn" onclick="openManualStore('🇵🇭 Philippine Server', 'mlbb-philippine')">🇵🇭 Philippine</button>
-                </div>
-                <div class="col-6">
-                    <button class="server-btn" onclick="openManualStore('🇸🇬 Singapore Server', 'mlbb-singapore')">🇸🇬 Singapore</button>
-                </div>
-                <div class="col-6">
-                    <button class="server-btn" onclick="openManualStore('🇮🇩 Indonesia Server', 'mlbb-indonesia')">🇮🇩 Indonesia</button>
-                </div>
-                <div class="col-6">
-                    <button class="server-btn" onclick="openManualStore('🇷🇺 Russia Server', 'mlbb-russia')">🇷🇺 Russia</button>
-                </div>
-                <div class="col-6">
-                    <button class="server-btn" onclick="openManualStore('🇹🇷 Turkey Server', 'mlbb-turkey')">🇹🇷 Turkey</button>
-                </div>
+                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇲🇾 Malaysia Server', 'mlbb-malaysia')">🇲🇾 Malaysia</button></div>
+                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇵🇭 Philippine Server', 'mlbb-philippine')">🇵🇭 Philippine</button></div>
+                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇸🇬 Singapore Server', 'mlbb-singapore')">🇸🇬 Singapore</button></div>
+                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇮🇩 Indonesia Server', 'mlbb-indonesia')">🇮🇩 Indonesia</button></div>
+                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇷🇺 Russia Server', 'mlbb-russia')">🇷🇺 Russia</button></div>
+                <div class="col-6"><button class="server-btn" onclick="openManualStore('🇹🇷 Turkey Server', 'mlbb-turkey')">🇹🇷 Turkey</button></div>
             </div>
         </div>
 
-        <!-- Section 4: စိန်ဝယ်နည်း (Video Guide) -->
         <div class="white-card">
-            <div class="section-title">
-                <i class="fas fa-play-circle"></i> စိန်ဝယ်နည်း (Video Guide)
-            </div>
+            <div class="section-title"><i class="fas fa-play-circle"></i> စိန်ဝယ်နည်း (Video Guide)</div>
             <div style="border-radius: 16px; overflow: hidden; background: #fce4ec;">
-                <video controls width="100%" poster="" style="display: block; max-height: 220px;">
+                <video controls width="100%" style="display: block; max-height: 220px;">
                     <source src="tutorial.mp4" type="video/mp4">
                     သင့်ဖုန်းတွင် ဗီဒီယို ကြည့်ရှု၍ မရပါ။
                 </video>
             </div>
         </div>
 
-        <!-- Section 5: Ai Tools & Services (All 17 Buttons from 9056.jpg) -->
         <div class="white-card">
-            <div class="section-title">
-                <i class="fas fa-robot"></i> Ai Tools & Services
-            </div>
+            <div class="section-title"><i class="fas fa-robot"></i> Ai Tools & Services</div>
             <div class="row g-2">
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🤖 Gemini Service', 'ai-gemini-service')">🇬 Gemini Service</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('✂️ CapCut Pro', 'ai-capcut')">✂️ CapCut Pro</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-green" onclick="openManualStore('🇬 Gemini Acc', 'ai-gemini-acc')">🇬 Gemini Acc</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('💬 ChatGPT Plus', 'ai-chatgpt')">💬 ChatGPT</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🍎 iTune Gift Card', 'ai-itune')">🍎 I Tune Gift Card</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🎬 Kling Ai', 'ai-kling')">🎬 Kling Ai</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🎵 Tiktok Japan', 'ai-tiktok-jp')">🎵 Tiktok Japan</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🚀 Grok AI', 'ai-grok')">🚀 Grok</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🎨 Canva Pro', 'ai-canva')">🎨 Canva</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('✴️ Claude AI', 'ai-claude')">✴️ Claude</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🛡️ VPN Service', 'ai-vpn')">🛡️ VPN</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('☁️ Adobe Creative Cloud', 'ai-adobe')">☁️ Adobe Creative Clc</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🪟 Microsoft 365', 'ai-ms365')">🪟 Microsoft 365</button>
-                </div>
-                <div class="col-6">
-                    <button class="ai-btn-blue" onclick="openManualStore('🎶 Muse Ai', 'ai-muse')">🎶 Muse Ai</button>
-                </div>
-                <div class="col-12">
-                    <button class="ai-btn-blue" onclick="openManualStore('🎵 Suno AI', 'ai-suno')">🎵 Suno</button>
-                </div>
-                <div class="col-12">
-                    <button class="ai-btn-green" onclick="openManualStore('🛒 Creator Bundle · Cart', 'ai-bundle-cart')">🛒 Creator Bundle · Cart</button>
-                </div>
-                <div class="col-12">
-                    <button class="ai-btn-green" onclick="openManualStore('🎁 Basic Creator Bundle · 20% OFF', 'ai-basic-bundle')">🎁 Basic Creator Bundle · 20% OFF</button>
-                </div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🤖 Gemini Service', 'ai-gemini-service')">🇬 Gemini Service</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('✂️ CapCut Pro', 'ai-capcut')">✂️ CapCut Pro</button></div>
+                <div class="col-6"><button class="ai-btn-green" onclick="openManualStore('🇬 Gemini Acc', 'ai-gemini-acc')">🇬 Gemini Acc</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('💬 ChatGPT Plus', 'ai-chatgpt')">💬 ChatGPT</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🍎 iTune Gift Card', 'ai-itune')">🍎 I Tune Gift Card</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎬 Kling Ai', 'ai-kling')">🎬 Kling Ai</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎵 Tiktok Japan', 'ai-tiktok-jp')">🎵 Tiktok Japan</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🚀 Grok AI', 'ai-grok')">🚀 Grok</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎨 Canva Pro', 'ai-canva')">🎨 Canva</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('✴️ Claude AI', 'ai-claude')">✴️ Claude</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🛡️ VPN Service', 'ai-vpn')">🛡️ VPN</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('☁️ Adobe Creative Cloud', 'ai-adobe')">☁️ Adobe Creative Clc</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🪟 Microsoft 365', 'ai-ms365')">🪟 Microsoft 365</button></div>
+                <div class="col-6"><button class="ai-btn-blue" onclick="openManualStore('🎶 Muse Ai', 'ai-muse')">🎶 Muse Ai</button></div>
+                <div class="col-12"><button class="ai-btn-blue" onclick="openManualStore('🎵 Suno AI', 'ai-suno')">🎵 Suno</button></div>
+                <div class="col-12"><button class="ai-btn-green" onclick="openManualStore('🛒 Creator Bundle · Cart', 'ai-bundle-cart')">🛒 Creator Bundle · Cart</button></div>
+                <div class="col-12"><button class="ai-btn-green" onclick="openManualStore('🎁 Basic Creator Bundle · 20% OFF', 'ai-basic-bundle')">🎁 Basic Creator Bundle · 20% OFF</button></div>
             </div>
         </div>
     </div>
 
-    <!-- ================= 2. PACKAGE LIST VIEW (9145.jpg Style) ================= -->
+    <!-- ================= 2. PACKAGE LIST VIEW ================= -->
     <div id="storePackageView" class="d-none">
         <div class="white-card d-flex align-items-center justify-content-between py-3 px-3">
             <button class="home-badge-btn" onclick="backToHub()">← နောက်သို့</button>
@@ -355,20 +297,18 @@
             <div style="width: 40px;"></div>
         </div>
 
-        <!-- Currency Switcher (THB / MMK) -->
         <div class="currency-bar shadow-sm">
             <button id="btnCurrTHB" class="curr-tab active" onclick="changeCurrency('THB')">🇹🇭 ထိုင်းဘတ် (THB)</button>
             <button id="btnCurrMMK" class="curr-tab" onclick="changeCurrency('MMK')">🇲🇲 မြန်မာကျပ် (MMK)</button>
         </div>
 
-        <!-- Packages Card List -->
         <div class="white-card">
             <div class="section-title">💎 ရွေးချယ်နိုင်သော ပက်ကေ့ဂျ်များ</div>
             <div id="dynamicPackageList"></div>
         </div>
     </div>
 
-    <!-- ================= 3. CHECKOUT & ORDER VIEW (9146.jpg & 9147.jpg Style) ================= -->
+    <!-- ================= 3. CHECKOUT & ORDER VIEW (Index.html Payment Match) ================= -->
     <div id="checkoutOrderView" class="d-none">
         <div class="white-card d-flex align-items-center justify-content-between py-3 px-3">
             <button class="home-badge-btn" onclick="backToPackages()">← နောက်သို့</button>
@@ -377,20 +317,17 @@
         </div>
 
         <div class="white-card">
-            <!-- Selected Package Summary Box -->
             <div class="p-3 mb-3" style="background: #fdf2f7; border-radius: 16px; border: 1px solid #f9d8e6;">
                 <div class="text-muted small">ရွေးချယ်ထားသည် -</div>
                 <div class="fw-bold fs-5 text-dark" id="summaryPkgName">Weekly Pass</div>
                 <div class="fw-bold" style="color: #1d64d8;" id="summaryPkgPrice">ဈေးနှုန်း: ฿53 (THB)</div>
             </div>
 
-            <!-- Game / Category Title -->
             <div class="mb-3">
                 <label class="form-label fw-bold small text-dark">ဂိမ်း / ဝန်ဆောင်မှု အမျိုးအစား</label>
                 <input type="text" id="orderGameType" class="form-control custom-input" readonly>
             </div>
 
-            <!-- Game UID & Zone ID Inputs -->
             <div id="gameAccountFields">
                 <div class="mb-3">
                     <label class="form-label fw-bold small text-dark">Game UID / ID</label>
@@ -409,13 +346,13 @@
                 </div>
             </div>
 
-            <!-- Payment Information Box -->
+            <!-- Payment Information Box (Index.html style matching exact THB & MMK QR/Acc) -->
             <div class="p-3 border rounded-4 mb-3">
                 <div class="fw-bold mb-2" style="color: #333; font-size: 14.5px;" id="paymentTitle">
                     🇹🇭 ထိုင်းဘတ်ငွေလွှဲရန် အကောင့်နှင့် QR:
                 </div>
 
-                <!-- THB Payment Info -->
+                <!-- THB Payment Box (Bangkok Bank with QR & Save button) -->
                 <div id="thbPaymentBox">
                     <div class="p-3 border rounded-3 mb-3 d-flex justify-content-between align-items-center bg-light">
                         <div>
@@ -426,19 +363,34 @@
                         <button class="btn btn-sm btn-outline-primary rounded-3 px-3 fw-bold" onclick="copyText('0408228211')">Copy</button>
                     </div>
                     <div class="text-center mb-2">
-                        <img src="qr-thb.jpg" alt="Thai QR Payment" class="img-fluid rounded-3 border" style="max-width: 210px;" onerror="this.style.display='none'">
+                        <!-- ထိုင်းဘဏ် QR ပုံ (index.html တွင်သုံးသော နည်းအတိုင်း) -->
+                        <img src="qr-thb.jpg" alt="Thai QR Payment" class="img-fluid rounded-3 border mb-2" style="max-width: 210px;" id="thbQrImage">
+                        <div>
+                            <a href="qr-thb.jpg" download="Bangkok_Bank_QR.jpg" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
+                                ⬇️ 📥 QR ပုံ Save ရန် ဖွင့်မည်
+                            </a>
+                        </div>
                     </div>
                 </div>
 
-                <!-- MMK Payment Info -->
+                <!-- MMK Payment Box (KBZPay / WavePay with correct number, name & QR) -->
                 <div id="mmkPaymentBox" class="d-none">
-                    <div class="p-3 border rounded-3 mb-2 d-flex justify-content-between align-items-center bg-light">
+                    <div class="p-3 border rounded-3 mb-3 d-flex justify-content-between align-items-center bg-light">
                         <div>
                             <div class="fw-bold text-primary">KBZPay / WavePay</div>
-                            <div class="fw-bold fs-6 text-dark" id="mmkAccNumber">09xxxxxxxxx</div>
+                            <div class="fw-bold fs-6 text-dark" id="mmkAccNumber">09xxxxxxxx</div>
                             <div class="text-muted small">Phyo Wanna Linn</div>
                         </div>
                         <button class="btn btn-sm btn-outline-primary rounded-3 px-3 fw-bold" onclick="copyText(document.getElementById('mmkAccNumber').innerText)">Copy</button>
+                    </div>
+                    <div class="text-center mb-2">
+                        <!-- မြန်မာဘဏ် QR ပုံ (index.html တွင်သုံးသော နည်းအတိုင်း) -->
+                        <img src="qr-mmk.jpg" alt="Myanmar QR Payment" class="img-fluid rounded-3 border mb-2" style="max-width: 210px;" id="mmkQrImage">
+                        <div>
+                            <a href="qr-mmk.jpg" download="MM_Bank_QR.jpg" class="btn btn-sm btn-success rounded-pill px-3 fw-bold">
+                                ⬇️ 📥 QR ပုံ Save ရန် ဖွင့်မည်
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -447,13 +399,11 @@
                 </div>
             </div>
 
-            <!-- Upload Slip -->
             <div class="mb-3">
                 <label class="form-label fw-bold small text-dark">ငွေလွှဲစလစ် (Slip) တင်ရန်</label>
                 <input type="file" id="orderSlipFile" class="form-control custom-input" accept="image/*">
             </div>
 
-            <!-- Submit Button -->
             <button id="finalSubmitBtn" class="gradient-pink-btn py-3" onclick="submitOrderToTelegram()">
                 🚀 Order တင်မည် / ဝယ်ယူမည်
             </button>
@@ -463,9 +413,7 @@
 </div>
 
 <script>
-    // ================= CONFIGURATION =================
     const ADMIN_CHAT_ID = "8863215122";
-    // Bot Token သို့မဟုတ် Backend API URL ရှိပါက ဒီမှာထည့်ပါ
     const TELEGRAM_BOT_TOKEN = ""; 
 
     let currentCurrency = "THB";
@@ -473,15 +421,10 @@
     let activeCategoryLabel = "";
     let chosenPkg = null;
 
-    // Default Packages (Google Sheet မချိတ်ရသေးခင် သို့မဟုတ် Sheet ထဲတွင် မရှိသေးခင် ပြသမည့် စာရင်း)
     const PACKAGE_DATABASE = {
         "mlbb-malaysia": [
             { name: "Weekly Pass", thb: 53, mmk: 7500, sub: "မစောင့်ရပါ" },
             { name: "Twilight Pass", thb: 280, mmk: 39000, sub: "မစောင့်ရပါ" },
-            { name: "50 + 50 Diamonds", thb: 30, mmk: 4200, sub: "မစောင့်ရပါ" },
-            { name: "150 + 150 Diamonds", thb: 85, mmk: 12000, sub: "မစောင့်ရပါ" },
-            { name: "250 + 250 Diamonds", thb: 135, mmk: 19000, sub: "မစောင့်ရပါ" },
-            { name: "500 + 500 Diamonds", thb: 270, mmk: 38000, sub: "မစောင့်ရပါ" },
             { name: "86 Diamonds", thb: 45, mmk: 6300, sub: "မစောင့်ရပါ" },
             { name: "172 Diamonds", thb: 90, mmk: 12600, sub: "မစောင့်ရပါ" },
             { name: "257 Diamonds", thb: 135, mmk: 18900, sub: "မစောင့်ရပါ" },
@@ -501,7 +444,6 @@
         ]
     };
 
-    // ================= 1. REAL MLBB ID CHECKER =================
     async function verifyId(uidInputId, zoneInputId, resultElemId, isInputTarget = false) {
         const uid = document.getElementById(uidInputId).value.trim();
         const zone = document.getElementById(zoneInputId).value.trim();
@@ -521,7 +463,6 @@
         }
 
         try {
-            // Public MLBB Nickname Lookup API
             const res = await fetch(`https://api.isan.eu.org/nickname/ml?id=${encodeURIComponent(uid)}&zone=${encodeURIComponent(zone)}`);
             const data = await res.json();
 
@@ -535,10 +476,10 @@
                 }
             } else {
                 if (isInputTarget) {
-                    target.value = "အမည်မတွေ့ပါ (ကိုယ်တိုင်ရိုက်ထည့်နိုင်သည်)";
+                    target.value = "အမည်မတွေ့ပါ";
                 } else {
                     target.style.color = "#dc3545";
-                    target.innerHTML = `❌ အကောင့်မတွေ့ရှိပါ။ UID နှင့် Zone ID ကို ပြန်စစ်ပါ။`;
+                    target.innerHTML = `❌ အကောင့်မတွေ့ရှိပါ။`;
                 }
             }
         } catch (err) {
@@ -547,7 +488,7 @@
                 target.placeholder = "In-game Name ရိုက်ထည့်ပါ";
             } else {
                 target.style.color = "#dc3545";
-                target.innerHTML = `⚠️ Connection အခက်အခဲရှိနေပါသည်။ ထပ်မံကြိုးစားပါ။`;
+                target.innerHTML = `⚠️ Connection အခက်အခဲရှိပါသည်။`;
             }
         }
     }
@@ -560,7 +501,6 @@
         }
     }
 
-    // ================= 2. STORE & PACKAGE NAVIGATION =================
     function openManualStore(title, categoryKey) {
         activeCategoryLabel = title;
         activeCategoryKey = categoryKey;
@@ -621,7 +561,6 @@
         });
     }
 
-    // ================= 3. CHECKOUT & ORDER SUBMISSION =================
     function openCheckout(pkgIndex) {
         const list = getPackagesForCategory(activeCategoryKey);
         chosenPkg = list[pkgIndex];
@@ -631,7 +570,6 @@
         document.getElementById("summaryPkgPrice").innerText = `ဈေးနှုန်း: ${priceStr}`;
         document.getElementById("orderGameType").value = activeCategoryLabel;
 
-        // Hub မှာ ရိုက်ခဲ့တဲ့ UID/Zone ရှိရင် တစ်ခါတည်း ဖြည့်ပေးမည်
         const hubUidVal = document.getElementById("hubUid").value.trim();
         const hubZoneVal = document.getElementById("hubZone").value.trim();
         if (hubUidVal && !document.getElementById("orderUid").value) {
@@ -641,17 +579,15 @@
             document.getElementById("orderZone").value = hubZoneVal;
         }
 
-        // AI Tools ဖြစ်ပါက Game UID အစား ဆက်သွယ်ရန် အကောင့်/ဖုန်း ဟု ပြောင်းပြမည်
         const isAiService = activeCategoryKey.startsWith("ai-");
         document.getElementById("gameAccountFields").style.display = isAiService ? "none" : "block";
 
-        // ငွေကြေးအလိုက် ဘဏ်အကောင့်ပြောင်းပြမည်
         if (currentCurrency === "THB") {
             document.getElementById("paymentTitle").innerText = "🇹🇭 ထိုင်းဘတ်ငွေလွှဲရန် အကောင့်နှင့် QR:";
             document.getElementById("thbPaymentBox").classList.remove("d-none");
             document.getElementById("mmkPaymentBox").classList.add("d-none");
         } else {
-            document.getElementById("paymentTitle").innerText = "🇲🇲 မြန်မာကျပ်ငွေလွှဲရန် အကောင့်:";
+            document.getElementById("paymentTitle").innerText = "🇲🇲 မြန်မာကျပ်ငွေလွှဲရန် အကောင့်နှင့် QR:";
             document.getElementById("thbPaymentBox").classList.add("d-none");
             document.getElementById("mmkPaymentBox").classList.remove("d-none");
         }
