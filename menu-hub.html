@@ -4,12 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>May Lay Menu Hub</title>
+    <!-- Telegram Web App SDK -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <!-- Game ID Auto-Checker -->
     <script src="mlbb-mcgg-checker.js"></script>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background-color: #fbcfe8; font-family: sans-serif; }
+        body { 
+            background-color: #fbcfe8; 
+            font-family: sans-serif; 
+        }
     </style>
 </head>
 <body class="pb-24">
@@ -19,7 +26,7 @@
         <i class="fa-solid fa-arrow-left text-lg"></i>
     </a>
 
-    <!-- MENU HUB MAIN VIEW -->
+    <!-- MENU HUB MAIN VIEW (ပင်မ မီနူးမျက်နှာပြင်) -->
     <div id="hub-main-view" class="p-4 max-w-md mx-auto space-y-4">
         <div class="text-center my-3">
             <h1 class="text-pink-700 font-extrabold text-2xl tracking-wide">
@@ -39,13 +46,31 @@
             <div>
                 <input type="text" id="hub-server" placeholder="Server Zone ID ထည့်ပါ" class="w-full p-2.5 border border-gray-200 rounded-xl text-xs focus:outline-none focus:border-pink-500">
             </div>
-            <button onclick="runHubIdCheck()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-2.5 rounded-xl shadow text-xs">
+            <button onclick="runHubIdCheck()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-2.5 rounded-xl shadow text-xs hover:opacity-90 transition">
                 🔍 အမည် စစ်ဆေးမည်
             </button>
             <p id="hub-id-result" class="text-xs text-gray-600 font-bold text-center mt-1"></p>
         </div>
 
-        <!-- Server & AI Tools Navigation Sections -->
+        <!-- Global & Other Server Navigation Cards -->
+        <div class="grid grid-cols-2 gap-3">
+            <div onclick="window.location.href='index.html'" class="bg-white p-3 rounded-2xl shadow-sm text-center cursor-pointer border border-pink-100 hover:shadow-md transition">
+                <div class="w-10 h-10 bg-pink-100 text-pink-600 rounded-xl mx-auto flex items-center justify-center text-lg mb-1">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <p class="font-bold text-pink-700 text-xs">Global Server</p>
+                <p class="text-[9px] text-gray-500">စိန်ဖြည့်ရန် (Home)</p>
+            </div>
+            <div onclick="window.scrollTo({top: 300, behavior: 'smooth'})" class="bg-white p-3 rounded-2xl shadow-sm text-center cursor-pointer border border-pink-100 hover:shadow-md transition">
+                <div class="w-10 h-10 bg-purple-100 text-purple-600 rounded-xl mx-auto flex items-center justify-center text-lg mb-1">
+                    <i class="fa-solid fa-server"></i>
+                </div>
+                <p class="font-bold text-purple-700 text-xs">Other Server</p>
+                <p class="text-[9px] text-gray-500">စိန်ဖြည့်ရန် (Menu)</p>
+            </div>
+        </div>
+
+        <!-- Other Server – နိုင်ငံတကာ ဆာဗာများ -->
         <div class="bg-white p-4 rounded-2xl shadow-md space-y-3">
             <h3 class="font-bold text-pink-700 text-xs flex items-center space-x-1">
                 <i class="fa-solid fa-network-wired"></i>
@@ -53,39 +78,39 @@
             </h3>
             <p class="text-[10px] text-gray-500">ဆာဗာတစ်ခုကို နှိပ်၍ Manual ဈေးနှုန်းဖြင့် အော်ဒါတင်နိုင်ပါသည် -</p>
             <div class="grid grid-cols-2 gap-2">
-                <button onclick="openStoreCategory('🇲🇾 Malaysia Server', 'mlbb-malaysia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇲🇾 Malaysia</button>
-                <button onclick="openStoreCategory('🇵🇭 Philippine Server', 'mlbb-philippine')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇵🇭 Philippine</button>
-                <button onclick="openStoreCategory('🇸🇬 Singapore Server', 'mlbb-singapore')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇸🇬 Singapore</button>
-                <button onclick="openStoreCategory('🇮🇩 Indonesia Server', 'mlbb-indonesia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇮🇩 Indonesia</button>
-                <button onclick="openStoreCategory('🇷🇺 Russia Server', 'mlbb-russia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇷🇺 Russia</button>
-                <button onclick="openStoreCategory('🇹🇷 Turkey Server', 'mlbb-turkey')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow">🇹🇷 Turkey</button>
+                <button onclick="openStoreCategory('🇲🇾 Malaysia Server', 'mlbb-malaysia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow hover:opacity-90 transition">🇲🇾 Malaysia</button>
+                <button onclick="openStoreCategory('🇵🇭 Philippine Server', 'mlbb-philippine')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow hover:opacity-90 transition">🇵🇭 Philippine</button>
+                <button onclick="openStoreCategory('🇸🇬 Singapore Server', 'mlbb-singapore')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow hover:opacity-90 transition">🇸🇬 Singapore</button>
+                <button onclick="openStoreCategory('🇮🇩 Indonesia Server', 'mlbb-indonesia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow hover:opacity-90 transition">🇮🇩 Indonesia</button>
+                <button onclick="openStoreCategory('🇷🇺 Russia Server', 'mlbb-russia')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow hover:opacity-90 transition">🇷🇺 Russia</button>
+                <button onclick="openStoreCategory('🇹🇷 Turkey Server', 'mlbb-turkey')" class="bg-slate-900 text-white p-2.5 rounded-xl font-bold text-xs shadow hover:opacity-90 transition">🇹🇷 Turkey</button>
             </div>
         </div>
 
-        <!-- AI Tools & Services -->
+        <!-- Ai Tools & Services (All Buttons) -->
         <div class="bg-white p-4 rounded-2xl shadow-md space-y-3">
             <h3 class="font-bold text-pink-700 text-xs flex items-center space-x-1">
                 <i class="fa-solid fa-robot"></i>
                 <span>Ai Tools & Services</span>
             </h3>
             <div class="grid grid-cols-2 gap-2">
-                <button onclick="openStoreCategory('🤖 Gemini Service', 'ai-gemini')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🇬 Gemini Service</button>
-                <button onclick="openStoreCategory('✂️ CapCut Pro', 'ai-capcut')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">✂️ CapCut Pro</button>
-                <button onclick="openStoreCategory('🇬 Gemini Acc', 'ai-gemini-acc')" class="bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs">🇬 Gemini Acc</button>
-                <button onclick="openStoreCategory('💬 ChatGPT Plus', 'ai-chatgpt')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">💬 ChatGPT</button>
-                <button onclick="openStoreCategory('🍎 iTune Gift Card', 'ai-itune')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🍎 I Tune Gift Card</button>
-                <button onclick="openStoreCategory('🎬 Kling Ai', 'ai-kling')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎬 Kling Ai</button>
-                <button onclick="openStoreCategory('🎵 Tiktok Japan', 'ai-tiktok')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎵 Tiktok Japan</button>
-                <button onclick="openStoreCategory('🚀 Grok AI', 'ai-grok')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🚀 Grok</button>
-                <button onclick="openStoreCategory('🎨 Canva Pro', 'ai-canva')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎨 Canva</button>
-                <button onclick="openStoreCategory('✴️ Claude AI', 'ai-claude')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">✴️ Claude</button>
-                <button onclick="openStoreCategory('🛡️ VPN Service', 'ai-vpn')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🛡️ VPN</button>
-                <button onclick="openStoreCategory('☁️ Adobe Creative Cloud', 'ai-adobe')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">☁️ Adobe Creative Clc</button>
-                <button onclick="openStoreCategory('🪟 Microsoft 365', 'ai-ms365')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🪟 Microsoft 365</button>
-                <button onclick="openStoreCategory('🎶 Muse Ai', 'ai-muse')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎶 Muse Ai</button>
-                <button onclick="openStoreCategory('🎵 Suno AI', 'ai-suno')" class="col-span-2 bg-sky-500 text-white p-2 rounded-xl font-bold text-xs">🎵 Suno</button>
-                <button onclick="openStoreCategory('🛒 Creator Bundle · Cart', 'ai-bundle')" class="col-span-2 bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs">🛒 Creator Bundle · Cart</button>
-                <button onclick="openStoreCategory('🎁 Basic Creator Bundle · 20% OFF', 'ai-basic')" class="col-span-2 bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs">🎁 Basic Creator Bundle · 20% OFF</button>
+                <button onclick="openStoreCategory('🤖 Gemini Service', 'ai-gemini')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🇬 Gemini Service</button>
+                <button onclick="openStoreCategory('✂️ CapCut Pro', 'ai-capcut')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">✂️ CapCut Pro</button>
+                <button onclick="openStoreCategory('🇬 Gemini Acc', 'ai-gemini-acc')" class="bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs shadow">🇬 Gemini Acc</button>
+                <button onclick="openStoreCategory('💬 ChatGPT Plus', 'ai-chatgpt')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">💬 ChatGPT</button>
+                <button onclick="openStoreCategory('🍎 iTune Gift Card', 'ai-itune')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🍎 I Tune Gift Card</button>
+                <button onclick="openStoreCategory('🎬 Kling Ai', 'ai-kling')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🎬 Kling Ai</button>
+                <button onclick="openStoreCategory('🎵 Tiktok Japan', 'ai-tiktok')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🎵 Tiktok Japan</button>
+                <button onclick="openStoreCategory('🚀 Grok AI', 'ai-grok')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🚀 Grok</button>
+                <button onclick="openStoreCategory('🎨 Canva Pro', 'ai-canva')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🎨 Canva</button>
+                <button onclick="openStoreCategory('✴️ Claude AI', 'ai-claude')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">✴️ Claude</button>
+                <button onclick="openStoreCategory('🛡️ VPN Service', 'ai-vpn')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🛡️ VPN</button>
+                <button onclick="openStoreCategory('☁️ Adobe Creative Cloud', 'ai-adobe')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">☁️ Adobe Creative Clc</button>
+                <button onclick="openStoreCategory('🪟 Microsoft 365', 'ai-ms365')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🪟 Microsoft 365</button>
+                <button onclick="openStoreCategory('🎶 Muse Ai', 'ai-muse')" class="bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🎶 Muse Ai</button>
+                <button onclick="openStoreCategory('🎵 Suno AI', 'ai-suno')" class="col-span-2 bg-sky-500 text-white p-2 rounded-xl font-bold text-xs shadow">🎵 Suno</button>
+                <button onclick="openStoreCategory('🛒 Creator Bundle · Cart', 'ai-bundle')" class="col-span-2 bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs shadow">🛒 Creator Bundle · Cart</button>
+                <button onclick="openStoreCategory('🎁 Basic Creator Bundle · 20% OFF', 'ai-basic')" class="col-span-2 bg-emerald-600 text-white p-2 rounded-xl font-bold text-xs shadow">🎁 Basic Creator Bundle · 20% OFF</button>
             </div>
         </div>
     </div>
@@ -135,6 +160,7 @@
                 </div>
             </div>
 
+            <!-- Payment Box matching index.html exact accounts and QR download links -->
             <div id="hub-payment-box" class="space-y-3"></div>
 
             <div>
@@ -142,7 +168,7 @@
                 <input type="file" id="hub-f-slip" accept="image/*" class="w-full p-2 border border-gray-200 rounded-xl text-xs bg-gray-50">
             </div>
 
-            <button onclick="submitHubOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md">
+            <button id="hub-submit-btn" onclick="submitHubOrder()" class="w-full bg-gradient-to-r from-pink-600 to-purple-600 text-white font-bold py-3 rounded-xl shadow-md hover:opacity-90 transition">
                 🚀 Order တင်မည် / ဝယ်ယူမည်
             </button>
         </div>
@@ -194,6 +220,10 @@
                 let res = await checkMLBBPlayer(uid, server);
                 if (res && res.success) {
                     resultEl.innerText = `✅ တွေ့ရှိသည်: ${res.name} (Server: ${server})`;
+                    // Auto-fill checkout fields if open
+                    document.getElementById('hub-f-uid').value = uid;
+                    document.getElementById('hub-f-server').value = server;
+                    document.getElementById('hub-f-name').value = res.name;
                 } else {
                     resultEl.innerText = `❌ အကောင့်မတွေ့ပါ။ ID ပြန်စစ်ပါ။`;
                 }
@@ -263,7 +293,7 @@
                         </div>
                         <div class="flex items-center space-x-3">
                             <p class="text-xs font-bold ${hubCurrency === 'THB' ? 'text-blue-600' : 'text-emerald-600'}">${symbol}${price.toLocaleString()}</p>
-                            <button onclick="selectHubPackage('${safeName}', ${price}, '${hubCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow">
+                            <button onclick="selectHubPackage('${safeName}', ${price}, '${hubCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
                                 ဝယ်ယူမည်
                             </button>
                         </div>
@@ -280,6 +310,20 @@
 
             let isAi = activeCategoryKey.startsWith('ai-');
             document.getElementById('hub-game-fields').style.display = isAi ? 'none' : 'block';
+
+            // Pre-fill from hub ID checker if available
+            let hubUid = document.getElementById('hub-uid').value.trim();
+            let hubServer = document.getElementById('hub-server').value.trim();
+            let hubResultText = document.getElementById('hub-id-result').innerText;
+            if (hubUid) document.getElementById('hub-f-uid').value = hubUid;
+            if (hubServer) document.getElementById('hub-f-server').value = hubServer;
+            if (hubResultText.includes('တွေ့ရှိသည်:')) {
+                let parts = hubResultText.split(': ');
+                if (parts[1]) {
+                    let namePart = parts[1].split(' (Server')[0];
+                    document.getElementById('hub-f-name').value = namePart;
+                }
+            }
 
             updateHubPaymentBox(curr);
             document.getElementById('hub-order-section').classList.remove('hidden');
@@ -299,29 +343,33 @@
             let box = document.getElementById('hub-payment-box');
             if (curr === 'THB') {
                 box.innerHTML = `
+                    <p class="font-bold text-gray-800">🇹🇭 ထိုင်းဘတ်ငွေလွှဲရန် အကောင့်နှင့် QR:</p>
                     <div class="bg-gray-50 p-3 rounded-xl border space-y-2 text-center">
                         <div class="flex justify-between items-center text-left">
                             <div>
                                 <span class="font-semibold text-blue-600">Bangkok Bank</span>
-                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('0408228211')" style="cursor:pointer;">0408228211 📋</p>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('0408228211')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">0408228211 📋</p>
                                 <p class="text-[10px] text-gray-500">Mr. Phyo Wanna Linn</p>
                             </div>
                             <button onclick="copyText('0408228211')" class="bg-blue-100 text-blue-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
                         </div>
                         <div class="my-2 border-t pt-2 space-y-2">
                             <img src="7659.jpeg" alt="Thai QR" class="w-36 h-36 mx-auto rounded-lg shadow border object-contain">
-                            <button onclick="openQRImage('7659.jpeg')" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow">📥 QR ပုံ Save ရန် ဖွင့်မည်</button>
+                            <button onclick="openQRImage('7659.jpeg')" class="inline-block bg-blue-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow hover:bg-blue-700 transition">
+                                <i class="fa-solid fa-download mr-1"></i> 📥 QR ပုံ Save ရန် ဖွင့်မည်
+                            </button>
                         </div>
-                        <p class="text-[10px] text-red-500 font-semibold text-left">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။</p>
+                        <p class="text-[10px] text-red-500 font-semibold text-left">📌 Note / Memo တွင် (Payment) ဟုသာ ရေးပါ။ စိန်ဝယ်ခြင်း၊ ဂိမ်းနာမည်များ လုံးဝမရေးရပါ။</p>
                     </div>
                 `;
             } else {
                 box.innerHTML = `
+                    <p class="font-bold text-gray-800">🇲🇲 မြန်မာကျပ်ငွေလွှဲရန် အကောင့်များနှင့် QR:</p>
                     <div class="bg-gray-50 p-3 rounded-xl border space-y-2">
                         <div class="flex justify-between items-center border-b pb-1">
                             <div>
                                 <span class="font-semibold text-emerald-600">KBZPay / WavePay</span>
-                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('09779091686')" style="cursor:pointer;">09779091686 📋</p>
+                                <p class="font-mono text-gray-700 text-xs font-bold" onclick="copyText('09779091686')" style="cursor:pointer;" title="နှိပ်၍ Copy ကူးရန်">09779091686 📋</p>
                                 <p class="text-[10px] text-gray-500">Ei Ei Phyu</p>
                             </div>
                             <button onclick="copyText('09779091686')" class="bg-emerald-100 text-emerald-700 px-2.5 py-1 rounded-lg text-[10px] font-bold">Copy</button>
@@ -330,31 +378,41 @@
                             <div class="space-y-1">
                                 <p class="text-[10px] font-bold text-gray-600">KBZPay QR</p>
                                 <img src="7655.jpg" alt="KBZPay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
-                                <button onclick="openQRImage('7655.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold">Save KBZ</button>
+                                <button onclick="openQRImage('7655.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
+                                    <i class="fa-solid fa-download"></i> Save KBZ
+                                </button>
                             </div>
                             <div class="space-y-1">
                                 <p class="text-[10px] font-bold text-gray-600">WavePay QR</p>
                                 <img src="7656.jpg" alt="WavePay QR" class="w-28 h-28 mx-auto rounded-lg shadow border object-contain">
-                                <button onclick="openQRImage('7656.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold">Save Wave</button>
+                                <button onclick="openQRImage('7656.jpg')" class="mt-1 bg-emerald-600 text-white px-2 py-1 rounded-lg text-[10px] font-bold shadow hover:bg-emerald-700 transition">
+                                    <i class="fa-solid fa-download"></i> Save Wave
+                                </button>
                             </div>
                         </div>
-                        <p class="text-[10px] text-red-500 font-semibold">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။</p>
+                        <p class="text-[10px] text-red-500 font-semibold">📌 Note တွင် (Payment) ဟုသာ ရေးပါ။ (dia, Skin, Weekly pass လုံးဝမရေးရပါ)</p>
                     </div>
                 `;
             }
         }
 
         function copyText(txt) {
-            navigator.clipboard.writeText(txt);
-            showHubModal("May Lay Game Store", "Copied: " + txt);
+            navigator.clipboard.writeText(txt).then(() => {
+                showHubModal("May Lay Game Store", "📋 Copied: " + txt);
+            });
         }
 
         async function submitHubOrder() {
+            try {
+                if (tg && tg.HapticFeedback) tg.HapticFeedback.notificationOccurred('success');
+            } catch (e) {}
+
             let isAi = activeCategoryKey.startsWith('ai-');
             let uid = isAi ? 'N/A' : document.getElementById('hub-f-uid').value.trim();
             let server = isAi ? 'N/A' : document.getElementById('hub-f-server').value.trim();
             let name = isAi ? 'N/A' : document.getElementById('hub-f-name').value.trim();
             let slipFile = document.getElementById('hub-f-slip').files[0];
+            let submitBtn = document.getElementById('hub-submit-btn');
 
             if (!isAi && (!uid || !server)) {
                 showHubModal("May Lay Game Store", "Game UID နှင့် Server ID ဖြည့်ပါ။");
@@ -365,35 +423,62 @@
                 return;
             }
 
-            let msg = `==== New Manual Order (From Hub) ====\n\n` +
-                      `Category: ${activeCategoryName}\n` +
-                      `Package: ${selectedHubPkg.name}\n` +
-                      `UID: ${uid} (${server})\n` +
-                      `Name: ${name || '-'}\n` +
-                      `Price: ${selectedHubPkg.price} ${selectedHubPkg.curr}\n\n` +
-                      `📌 [Admin မှ စစ်ဆေးရန် စောင့်ဆိုင်းနေသည်]`;
+            let shortPkg = (selectedHubPkg.name || 'Order').replace(/[^a-zA-Z0-9 ]/g, '').slice(0, 18).trim();
+            let msg = `==== Transaction Report (Pending Admin Approval) ===-\n\n` +
+                      `UID : ${uid}\n` +
+                      `(${server})\n` +
+                      `Name : ${name || '-'}\n` +
+                      `Category : ${activeCategoryName}\n` +
+                      `Order : ${selectedHubPkg.name}\n` +
+                      `SN : S${Date.now()}\n` +
+                      `Time : ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}\n` +
+                      `Date : ${new Date().toLocaleDateString()}\n` +
+                      `Amount: ${selectedHubPkg.price} ${selectedHubPkg.curr}\n` +
+                      `Type: MANUAL (HUB)\n\n` +
+                      `📌 [Admin မှ အတည်ပြုရန် စောင့်ဆိုင်းနေသည်]`;
+
+            const cbData = `ok|0|${uid}|${shortPkg}|${selectedHubPkg.price}${selectedHubPkg.curr}`.slice(0, 64);
+            const keyboard = [[{ text: "✅ ဖြည့်ပြီးပါပြီ", callback_data: cbData }]];
+
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerText = "⏳ Order ပို့နေပါပြီ...";
+            }
 
             try {
-                let form = new FormData();
-                form.append('chat_id', ADMIN_CHAT_ID);
-                form.append('text', msg);
-                let res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, { method: 'POST', body: form });
-                let result = await res.json();
+                const msgForm = new FormData();
+                msgForm.append('chat_id', ADMIN_CHAT_ID);
+                msgForm.append('text', msg);
+                msgForm.append('reply_markup', JSON.stringify({ inline_keyboard: keyboard }));
+
+                const res = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    body: msgForm
+                });
+                const result = await res.json();
 
                 if (result.ok) {
-                    let photoForm = new FormData();
+                    const photoForm = new FormData();
                     photoForm.append('chat_id', ADMIN_CHAT_ID);
                     photoForm.append('photo', slipFile);
-                    photoForm.append('caption', `📎 Slip for UID: ${uid}`);
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, { method: 'POST', body: photoForm });
+                    photoForm.append('caption', `📎 ငွေလွှဲစလစ်ပုံ (UID: ${uid})`);
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                        method: 'POST',
+                        body: photoForm
+                    });
 
-                    showHubModal("✅ အောင်မြင်သည်", "Order တင်ပြီးပါပြီ။ Admin မှ စစ်ဆေးဆောင်ရွက်ပေးပါမည်။");
+                    showHubModal("✅ Order တင်ခြင်း အောင်မြင်ပါသည်", "Order အချက်အလက်များကို Admin ထံ အောင်မြင်စွာ ပို့ပြီးပါပြီ။ Admin မှ စစ်ဆေးဖြည့်သွင်းပေးပါမည်။");
                     backToHubMain();
                 } else {
-                    showHubModal("Error", "Telegram သို့ ပို့၍ မရပါ။");
+                    showHubModal("⚠️ Telegram ပေးပို့မှု မအောင်မြင်ပါ", result.description || "Error");
                 }
             } catch (err) {
-                showHubModal("Error", "ချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။");
+                showHubModal("Network Error", "ချိတ်ဆက်မှု အမှားအယွင်းရှိပါသည်။");
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.innerText = "🚀 Order တင်မည် / ဝယ်ယူမည်";
+                }
             }
         }
     </script>
