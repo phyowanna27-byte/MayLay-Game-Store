@@ -130,7 +130,10 @@
         </div>
 
         <div class="bg-white p-4 rounded-2xl shadow-md space-y-3">
-            <h3 class="font-bold text-pink-700 text-xs">💎 ရွေးချယ်နိုင်သော ပက်ကေ့ဂျ်များ</h3>
+            <div class="flex items-center justify-between">
+                <h3 class="font-bold text-pink-700 text-xs">💎 ရွေးချယ်နိုင်သော ပက်ကေ့ဂျ်များ</h3>
+                <span id="hub-price-source-badge" class="text-[10px] text-gray-500 font-semibold"></span>
+            </div>
             <div id="hub-price-list" class="space-y-2"></div>
         </div>
 
@@ -201,6 +204,113 @@
 
         const BOT_TOKEN = '9289484899:AAF5IsfmVy1JHz-iVTXOBCItcVD2c4mIE4E';
         const ADMIN_CHAT_ID = '8863215122';
+
+        // Live Google Sheet CSV URLs
+        const SHEET_CSV_URLS = [
+            "https://docs.google.com/spreadsheets/d/19Ryx-h258rS8duejpKA2Y0WoD2drx77CkFzc-6MYBbg/gviz/tq?tqx=out:csv&sheet=Sheet1",
+            "https://docs.google.com/spreadsheets/d/19Ryx-h258rS8duejpKA2Y0WoD2drx77CkFzc-6MYBbg/gviz/tq?tqx=out:csv&sheet=Menu_Hub_Prices"
+        ];
+
+        // Embedded CSV data (all 151 items: 6 international servers + 21 AI items)
+        const EMBEDDED_CSV_ITEMS = [{"category": "MLBB - Malaysia", "name": "Weekly pass", "mmk": 10480, "thb": 78, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "Twilight Pass", "mmk": 53710, "thb": 398, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "Weekly Elite Bundle", "mmk": 4800, "thb": 36, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "Monthly Epic Bundle", "mmk": 23700, "thb": 176, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "50 + 50 Diamonds", "mmk": 4800, "thb": 36, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "150 + 150 Diamonds", "mmk": 14220, "thb": 105, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "250 + 250 Diamonds", "mmk": 23700, "thb": 176, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "500 + 500 Diamonds", "mmk": 48070, "thb": 356, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "14 Diamonds", "mmk": 1270, "thb": 9, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "28 Diamonds", "mmk": 2480, "thb": 18, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "42 Diamonds", "mmk": 3740, "thb": 28, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "70 Diamonds", "mmk": 6170, "thb": 46, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "112 Diamonds", "mmk": 9530, "thb": 71, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "140 Diamonds", "mmk": 12330, "thb": 91, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "168 Diamonds", "mmk": 14640, "thb": 108, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "284 Diamonds", "mmk": 24220, "thb": 179, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "355 Diamonds", "mmk": 30540, "thb": 226, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "430 Diamonds", "mmk": 36810, "thb": 273, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "571 Diamonds", "mmk": 46970, "thb": 348, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "716 Diamonds", "mmk": 61500, "thb": 456, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "1192 Diamonds", "mmk": 93880, "thb": 695, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "1446 Diamonds", "mmk": 115570, "thb": 856, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "2010 Diamonds", "mmk": 171170, "thb": 1268, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "3005 Diamonds", "mmk": 234610, "thb": 1738, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "3606 Diamonds", "mmk": 271940, "thb": 2014, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "4810 Diamonds", "mmk": 372190, "thb": 2757, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "6012 Diamonds", "mmk": 469220, "thb": 3476, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Malaysia", "name": "7502 Diamonds", "mmk": 586370, "thb": 4343, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "Weekly pass", "mmk": 9010, "thb": 67, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "Twilight Pass", "mmk": 41620, "thb": 308, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "Weekly Elite Bundle", "mmk": 4320, "thb": 32, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "Monthly Elite Bundle", "mmk": 21280, "thb": 158, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "50 + 50 Diamonds", "mmk": 4320, "thb": 32, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "150 + 150 Diamonds", "mmk": 12800, "thb": 95, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "250 + 250 Diamonds", "mmk": 21280, "thb": 158, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "500 + 500 Diamonds", "mmk": 43020, "thb": 319, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "11 Diamonds", "mmk": 900, "thb": 7, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "22 Diamonds", "mmk": 1800, "thb": 13, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "56 Diamonds", "mmk": 4430, "thb": 33, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "112 Diamonds", "mmk": 8960, "thb": 66, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "223 Diamonds", "mmk": 17800, "thb": 132, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "279 Diamonds", "mmk": 22380, "thb": 166, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "336 Diamonds", "mmk": 26070, "thb": 193, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "570 Diamonds", "mmk": 43440, "thb": 322, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "669 Diamonds", "mmk": 51390, "thb": 381, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "738 Diamonds", "mmk": 55660, "thb": 412, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "906 Diamonds", "mmk": 68500, "thb": 507, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "1163 Diamonds", "mmk": 86770, "thb": 643, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "2398 Diamonds", "mmk": 173380, "thb": 1284, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "6042 Diamonds", "mmk": 433370, "thb": 3210, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Philippine", "name": "10173 Diamonds", "mmk": 727630, "thb": 5390, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "Weekly pass", "mmk": 10970, "thb": 81, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "Weekly Elite Bundle", "mmk": 4940, "thb": 37, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "Monthly Epic Bundle", "mmk": 24430, "thb": 181, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "50 + 50 Diamonds", "mmk": 4940, "thb": 37, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "150 + 150 Diamonds", "mmk": 14660, "thb": 109, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "250 + 250 Diamonds", "mmk": 24430, "thb": 181, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "500 + 500 Diamonds", "mmk": 49570, "thb": 367, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "14 Diamonds", "mmk": 1310, "thb": 10, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "28 Diamonds", "mmk": 2560, "thb": 19, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "42 Diamonds", "mmk": 3860, "thb": 29, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "70 Diamonds", "mmk": 6360, "thb": 47, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "140 Diamonds", "mmk": 12380, "thb": 92, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "168 Diamonds", "mmk": 15100, "thb": 112, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "182 Diamonds", "mmk": 15960, "thb": 118, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "284 Diamonds", "mmk": 25250, "thb": 187, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "278 Diamonds", "mmk": 24760, "thb": 183, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "355 Diamonds", "mmk": 31490, "thb": 233, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "429 Diamonds", "mmk": 37950, "thb": 281, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "569 Diamonds", "mmk": 49460, "thb": 366, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "571 Diamonds", "mmk": 49460, "thb": 366, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "716 Diamonds", "mmk": 64330, "thb": 477, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "1084 Diamonds", "mmk": 95270, "thb": 706, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "1192 Diamonds", "mmk": 98850, "thb": 732, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "1446 Diamonds", "mmk": 125400, "thb": 929, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "1730 Diamonds", "mmk": 138530, "thb": 1026, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "1788 Diamonds", "mmk": 148790, "thb": 1102, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "2976 Diamonds", "mmk": 249110, "thb": 1845, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "3005 Diamonds", "mmk": 247150, "thb": 1831, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "3606 Diamonds", "mmk": 280370, "thb": 2077, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "4830 Diamonds", "mmk": 395450, "thb": 2929, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "6012 Diamonds", "mmk": 494300, "thb": 3661, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Singapore", "name": "7502 Diamonds", "mmk": 619970, "thb": 4592, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "Weekly Pass", "mmk": 9180, "thb": 68, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "Twilight Pass", "mmk": 37990, "thb": 281, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "Weekly Elite Bundle", "mmk": 4840, "thb": 36, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "Monthly Elite Bundle", "mmk": 23940, "thb": 177, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "50 + 50 Diamonds", "mmk": 4890, "thb": 36, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "150 + 150 Diamonds", "mmk": 14610, "thb": 108, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "250 + 250 Diamonds", "mmk": 24270, "thb": 180, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "500 + 500 Diamonds", "mmk": 48810, "thb": 362, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "12 Diamonds", "mmk": 1250, "thb": 9, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "19 Diamonds", "mmk": 1850, "thb": 14, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "28 Diamonds", "mmk": 2720, "thb": 20, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "44 Diamonds", "mmk": 4080, "thb": 30, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "59 Diamonds", "mmk": 5220, "thb": 39, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "85 Diamonds", "mmk": 7820, "thb": 58, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "170 Diamonds", "mmk": 15580, "thb": 115, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "240 Diamonds", "mmk": 22040, "thb": 163, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "296 Diamonds", "mmk": 27150, "thb": 201, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "408 Diamonds", "mmk": 37300, "thb": 276, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "568 Diamonds", "mmk": 50810, "thb": 376, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "875 Diamonds", "mmk": 77950, "thb": 577, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "2010 Diamonds", "mmk": 169260, "thb": 1254, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "4830 Diamonds", "mmk": 406310, "thb": 3010, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Indonesia", "name": "20100 Diamonds", "mmk": 1441320, "thb": 10676, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "Weekly Pass", "mmk": 10430, "thb": 77, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "50 + 50 Diamonds", "mmk": 5220, "thb": 39, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "150 + 150 Diamonds", "mmk": 15370, "thb": 114, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "250 + 250 Diamonds", "mmk": 25630, "thb": 190, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "500 + 500 Diamonds", "mmk": 51570, "thb": 382, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "35 Diamonds", "mmk": 3320, "thb": 25, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "1155 Diamonds", "mmk": 103360, "thb": 766, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "1765 Diamonds", "mmk": 154440, "thb": 1144, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "2975 Diamonds", "mmk": 257740, "thb": 1909, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Russia", "name": "6000 Diamonds", "mmk": 514660, "thb": 3812, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "Weekly Pass", "mmk": 9880, "thb": 73, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "50 + 50 Diamonds", "mmk": 5000, "thb": 37, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "150 + 150 Diamonds", "mmk": 14880, "thb": 110, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "250 + 250 Diamonds", "mmk": 24810, "thb": 184, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "500 + 500 Diamonds", "mmk": 50490, "thb": 374, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "16 Diamonds", "mmk": 1250, "thb": 9, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "44 Diamonds", "mmk": 3370, "thb": 25, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "88 Diamonds", "mmk": 6740, "thb": 50, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "133 Diamonds", "mmk": 10160, "thb": 75, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "221 Diamonds", "mmk": 16830, "thb": 125, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "494 Diamonds", "mmk": 37350, "thb": 277, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "1041 Diamonds", "mmk": 74750, "thb": 554, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "2645 Diamonds", "mmk": 186630, "thb": 1382, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "MLBB - Turkey", "name": "6146 Diamonds", "mmk": 425960, "thb": 3155, "badge": "Manual ဖြည့်သွင်းပေးပါမည်"}, {"category": "AI - Gemini Service", "name": "Gemini Advanced 1 Month", "mmk": 70000, "thb": 500, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - CapCut Pro", "name": "CapCut Pro 1 Month", "mmk": 25000, "thb": 180, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - CapCut Pro", "name": "CapCut Pro 1 Year", "mmk": 180000, "thb": 1300, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Gemini Acc", "name": "Gemini Private Account 1 Month", "mmk": 55000, "thb": 400, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - ChatGPT Plus", "name": "ChatGPT Plus 1 Month", "mmk": 75000, "thb": 540, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - iTune Gift Card", "name": "US iTunes $10", "mmk": 38000, "thb": 275, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - iTune Gift Card", "name": "US iTunes $20", "mmk": 75000, "thb": 540, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Kling Ai", "name": "Kling AI Standard 1 Month", "mmk": 45000, "thb": 325, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Kling Ai", "name": "Kling AI Pro 1 Month", "mmk": 110000, "thb": 790, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Tiktok Japan", "name": "TikTok Japan Account", "mmk": 30000, "thb": 215, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Grok AI", "name": "SuperGrok 1 Month", "mmk": 60000, "thb": 430, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Canva Pro", "name": "Canva Pro 1 Month", "mmk": 15000, "thb": 110, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Canva Pro", "name": "Canva Pro 1 Year", "mmk": 65000, "thb": 470, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Claude AI", "name": "Claude Pro 1 Month", "mmk": 75000, "thb": 540, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - VPN Service", "name": "ExpressVPN / NordVPN 1 Month", "mmk": 28000, "thb": 200, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Adobe Creative Cloud", "name": "Adobe All Apps 1 Month", "mmk": 125000, "thb": 900, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Microsoft 365", "name": "Microsoft 365 1 Year", "mmk": 70000, "thb": 500, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Muse Ai", "name": "Muse AI 1 Month", "mmk": 35000, "thb": 250, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Suno AI", "name": "Suno Pro 1 Month", "mmk": 40000, "thb": 290, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Creator Bundle", "name": "All-in-One Creator Bundle 1 Month", "mmk": 150000, "thb": 1080, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}, {"category": "AI - Basic Creator Bundle", "name": "Basic Creator Bundle 20% OFF", "mmk": 85000, "thb": 610, "badge": "အကောင့် / Subscription ဝန်ဆောင်မှု"}];
+
+        let allHubItems = [...EMBEDDED_CSV_ITEMS];
+        let isLiveCsvLoaded = false;
+
+        const CATEGORY_KEY_MAP = {
+            'mlbb-malaysia': 'MLBB - Malaysia',
+            'mlbb-philippine': 'MLBB - Philippine',
+            'mlbb-singapore': 'MLBB - Singapore',
+            'mlbb-indonesia': 'MLBB - Indonesia',
+            'mlbb-russia': 'MLBB - Russia',
+            'mlbb-turkey': 'MLBB - Turkey',
+            'ai-gemini': 'AI - Gemini Service',
+            'ai-capcut': 'AI - CapCut Pro',
+            'ai-gemini-acc': 'AI - Gemini Acc',
+            'ai-chatgpt': 'AI - ChatGPT Plus',
+            'ai-itune': 'AI - iTune Gift Card',
+            'ai-kling': 'AI - Kling Ai',
+            'ai-tiktok': 'AI - Tiktok Japan',
+            'ai-grok': 'AI - Grok AI',
+            'ai-canva': 'AI - Canva Pro',
+            'ai-claude': 'AI - Claude AI',
+            'ai-vpn': 'AI - VPN Service',
+            'ai-adobe': 'AI - Adobe Creative Cloud',
+            'ai-ms365': 'AI - Microsoft 365',
+            'ai-muse': 'AI - Muse Ai',
+            'ai-suno': 'AI - Suno AI',
+            'ai-bundle': 'AI - Creator Bundle',
+            'ai-basic': 'AI - Basic Creator Bundle'
+        };
+
+        function parseCsvRow(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < line.length; i++) {
+                const ch = line[i];
+                if (ch === '"') {
+                    if (inQuotes && line[i + 1] === '"') {
+                        current += '"';
+                        i++;
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (ch === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += ch;
+                }
+            }
+            result.push(current.trim());
+            return result;
+        }
+
+        function parseSheetCsvText(csvText) {
+            if (!csvText || !csvText.includes('Category')) return [];
+            const lines = csvText.trim().split(/\r?\n/);
+            const parsed = [];
+            for (let i = 1; i < lines.length; i++) {
+                if (!lines[i].trim()) continue;
+                const cols = parseCsvRow(lines[i]);
+                if (cols.length < 4) continue;
+                const category = cols[0] || '';
+                const name = cols[1] || '';
+                const mmk = Number(String(cols[2] || '0').replace(/[^0-9.-]/g, '')) || 0;
+                const thb = Number(String(cols[3] || '0').replace(/[^0-9.-]/g, '')) || 0;
+                const badge = cols[4] || '';
+                if (category && name) {
+                    parsed.push({ category, name, mmk, thb, badge });
+                }
+            }
+            return parsed;
+        }
+
+        async function syncPricesFromGoogleSheetCSV() {
+            for (const url of SHEET_CSV_URLS) {
+                try {
+                    const res = await fetch(url, { cache: 'no-store' });
+                    if (!res.ok) continue;
+                    const text = await res.text();
+                    const parsed = parseSheetCsvText(text);
+                    if (parsed.length >= 20) {
+                        allHubItems = parsed;
+                        isLiveCsvLoaded = true;
+                        if (activeCategoryKey && !document.getElementById('store-checkout-view').classList.contains('hidden')) {
+                            renderHubPackages();
+                        }
+                        return;
+                    }
+                } catch (e) {
+                    // Fallback to next URL or embedded CSV items
+                }
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            syncPricesFromGoogleSheetCSV();
+        });
 
         function showHubModal(title, text) {
             document.getElementById('hub-status-title').innerText = title;
@@ -339,6 +449,7 @@
             document.getElementById('store-checkout-view').classList.remove('hidden');
 
             renderHubPackages();
+            syncPricesFromGoogleSheetCSV();
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
@@ -362,36 +473,43 @@
         }
 
         function renderHubPackages() {
-            let container = document.getElementById('hub-price-list');
-            let samplePackages = [
-                { name: "Weekly Diamond Pass", thb: 53, mmk: 7500 },
-                { name: "86 Diamonds", thb: 45, mmk: 6300 },
-                { name: "172 Diamonds", thb: 90, mmk: 12600 },
-                { name: "257 Diamonds", thb: 135, mmk: 18900 },
-                { name: "706 Diamonds", thb: 360, mmk: 50000 }
-            ];
+            const container = document.getElementById('hub-price-list');
+            const badgeEl = document.getElementById('hub-price-source-badge');
+            const targetCategory = CATEGORY_KEY_MAP[activeCategoryKey] || activeCategoryKey;
 
-            if (activeCategoryKey.startsWith('ai-')) {
-                samplePackages = [
-                    { name: "1 Month Plan", thb: 150, mmk: 21000 },
-                    { name: "3 Months Plan", thb: 400, mmk: 56000 },
-                    { name: "1 Year Plan", thb: 1200, mmk: 168000 }
-                ];
+            const matchingItems = allHubItems.filter(
+                item => item.category.trim().toLowerCase() === targetCategory.trim().toLowerCase()
+            );
+
+            if (badgeEl) {
+                badgeEl.innerText = isLiveCsvLoaded
+                    ? `Sheet CSV · ${matchingItems.length} မျိုး`
+                    : `CSV Data · ${matchingItems.length} မျိုး`;
+            }
+
+            if (!matchingItems.length) {
+                container.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">ဤအမျိုးအစားအတွက် ဈေးနှုန်းစာရင်း မရှိသေးပါ။</p>`;
+                return;
             }
 
             let html = "";
-            samplePackages.forEach(pkg => {
-                let price = hubCurrency === 'THB' ? pkg.thb : pkg.mmk;
-                let symbol = hubCurrency === 'THB' ? '฿' : 'Ks ';
-                let safeName = pkg.name.replace(/'/g, "\\'");
+            matchingItems.forEach(item => {
+                const price = hubCurrency === 'THB' ? item.thb : item.mmk;
+                const symbol = hubCurrency === 'THB' ? '฿' : 'Ks ';
+                const safeName = item.name.replace(/'/g, "\\'");
+                const badgeHtml = item.badge
+                    ? `<span class="inline-block text-[9px] bg-white text-pink-700 border border-pink-200 px-2 py-0.5 rounded-full mt-1 font-semibold">${item.badge}</span>`
+                    : "";
+
                 html += `
-                    <div class="flex justify-between items-center p-2.5 bg-pink-50 rounded-xl border border-pink-100">
+                    <div class="flex justify-between items-center p-2.5 bg-pink-50 rounded-xl border border-pink-100 gap-2">
                         <div>
-                            <p class="font-bold text-xs text-gray-800">${pkg.name}</p>
+                            <p class="font-bold text-xs text-gray-800">${item.name}</p>
+                            ${badgeHtml}
                         </div>
-                        <div class="flex items-center space-x-3">
-                            <p class="text-xs font-bold ${hubCurrency === 'THB' ? 'text-blue-600' : 'text-emerald-600'}">${symbol}${price.toLocaleString()}</p>
-                            <button onclick="selectHubPackage('${safeName}', ${price}, '${hubCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
+                        <div class="flex items-center space-x-2 shrink-0">
+                            <p class="text-xs font-bold ${hubCurrency === 'THB' ? 'text-blue-600' : 'text-emerald-600'}">${symbol}${Number(price).toLocaleString()}</p>
+                            <button onclick="selectHubPackage('${safeName}', ${Number(price)}, '${hubCurrency}')" class="bg-gradient-to-r from-pink-500 to-purple-600 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow hover:opacity-90 transition">
                                 ဝယ်ယူမည်
                             </button>
                         </div>
